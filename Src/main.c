@@ -64,15 +64,18 @@ void MW_wait(uint32_t wait);
 
 int main(void)
 {
+  
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+  
   /* Configure the system clock */
   SystemClock_Config();
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
-
   /* Initialize all configured peripherals */
-  //  MW_USARTInit(USART1ID);
+  MW_USARTInit(USART1ID);
 
+  ENABLECLKGPIOA();
+  ENABLECLKGPIOD();
   /*Configure GPIO pin : PC13 */
   MW_SetGPIOPin(GPIO_PIN_13);
   MW_SetGPIOMode(GPIO_MODE_INPUT);
@@ -96,9 +99,9 @@ int main(void)
 
   while (1)
     {
-      MW_GPIOWrite(GPIOAID,5,1);
+      MW_GPIOWrite(GPIOAID,GPIO_PIN_5,1);
       MW_wait(10000);
-      MW_GPIOWrite(GPIOAID,5,0);
+      MW_GPIOWrite(GPIOAID,GPIO_PIN_5,0);
       MW_wait(10000);
     }
 }
