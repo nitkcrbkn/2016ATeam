@@ -105,7 +105,7 @@ int32_t MW_USART1Receive(void)
 
 int32_t MW_USART2Transmit(uint8_t c)
 {
-  if(HAL_UART_Transmit(&huart2,&c,1,1)!=HAL_OK)
+  if(HAL_UART_Transmit(&huart2,&c,1,0xFFFF)!=HAL_OK)
     return -1;
   return 0;
 }
