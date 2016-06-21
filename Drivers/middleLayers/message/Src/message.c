@@ -1,5 +1,4 @@
 #include "xprintf.h"
-#include <stdio.h>
 #include <stdarg.h>
 
 #define message(type,fmt, ...) _msg(type,__FILE__, __FUNCTION__, __LINE__, fmt, ##__VA_ARGS__)
@@ -39,7 +38,7 @@ void _msg(const char* type,
 void flush(void){
   if(outptr!=0){
     *outptr = 0;		/* Terminate output string with a \0 */
-    printf("%s",buff);		/*print string.*/
+    MW_Puts(buff); 
   }
   outptr=buff;
 }
