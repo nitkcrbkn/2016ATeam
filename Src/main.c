@@ -65,22 +65,23 @@ extern void MW_TIM2Hadler(void);
 void MW_wait(uint32_t wait);
 
 int main(void)
-{ 
+{
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-  
+
   /* Configure the system clock */
   SystemClock_Config();
-
+  
   /*Initialize printf*/
   flush();
+  
+  ENABLECLKGPIOA();
+  ENABLECLKGPIOD();
   
   /* Initialize all configured peripherals */
   MW_USARTInit(USART2ID);
   xdev_out(MW_USART2Transmit);
   
-  ENABLECLKGPIOA();
-  ENABLECLKGPIOD();
   /*Configure GPIO pin : PC13 */
   MW_SetGPIOPin(GPIO_PIN_13);
   MW_SetGPIOMode(GPIO_MODE_INPUT);
