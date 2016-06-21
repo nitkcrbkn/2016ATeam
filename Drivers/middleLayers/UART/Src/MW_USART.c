@@ -84,7 +84,7 @@ void MW_USARTInit(usartid_t id)
 {
   if (HAL_UART_Init(uartid[(uint32_t)id]) != HAL_OK)
     {
-      Error_Handler();
+      //Error_Handler();
     }
 }
 
