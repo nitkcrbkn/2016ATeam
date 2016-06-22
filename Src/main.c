@@ -33,6 +33,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
 
+
+
 /*name rule
  *
  * function
@@ -64,15 +66,22 @@ void MW_wait(uint32_t wait);
 
 int main(void)
 {
-  /* Configure the system clock */
-  SystemClock_Config();
-
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
+  /* Configure the system clock */
+  SystemClock_Config();
+  
+  /*Initialize printf*/
+  flush();
+  
+  ENABLECLKGPIOA();
+  ENABLECLKGPIOD();
+  
   /* Initialize all configured peripherals */
-  //  MW_USARTInit(USART1ID);
-
+  MW_USARTInit(USART2ID);
+  xdev_out(MW_USART2Transmit);
+  
   /*Configure GPIO pin : PC13 */
   MW_SetGPIOPin(GPIO_PIN_13);
   MW_SetGPIOMode(GPIO_MODE_INPUT);
@@ -96,10 +105,14 @@ int main(void)
 
   while (1)
     {
-      MW_GPIOWrite(GPIOAID,5,1);
+      MW_printf("fuck you \n");
+      /*
+      MW_GPIOWrite(GPIOAID,GPIO_PIN_5,1);
       MW_wait(10000);
-      MW_GPIOWrite(GPIOAID,5,0);
+      MW_GPIOWrite(GPIOAID,GPIO_PIN_5,0);
       MW_wait(10000);
+      */      
+      flush();
     }
 }
 

@@ -12,6 +12,7 @@
 #define	_LINE_ECHO		1	/* 1: Echo back input chars in xgets function */
 
 #include <stdarg.h>
+#include "MW_USART.h"
 
 #if _USE_XFUNC_OUT
 #define xdev_out(func) xfunc_out = (void(*)(unsigned char))(func)

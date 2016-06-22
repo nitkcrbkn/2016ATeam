@@ -58,7 +58,7 @@ INCLUDEDIRS =   -I $(shell cd ./Inc &&  pwd)							\
 		$(foreach dir,$(wildcard $(MIDDLE_DRIVERDIR)/*/Inc),$(shell cd $(dir) && pwd))\
 	)
 
-LINKER_SCRIPT = $(DRIVERSDIR)/STM32F103VETx_FLASH.ld
+LINKER_SCRIPT = $(DRIVERSDIR)/STM32F103RBTx_FLASH.ld
 
 CC      = $(GCC_BIN)arm-none-eabi-gcc
 CPP     = $(GCC_BIN)arm-none-eabi-g++

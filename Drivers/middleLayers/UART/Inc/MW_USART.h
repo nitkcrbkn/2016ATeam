@@ -62,4 +62,6 @@ int32_t MW_USART2Receive(void);
 int32_t MW_USART3Transmit(uint8_t c);
 int32_t MW_USART3Receive(void);
 
+void MW_Puts(uint8_t *str);
+
 #endif /* MIDLEWARE_UART_H_ */

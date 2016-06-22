@@ -84,49 +84,60 @@ void MW_USARTInit(usartid_t id)
 {
   if (HAL_UART_Init(uartid[(uint32_t)id]) != HAL_OK)
     {
-      Error_Handler();
+      //Error_Handler();
     }
 }
 
 int32_t MW_USART1Transmit(uint8_t c)
 {
-  if(HAL_UART_Receive(&huart1,&c,1,100)!=HAL_OK)
+  if(HAL_UART_Transmit(&huart1,&c,1,100)!=HAL_OK)
     return -1;
-  return 0;
+  return 0;  
 }
+
 int32_t MW_USART1Receive(void)
 {
   uint8_t c;
-  if(HAL_UART_Transmit(&huart1, &c, 1, 100)!=HAL_OK)
+  if(HAL_UART_Receive(&huart1, &c, 1, 100)!=HAL_OK)
     return -1;
   return (uint32_t)c;
 }
 
 int32_t MW_USART2Transmit(uint8_t c)
 {
-  if(HAL_UART_Receive(&huart2,&c,1,100)!=HAL_OK)
+  if(HAL_UART_Transmit(&huart2,&c,1,0xFFFF)!=HAL_OK)
     return -1;
   return 0;
 }
+
 int32_t MW_USART2Receive(void)
 {
   uint8_t c;
-  if(HAL_UART_Transmit(&huart2, &c, 1, 100)!=HAL_OK)
+  if(HAL_UART_Receive(&huart2, &c, 1, 100)!=HAL_OK)
     return -1;
   return (uint32_t)c;
 }
 
 int32_t MW_USART3Transmit(uint8_t c)
 {
-  if(HAL_UART_Receive(&huart3,&c,1,100)!=HAL_OK)
+  if(HAL_UART_Transmit(&huart3,&c,1,100)!=HAL_OK)
     return -1;
   return 0;
 }
+
 int32_t MW_USART3Receive(void)
 {
   uint8_t c;
-  if(HAL_UART_Transmit(&huart3, &c, 1, 100)!=HAL_OK)
+  if(HAL_UART_Receive(&huart3, &c, 1, 100)!=HAL_OK)
     return -1;
   return (uint32_t)c;
 }
 
+void MW_Puts(uint8_t *str)
+{
+  while(*str)
+    MW_USART2Transmit(str++);
+  MW_USART2Transmit('\n');
+}
+    
+		    
