@@ -103,9 +103,8 @@ int32_t MW_USART1Receive(void)
   return (uint32_t)c;
 }
 
-int32_t MW_USART2Transmit(uint8_t c)
-{
-  if(HAL_UART_Transmit(&huart2,&c,1,0xFFFF)!=HAL_OK)
+int32_t MW_USART2Transmit(uint8_t c) {
+  if(HAL_UART_Transmit(&huart2,&c,1,100)!=HAL_OK)
     return -1;
   return 0;
 }
@@ -136,7 +135,7 @@ int32_t MW_USART3Receive(void)
 void MW_Puts(uint8_t *str)
 {
   while(*str)
-    MW_USART2Transmit(str++);
+    MW_USART2Transmit(*str++);
   MW_USART2Transmit('\n');
 }
     
