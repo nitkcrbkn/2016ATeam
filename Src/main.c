@@ -43,6 +43,7 @@
  *  UARTの受信チェック
  *　I2Cのチェック
  *　細かいところのチェック
+ */
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 extern void MW_TIM1Hadler(void);
@@ -65,6 +66,9 @@ int main(void){
   /* Initialize all configured peripherals */
   MW_USARTInit(USART2ID);
   xdev_out(MW_USART2Transmit);
+
+  //MW_SetI2CClockSpeed(40000);
+  MW_I2CInit(I2C1ID);
   
   /*Configure GPIO pin : PC13 */
   MW_SetGPIOPin(GPIO_PIN_13);
