@@ -112,36 +112,18 @@ void MW_TIMInit(timid_t id)
 void MW_TIMStart(timid_t id)
 {
   assert_param(IS_TIM_ID(id));
-  switch(id)
-    {
-    case TIM1ID:
-      ENABLETIM1HADLE();
-      break;
-    case TIM2ID:
-      ENABLETIM2HADLE();
-      break;
-    }
   if (HAL_TIM_Base_Start(timid[(uint32_t)id]) != HAL_OK)
     {
-      Error_Handler();
+      //      Error_Handler();
     }
 }
 
 void MW_TIMStop(timid_t id)
 {
   assert_param(IS_TIM_ID(id));
-  switch(id)
-    {
-    case TIM1ID:
-      DISABLETIM1HADLE();
-      break;
-    case TIM2ID:
-      DISABLETIM2HADLE();
-      break;
-    }
   if (HAL_TIM_Base_Stop(timid[(uint32_t)id]) != HAL_OK)
     {
-      Error_Handler();
+      //Error_Handler();
     }
 }
 
@@ -167,5 +149,16 @@ void MW_ResetTIMxFlag(timid_t id)
 {
   assert_param(IS_TIM_ID(id));
   HAL_TIM_IRQHandler(timid[(uint32_t)id]);
+}
+
+void MW_EnableTIMHandle(timid_t id)
+{
+  __HAL_TIM_ENABLE_IT(timid[(uint32_t)id], TIM_IT_UPDATE);	
+  HAL_NVIC_SetPriority(TIM1_UP_IRQn, 0, 0);			
+}
+
+void MW_DisableTIMHandle(timid_t id)
+{
+  __HAL_TIM_DISABLE_IT(timid[(uint32_t)id], TIM_IT_UPDATE);
 }
 

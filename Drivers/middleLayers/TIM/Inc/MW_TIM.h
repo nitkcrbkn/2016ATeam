@@ -27,20 +27,7 @@ typedef enum
 /******************************* TIM ID *******************************/
 #define IS_TIM_ID(ID) (((ID) == TIM1ID) || \
 						 ((ID) == TIM2ID))
-
-#define ENABLETIM1HADLE() {\
-	__HAL_TIM_ENABLE_IT(timid[0], TIM_IT_UPDATE);\
-	HAL_NVIC_SetPriority(TIM1_UP_IRQn, 0, 0);\
-}
-#define ENABLETIM2HADLE() {\
-	__HAL_TIM_ENABLE_IT(timid[1], TIM_IT_UPDATE);\
-	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);\
-}
-
-#define DISABLETIM1HADLE() __HAL_TIM_DISABLE_IT(timid[0], TIM_IT_UPDATE)
-#define DISABLETIM2HADLE() __HAL_TIM_DISABLE_IT(timid[1], TIM_IT_UPDATE)
-
-void MW_TIM1Init(timid_t id);
+void MW_TIMInit(timid_t id);
 
 void MW_SetTIMPrescaler(timid_t id,uint32_t Prescaler);
 void MW_SetTIMCounterMode(timid_t id,uint32_t CounterMode);
@@ -53,8 +40,13 @@ void MW_SetTIMMasterSlaveMode(timid_t id,uint32_t MasterSlaveMode);
 void MW_TIMStart(timid_t id);
 void MW_TIMStop(timid_t id);
 
+uint32_t MW_GetTIMCounter(timid_t id);
+
 void MW_TIM1Hadler(void);
 void MW_TIM2Hadler(void);
 void MW_ResetTIMxFlag(timid_t id);
 
+void MW_EnableTIMHandle(timid_t id);
+void MW_DisableTIMHandle(timid_t id);
+  
 #endif /* MIDLEWARE_INC_MW_TIM_H_ */
