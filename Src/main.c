@@ -68,11 +68,20 @@ int main(void){
   xdev_out(MW_USART2Transmit);
   
   //MW_SetI2CClockSpeed(40000);
-  MW_I2CInit(I2C1ID);
+  //  MW_I2CInit(I2C1ID);
   uint8_t decoy[4] = {19,98,5,6};
 
+  MW_SetTIMPrescaler(TIM1ID,10000);
+  MW_SetTIMPeriod(TIM1ID,1800);
+  MW_SetTIMClockDivision(TIM1ID,TIM_CLOCKDIVISION_DIV4);
+  MW_TIMInit(TIM1ID);
+
+  MW_EnableTIMHandle(TIM1ID);
+  
+  MW_TIMStart(TIM1ID);
+  
   while (1) {
-    MW_I2C1Transmit(0x56,decoy,4);
+    //    MW_I2C1Transmit(0x56,decoy,4);
     message("msg","fuck you");
     MW_GPIOWrite(GPIOAID,GPIO_PIN_5,1);
     MW_wait(1000);
@@ -84,6 +93,7 @@ int main(void){
 
 void MW_TIM1Hadler(void)
 {
+  MW_GPIOToggle(GPIOAID,GPIO_PIN_5);
 }
 void MW_TIM2Hadler(void)
 {
