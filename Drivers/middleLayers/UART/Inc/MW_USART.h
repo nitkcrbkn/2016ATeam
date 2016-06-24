@@ -55,13 +55,11 @@ void MW_SetStopBits(usartid_t id,uint32_t StopBits);
 void MW_SetWordLength(usartid_t id,uint32_t WordLength);
 void MW_SetBaudRate(usartid_t id,uint32_t BaudRate);
 
-int32_t MW_USART1Transmit(uint8_t c);
+int32_t MW_USART1Transmit(uint8_t *str,uint16_t datanum);
 int32_t MW_USART1Receive(void);
-int32_t MW_USART2Transmit(uint8_t c);
+int32_t MW_USART2Transmit(uint8_t *str,uint16_t datanum);
 int32_t MW_USART2Receive(void);
-int32_t MW_USART3Transmit(uint8_t c);
+int32_t MW_USART3Transmit(uint8_t *str,uint16_t datanum);
 int32_t MW_USART3Receive(void);
-
-void MW_Puts(uint8_t *str);
 
 #endif /* MIDLEWARE_UART_H_ */
