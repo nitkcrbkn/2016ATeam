@@ -3,6 +3,14 @@
 
 #define message(type,fmt, ...) _msg(type,__FILE__, __FUNCTION__, __LINE__, fmt, ##__VA_ARGS__)
 
+const int8_t *HalStatus_m = {
+  "HAL_OK",
+  "HAL_ERROR",
+  "HAL_BUSY",
+  "HAL_TIMEOUT"
+};
+
+  
 static
 void _xprintf(char *fmt,...);
 
