@@ -49,14 +49,7 @@
 #include "MW_GPIO.h"
 #include "MW_USART.h"
 #include "message.h"
-   /*
-#include "/home/evaota/workspace/STM32F1Nucleo/Drivers/MidleWare/Inc/MW_I2C.h"
-#include "/home/evaota/workspace/STM32F1Nucleo/Drivers/MidleWare/Inc/MW_SPI.h"
-#include "/home/evaota/workspace/STM32F1Nucleo/Drivers/MidleWare/Inc/MW_ADC.h"
-
-#include "/home/evaota/workspace/STM32F1Nucleo/Drivers/MidleWare/Inc/MW_TIM.h"
-   **/
-   
+#include "MW_I2C.h" 
 /** @addtogroup STM32F1xx_HAL_Driver
   * @{
   */
