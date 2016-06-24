@@ -49,6 +49,7 @@ void SystemClock_Config(void);
 extern void MW_TIM1Hadler(void);
 extern void MW_TIM2Hadler(void);
 void MW_wait(uint32_t wait);
+void GPIOInit(void);
 
 int main(void){
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -60,38 +61,18 @@ int main(void){
   /*Initialize printf*/
   flush();
   
-  ENABLECLKGPIOA();
-  ENABLECLKGPIOD();
-  
+  GPIOInit();
+
   /* Initialize all configured peripherals */
   MW_USARTInit(USART2ID);
   xdev_out(MW_USART2Transmit);
-
+  
   //MW_SetI2CClockSpeed(40000);
   MW_I2CInit(I2C1ID);
-  
-  /*Configure GPIO pin : PC13 */
-  MW_SetGPIOPin(GPIO_PIN_13);
-  MW_SetGPIOMode(GPIO_MODE_INPUT);
-  MW_SetGPIOPull(GPIO_NOPULL);
-  MW_GPIOInit(GPIOCID);
-
-  /*Configure GPIO pin : PA5 */
-  MW_SetGPIOPin(GPIO_PIN_5);
-  MW_SetGPIOMode(GPIO_MODE_OUTPUT_PP);
-  MW_SetGPIOSpeed(GPIO_SPEED_FREQ_LOW);
-  MW_GPIOInit(GPIOAID);
-
-  /*Configure GPIO pin : PC4 */
-  MW_SetGPIOPin(GPIO_PIN_4);
-  MW_SetGPIOMode(GPIO_MODE_IT_RISING);
-  MW_SetGPIOPull(GPIO_NOPULL);
-  MW_GPIOInit(GPIOCID);
-
-  /*Configure GPIO pin Output Level */
-  MW_GPIOWrite(GPIOAID,GPIO_PIN_5,0);
+  uint8_t *decoy = {19,98,5,6};
 
   while (1) {
+    MW_I2C1Transmit(0x56,decoy,4);
     message("msg","fuck you");
     MW_GPIOWrite(GPIOAID,GPIO_PIN_5,1);
     MW_wait(1000);
@@ -176,4 +157,30 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
+void GPIOInit(void)
+{
+  ENABLECLKGPIOA();
+  ENABLECLKGPIOD();
+  
+  /*Configure GPIO pin : PC13 */
+  MW_SetGPIOPin(GPIO_PIN_13);
+  MW_SetGPIOMode(GPIO_MODE_INPUT);
+  MW_SetGPIOPull(GPIO_NOPULL);
+  MW_GPIOInit(GPIOCID);
+
+  /*Configure GPIO pin : PA5 */
+  MW_SetGPIOPin(GPIO_PIN_5);
+  MW_SetGPIOMode(GPIO_MODE_OUTPUT_PP);
+  MW_SetGPIOSpeed(GPIO_SPEED_FREQ_LOW);
+  MW_GPIOInit(GPIOAID);
+
+  /*Configure GPIO pin : PC4 */
+  MW_SetGPIOPin(GPIO_PIN_4);
+  MW_SetGPIOMode(GPIO_MODE_IT_RISING);
+  MW_SetGPIOPull(GPIO_NOPULL);
+  MW_GPIOInit(GPIOCID);
+
+  /*Configure GPIO pin Output Level */
+  MW_GPIOWrite(GPIOAID,GPIO_PIN_5,0);
+}
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
