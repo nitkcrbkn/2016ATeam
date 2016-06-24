@@ -1,0 +1,12 @@
+This directory is contained some drivers:
+HAL driver, CMSIS, startup routine, linker
+script and openOCD configuration file.
+
+CMSIS /                 ...  Hardware header, cmsis header are in it.
+STM32F1xx_HAL_Driver /  ...  HAL driver is in it.
+
+STM32F103VETx_Flash.ls ...  linker script for stm32f103VETx.This is boot from
+flash.
+startup_stm32f103xe.s  ...  start up routine. "Initialize device code" was Deleted
+from this file.PLZ call "system initialize".
+middleLayers /          ...  middle layers directory.
