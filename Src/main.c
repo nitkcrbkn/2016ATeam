@@ -69,7 +69,7 @@ int main(void){
   
   //MW_SetI2CClockSpeed(40000);
   MW_I2CInit(I2C1ID);
-  uint8_t *decoy = {19,98,5,6};
+  uint8_t decoy[4] = {19,98,5,6};
 
   while (1) {
     MW_I2C1Transmit(0x56,decoy,4);
