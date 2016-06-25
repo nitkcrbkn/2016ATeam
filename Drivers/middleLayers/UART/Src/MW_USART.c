@@ -137,7 +137,7 @@ int32_t MW_USART3Receive(void){
 		    
 void MW_Puts(uint8_t *str)
 {
-  while(str++)
-    MW_USART1Transmit(str,1);
-  MW_USART1Transmit('\n',1);
+  while(*str)
+    MW_USART2Transmit(str++,1);
+  MW_USART2Transmit('\n',1);
 }

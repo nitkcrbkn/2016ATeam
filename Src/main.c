@@ -83,9 +83,8 @@ int main(void){
   while (1) {
     //    MW_I2C1Transmit(0x56,decoy,4);
     message("msg","fuck you");
-    MW_GPIOWrite(GPIOAID,GPIO_PIN_5,1);
-    MW_wait(1000);
-    MW_GPIOWrite(GPIOAID,GPIO_PIN_5,0);
+    //    message("msg","%d",MW_GetTIMCounter(TIM1ID));
+    MW_GPIOToggle(GPIOAID,GPIO_PIN_5);
     MW_wait(1000);
     flush();
   }
@@ -93,7 +92,7 @@ int main(void){
 
 void MW_TIM1Hadler(void)
 {
-  MW_GPIOToggle(GPIOAID,GPIO_PIN_5);
+  // MW_GPIOToggle(GPIOAID,GPIO_PIN_5);
 }
 void MW_TIM2Hadler(void)
 {
