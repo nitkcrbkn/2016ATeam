@@ -3,7 +3,7 @@
 
 #define message(type,fmt, ...) _msg(type,__FILE__, __FUNCTION__, __LINE__, fmt, ##__VA_ARGS__)
 
-const int8_t *HalStatus_m = {
+const char *HalStatus_m[] = {
   "HAL_OK",
   "HAL_ERROR",
   "HAL_BUSY",
@@ -45,8 +45,7 @@ void _msg(const char* type,
 
 void flush(void){
   if(outptr!=0){
-    *outptr = 0;		/* Terminate output string with a \0 */
-    MW_Puts(buff); 
+    MW_Puts(buff,outptr-buff); 
   }
   outptr=buff;
 }
