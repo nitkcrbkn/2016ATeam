@@ -37,8 +37,8 @@ void MW_SetTIMClockSource(timid_t id,uint32_t ClockSource);
 void MW_SetTIMMasterOutputTrigger(timid_t id,uint32_t MasterOutputTrigger);
 void MW_SetTIMMasterSlaveMode(timid_t id,uint32_t MasterSlaveMode);
 
-void MW_TIMStart(timid_t id);
-void MW_TIMStop(timid_t id);
+void MW_TIMStartIT(timid_t id);
+void MW_TIMStopIT(timid_t id);
 
 uint32_t MW_GetTIMCounter(timid_t id);
 
@@ -46,7 +46,4 @@ void MW_TIM1Hadler(void);
 void MW_TIM2Hadler(void);
 void MW_ResetTIMxFlag(timid_t id);
 
-void MW_EnableTIMHandle(timid_t id);
-void MW_DisableTIMHandle(timid_t id);
-  
 #endif /* MIDLEWARE_INC_MW_TIM_H_ */
