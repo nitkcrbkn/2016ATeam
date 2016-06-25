@@ -76,16 +76,15 @@ int main(void){
   MW_SetTIMClockDivision(TIM1ID,TIM_CLOCKDIVISION_DIV4);
   MW_TIMInit(TIM1ID);
 
-  MW_EnableTIMHandle(TIM1ID);
-  
-  MW_TIMStart(TIM1ID);
+  MW_TIMStartIT(TIM1ID);
+  ENABLETIM1HANDLE();
   
   while (1) {
     //    MW_I2C1Transmit(0x56,decoy,4);
     //message("msg","fuck you");
     message("msg","%d",MW_GetTIMCounter(TIM1ID));
-    MW_GPIOToggle(GPIOAID,GPIO_PIN_5);
-    MW_wait(1000);
+    //MW_GPIOToggle(GPIOAID,GPIO_PIN_5);
+    //MW_wait(1000);
     flush();
   }
 }
