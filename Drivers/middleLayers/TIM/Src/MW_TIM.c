@@ -132,22 +132,22 @@ uint32_t MW_GetTIMCounter(timid_t id)
   assert_param(IS_TIM_ID(id));
   return __HAL_TIM_GET_COUNTER(timid[(uint32_t)id]);
 }
-
 void TIM1_UP_IRQHandler(void)
 {
-  MW_ResetTIMxFlag(TIM1ID);
-  MW_TIM1Hadler();
+  HAL_TIM_IRQHandler(timid[TIM1ID]);
 }
 
 void TIM2_IRQHandler(void)
 {
-  MW_ResetTIMxFlag(TIM2ID);
-  MW_TIM2Hadler();
-}
+  HAL_TIM_IRQHandler(timid[TIM1ID]);
+} 
 
-void MW_ResetTIMxFlag(timid_t id)
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  assert_param(IS_TIM_ID(id));
-  HAL_TIM_IRQHandler(timid[(uint32_t)id]);
+  if(htim==&htim1)
+    MW_TIM1Hadler();
+  else if(htim==&htim2)
+    MW_TIM2Hadler();
+  else
+    assert_param(0);
 }
-
