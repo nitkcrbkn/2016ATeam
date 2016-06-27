@@ -8,30 +8,34 @@
 
 static I2C_HandleTypeDef hi2c1 = {
   .Instance = I2C1,
-  .Init.ClockSpeed = 100000,
-  .Init.DutyCycle = I2C_DUTYCYCLE_2,
-  .Init.OwnAddress1 = 0x00,
-  .Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT,
-  .Init.DualAddressMode = I2C_DUALADDRESS_DISABLE,
-  .Init.OwnAddress2 = 0,
-  .Init.GeneralCallMode = I2C_GENERALCALL_DISABLE,
-  .Init.NoStretchMode = I2C_NOSTRETCH_DISABLE,
+  .Init = {
+    .ClockSpeed = 100000,
+    .DutyCycle = I2C_DUTYCYCLE_2,
+    .OwnAddress1 = 0x00,
+    .AddressingMode = I2C_ADDRESSINGMODE_7BIT,
+    .DualAddressMode = I2C_DUALADDRESS_DISABLE,
+    .OwnAddress2 = 0,
+    .GeneralCallMode = I2C_GENERALCALL_DISABLE,
+    .NoStretchMode = I2C_NOSTRETCH_DISABLE,
+  }
 };
 static I2C_HandleTypeDef hi2c2 = {
   .Instance = I2C2,
-  .Init.ClockSpeed = 100000,
-  .Init.DutyCycle = I2C_DUTYCYCLE_2,
-  .Init.OwnAddress1 = 0x00,
-  .Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT,
-  .Init.DualAddressMode = I2C_DUALADDRESS_DISABLE,
-  .Init.OwnAddress2 = 0,
-  .Init.GeneralCallMode = I2C_GENERALCALL_DISABLE,
-  .Init.NoStretchMode = I2C_NOSTRETCH_DISABLE,
+  .Init = {
+    .ClockSpeed = 100000,
+    .DutyCycle = I2C_DUTYCYCLE_2,
+    .OwnAddress1 = 0x00,
+    .AddressingMode = I2C_ADDRESSINGMODE_7BIT,
+    .DualAddressMode = I2C_DUALADDRESS_DISABLE,
+    .OwnAddress2 = 0,
+    .GeneralCallMode = I2C_GENERALCALL_DISABLE,
+    .NoStretchMode = I2C_NOSTRETCH_DISABLE,
+  }
 };
 
 static I2C_HandleTypeDef *i2cid[2] = {
   &hi2c1,
-  &hi2c1
+  &hi2c2,
 };
 
 void MW_SetI2CClockSpeed(i2cid_t id,uint32_t ClockSpeed)
