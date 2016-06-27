@@ -434,6 +434,7 @@ void HAL_PWR_DisableWakeUpPin(uint32_t WakeUpPinx)
   */
 void HAL_PWR_EnterSLEEPMode(uint32_t Regulator, uint8_t SLEEPEntry)
 {
+  UNUSED(Regulator);
   /* Check the parameters */
   /* No check on Regulator because parameter not used in SLEEP mode */
   assert_param(IS_PWR_SLEEP_ENTRY(SLEEPEntry));

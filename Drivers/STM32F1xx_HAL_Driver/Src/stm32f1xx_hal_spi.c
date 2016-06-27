@@ -2391,6 +2391,7 @@ static HAL_StatusTypeDef SPI_WaitOnFlagUntilTimeout(SPI_HandleTypeDef *hspi, uin
 */
 __weak uint8_t SPI_ISCRCErrorValid(SPI_HandleTypeDef *hspi)
 {
+  UNUSED(hspi);
   return (SPI_VALID_CRC_ERROR);
 }
 /**
