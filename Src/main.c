@@ -67,8 +67,8 @@ int main(void){
   MW_USARTInit(USART2ID);
   xdev_out(MW_USART2Transmit);
   
-  //MW_SetI2CClockSpeed(40000);
-  //  MW_I2CInit(I2C1ID);
+  MW_SetI2CClockSpeed(I2C1ID,40000);
+  MW_I2CInit(I2C1ID);
   uint8_t decoy[4] = {19,98,5,6};
 
   MW_SetTIMPrescaler(TIM1ID,10000);
@@ -81,7 +81,7 @@ int main(void){
   MW_TIMStart(TIM1ID);
   
   while (1) {
-    //    MW_I2C1Transmit(0x56,decoy,4);
+    MW_I2C1Transmit(0x56,decoy,4);
     //message("msg","fuck you");
     message("msg","%d",MW_GetTIMCounter(TIM1ID));
     MW_GPIOToggle(GPIOAID,GPIO_PIN_5);
@@ -169,6 +169,7 @@ void SystemClock_Config(void)
 void GPIOInit(void)
 {
   ENABLECLKGPIOA();
+  ENABLECLKGPIOB();
   ENABLECLKGPIOD();
   
   /*Configure GPIO pin : PC13 */
