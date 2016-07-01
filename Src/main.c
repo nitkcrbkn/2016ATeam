@@ -74,6 +74,7 @@ int main(void){
   
   ENABLECLKGPIOA();
   ENABLECLKGPIOD();
+
   
   /* Initialize all configured peripherals */
   MW_USARTInit(USART2ID);
@@ -90,7 +91,6 @@ int main(void){
   MW_SetGPIOMode(GPIO_MODE_OUTPUT_PP);
   MW_SetGPIOSpeed(GPIO_SPEED_FREQ_LOW);
   MW_GPIOInit(GPIOAID);
-
   /*Configure GPIO pin : PC4 */
   MW_SetGPIOPin(GPIO_PIN_4);
   MW_SetGPIOMode(GPIO_MODE_IT_RISING);
@@ -101,7 +101,7 @@ int main(void){
   MW_GPIOWrite(GPIOAID,GPIO_PIN_5,0);
 
   while (1) {
-    message("msg","fuck you");
+    message("msg","HelloWorld");
     MW_GPIOWrite(GPIOAID,GPIO_PIN_5,1);
     MW_wait(1000);
     MW_GPIOWrite(GPIOAID,GPIO_PIN_5,0);
