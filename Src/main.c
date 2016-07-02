@@ -37,7 +37,7 @@
  *TODO 
  *wakabayashi
  *  UARTでマルチバイト送信
- *  I2C slaveなしでロジアナで確認
+ *  I2C slaveなしでロジアナで確認...Done
  *  Timer 一定時間でLEDをトグル
  *oishi
  *  UARTの受信チェック
@@ -77,15 +77,14 @@ int main(void){
   MW_TIMInit(TIM1ID);
 
   MW_EnableTIMHandle(TIM1ID);
-  
+
   MW_TIMStart(TIM1ID);
-  
+
   while (1) {
-    MW_I2C1Transmit(0x56,decoy,4);
+    MW_I2C1Transmit(0xA0,decoy,2);
     //message("msg","fuck you");
     message("msg","%d",MW_GetTIMCounter(TIM1ID));
     MW_GPIOToggle(GPIOAID,GPIO_PIN_5);
-    MW_wait(1000);
     flush();
   }
 }
