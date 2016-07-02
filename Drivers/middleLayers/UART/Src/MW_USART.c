@@ -8,7 +8,7 @@
 
 static UART_HandleTypeDef huart1 = {
   .Instance = USART1,
-  .Init.BaudRate = 9600,
+  .Init.BaudRate = 115200,
   .Init.WordLength = UART_WORDLENGTH_8B,
   .Init.StopBits = UART_STOPBITS_1,
   .Init.Parity = UART_PARITY_NONE,
@@ -19,7 +19,7 @@ static UART_HandleTypeDef huart1 = {
 
 static UART_HandleTypeDef huart2 = {
   .Instance = USART2,
-  .Init.BaudRate = 9600,
+  .Init.BaudRate = 115200,
   .Init.WordLength = UART_WORDLENGTH_8B,
   .Init.StopBits = UART_STOPBITS_1,
   .Init.Parity = UART_PARITY_NONE,
@@ -30,7 +30,7 @@ static UART_HandleTypeDef huart2 = {
 
 static UART_HandleTypeDef huart3 = {
   .Instance = USART3,
-  .Init.BaudRate = 9600,
+  .Init.BaudRate = 115200,
   .Init.WordLength = UART_WORDLENGTH_8B,
   .Init.StopBits = UART_STOPBITS_1,
   .Init.Parity = UART_PARITY_NONE,
@@ -135,9 +135,8 @@ int32_t MW_USART3Receive(void){
   return (uint32_t)c;
 }
 		    
-void MW_Puts(uint8_t *str)
+void MW_Puts(char *str,uint32_t len)
 {
-  while(*str)
-    MW_USART2Transmit(str++,1);
+  MW_USART2Transmit(str,len);
   MW_USART2Transmit('\n',1);
 }
