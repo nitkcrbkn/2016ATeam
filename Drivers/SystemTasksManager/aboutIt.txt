@@ -1,0 +1,12 @@
+/* ===Kisarazu RBKN Library===
+ *
+ * autor          : Oishi
+ * version        : v0.10
+ * last update    : 20160703
+ *
+ * **overview***
+ * 全体のシステムの管理をするところの説明
+ *
+ */
+
+全体のシステムの管理をするところである。mainなどエントリーポイントもここに置く。
