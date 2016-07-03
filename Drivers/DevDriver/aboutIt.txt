@@ -1,0 +1,31 @@
+/* ===Kisarazu RBKN Library===
+ *
+ * autor          : Oishi
+ * version        : v0.10
+ * last update    : 20160703
+ *
+ * **overview***
+ * デバイスドライバの説明
+ */
+
+
+これはデバイスドライバである。以下のような構造を持つ。
+AB...電磁弁のドライバ
+MD...MDのドライバ
+Gene...Generalで一般的なもの（他のレイヤーとの通信部分）を書く。今はI2Cのみである。
+.
+├── AB
+│   ├── Inc
+│   │   └── DD_AB.h
+│   └── Src
+│       └── DD_AB.c
+├── Inc
+│   └── DD_Gene.h
+├── MD
+│   ├── Inc
+│   │   └── DD_MD.h
+│   └── Src
+│       └── DD_MD.c
+├── Src
+│   └── DD_Gene.c
+└── aboutIt.txt
