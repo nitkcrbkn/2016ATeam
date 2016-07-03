@@ -17,6 +17,10 @@ typedef enum
 	USART3ID = 2
 }usartid_t;
 
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart3;
+
 /**Sample code(main)
  *
  *
