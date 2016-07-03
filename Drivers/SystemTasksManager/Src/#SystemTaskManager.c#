@@ -1,0 +1,16 @@
+#include "stm32f1xx_hal.h"
+#include "SystemTaskManager.h"
+#include "MW_USART.h"
+#include "message.h"
+#include "MW_I2C.h" 
+
+void main(void){
+  uint32_t prev_cnt;
+
+  Initialize();
+  systemCounter=0;
+  prev_cnt = systemCounter;
+  while(1){
+    while(prev_cnt > systemCounter-5);
+  }
+}
