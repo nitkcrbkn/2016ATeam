@@ -6,37 +6,43 @@
  */
 #include "../Inc/MW_USART.h"
 
-static UART_HandleTypeDef huart1 = {
+UART_HandleTypeDef huart1 = {
   .Instance = USART1,
-  .Init.BaudRate = 115200,
-  .Init.WordLength = UART_WORDLENGTH_8B,
-  .Init.StopBits = UART_STOPBITS_1,
-  .Init.Parity = UART_PARITY_NONE,
-  .Init.Mode = UART_MODE_TX_RX,
-  .Init.HwFlowCtl = UART_HWCONTROL_NONE,
-  .Init.OverSampling = UART_OVERSAMPLING_16
+  .Init={
+    .BaudRate = 115200,
+    .WordLength = UART_WORDLENGTH_8B,
+    .StopBits = UART_STOPBITS_1,
+    .Parity = UART_PARITY_NONE,
+    .Mode = UART_MODE_TX_RX,
+    .HwFlowCtl = UART_HWCONTROL_NONE,
+    .OverSampling = UART_OVERSAMPLING_16
+  },
 };
 
-static UART_HandleTypeDef huart2 = {
+UART_HandleTypeDef huart2 = {
   .Instance = USART2,
-  .Init.BaudRate = 115200,
-  .Init.WordLength = UART_WORDLENGTH_8B,
-  .Init.StopBits = UART_STOPBITS_1,
-  .Init.Parity = UART_PARITY_NONE,
-  .Init.Mode = UART_MODE_TX_RX,
-  .Init.HwFlowCtl = UART_HWCONTROL_NONE,
-  .Init.OverSampling = UART_OVERSAMPLING_16
+  .Init={
+    .BaudRate = 115200,
+    .WordLength = UART_WORDLENGTH_8B,
+    .StopBits = UART_STOPBITS_1,
+    .Parity = UART_PARITY_NONE,
+    .Mode = UART_MODE_TX_RX,
+    .HwFlowCtl = UART_HWCONTROL_NONE,
+    .OverSampling = UART_OVERSAMPLING_16
+  },
 };
 
-static UART_HandleTypeDef huart3 = {
+UART_HandleTypeDef huart3 = {
   .Instance = USART3,
-  .Init.BaudRate = 115200,
-  .Init.WordLength = UART_WORDLENGTH_8B,
-  .Init.StopBits = UART_STOPBITS_1,
-  .Init.Parity = UART_PARITY_NONE,
-  .Init.Mode = UART_MODE_TX_RX,
-  .Init.HwFlowCtl = UART_HWCONTROL_NONE,
-  .Init.OverSampling = UART_OVERSAMPLING_16
+  .Init={
+    .BaudRate = 115200,
+    .WordLength = UART_WORDLENGTH_8B,
+    .StopBits = UART_STOPBITS_1,
+    .Parity = UART_PARITY_NONE,
+    .Mode = UART_MODE_TX_RX,
+    .HwFlowCtl = UART_HWCONTROL_NONE,
+    .OverSampling = UART_OVERSAMPLING_16
+  },
 };
 
 static UART_HandleTypeDef *uartid[3] = {
@@ -107,7 +113,7 @@ int32_t MW_USART1Receive(void){
 
 int32_t MW_USART2Transmit(uint8_t *str,uint16_t datanum){
 
-  if(HAL_UART_Transmit(&huart2,str,datanum,0xFFFF)!=HAL_OK)
+  if(HAL_UART_Transmit_DMA(&huart2,str,datanum)!=HAL_OK)
     return -1;
   return 0;
 }
@@ -137,6 +143,5 @@ int32_t MW_USART3Receive(void){
 		    
 void MW_Puts(char *str,uint32_t len)
 {
-  MW_USART2Transmit(str,len);
-  MW_USART2Transmit('\n',1);
+  MW_USART2Transmit((uint8_t*)str,len);
 }
