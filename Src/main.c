@@ -32,6 +32,11 @@
 */
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
+#include "MW_GPIO.h"
+#include "MW_USART.h"
+#include "message.h"
+#include "MW_I2C.h" 
+#include "MW_TIM.h"
 
 /*
  *TODO 
@@ -64,7 +69,6 @@ int main(void){
   GPIOInit();
 
   /* Initialize all configured peripherals */
-  MW_USARTInit(USART2ID);
   xdev_out(MW_USART2Transmit);
   
   MW_SetI2CClockSpeed(I2C1ID,40000);
@@ -78,11 +82,14 @@ int main(void){
 
   MW_TIMStartIT(TIM1ID);
   ENABLETIM1HANDLE();
+
+  MW_USARTInit(USART2ID);
   
   while (1) {
-    MW_I2C1Transmit(0xA0,decoy,2);
+    //    MW_I2C1Transmit(0xA0,decoy,2);
     message("msg","%d",MW_GetTIMCounter(TIM1ID));
     MW_GPIOToggle(GPIOAID,GPIO_PIN_5);
+    MW_wait(0);
     flush();
   }
 }
