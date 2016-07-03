@@ -1,4 +1,5 @@
 #include "xprintf.h"
+#include "MW_USART.h"
 #include <stdarg.h>
 
 #define message(type,fmt, ...) _msg(type,__FILE__, __FUNCTION__, __LINE__, fmt, ##__VA_ARGS__)
@@ -45,7 +46,8 @@ void _msg(const char* type,
 
 void flush(void){
   if(outptr!=0){
-    MW_Puts(buff,outptr-buff); 
+    *outptr++='\n';
+    MW_USART2Transmit((uint8_t*)buff,outptr-buff); 
   }
   outptr=buff;
 }
