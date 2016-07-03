@@ -46,11 +46,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal_conf.h"
-#include "MW_GPIO.h"
-#include "MW_USART.h"
-#include "message.h"
-#include "MW_I2C.h" 
-#include "MW_TIM.h"
    /** @addtogroup STM32F1xx_HAL_Driver
   * @{
   */
