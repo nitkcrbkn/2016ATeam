@@ -4,5 +4,13 @@
 #include "message.h"
 #include "MW_I2C.h" 
 
-void _main(void){
+void main(void){
+  uint32_t prev_cnt;
+
+  Initialize();
+  system
+  prev_cnt = systemCounter;
+  while(1){
+    
+  }
 }
