@@ -15,10 +15,6 @@
 # Parallel compilation)
 # 
 
-#   text	   data	    bss	    dec	    hex	filename
-#
-#  22572	    236	   1596	  24404	   5f54	./bin/LED_Blink.elf
-
 GCC_BIN = 
 PROJECT = Test
 
@@ -30,12 +26,16 @@ HALDIR = $(DRIVERSDIR)/STM32F1xx_HAL_Driver
 CMSISDIR = $(DRIVERSDIR)/CMSIS
 CMSIS_DEVICEDIR = $(CMSISDIR)/Device/ST/STM32F1xx
 MIDDLE_DRIVERDIR = $(DRIVERSDIR)/middleLayers
+DEV_DRIVERDIR = $(DRIVERSDIR)/DevDriver
+SYSTEM_TASKS_MANAGERDIR = $(DRIVERSDIR)/SystemTasksManager
 
 OBJDIR=./obj
 
 USR_SRCDIR = ./Src
 HAL_SRCDIR = $(HALDIR)/Src
 MIDDLE_SRCDIRS = $(wildcard $(MIDDLE_DRIVERDIR)/*/Src)
+DEV_SRCDIRS =  $(wildcard $(DEV_DRIVERDIR)/*/Src)
+SYSTEM_TASKS_SRCDIR = $(SYSTEM_TASKS_MANAGERDIR)/Src
 STARTUP_SRC = $(DRIVERSDIR)/startup_stm32f103xb.s
 STARTUP_OBJ = startup.o
 
@@ -44,7 +44,10 @@ BINDIR = ./bin
 SRCS   = 	\
 		$(wildcard $(USR_SRCDIR)/*.c)	\
 		$(wildcard $(HAL_SRCDIR)/*.c)	\
-		$(foreach dir,$(wildcard $(MIDDLE_SRCDIRS)),$(wildcard $(dir)/*.c))
+		$(foreach dir,$(wildcard $(MIDDLE_SRCDIRS)),$(wildcard $(dir)/*.c))	\
+		$(foreach dir,$(wildcard $(DEV_SRCDIRS)),$(wildcard $(dir)/*.c))	\
+		$(wildcard $(SYSTEM_TASKS_SRCDIR)/*.c)
+
 
 SYS_OBJECTS = 	$(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))\
 		$(OBJDIR)/$(STARTUP_OBJ)
@@ -53,9 +56,14 @@ INCLUDEDIRS =   -I $(shell cd ./Inc &&  pwd)							\
 	 	-I $(shell cd  $(HALDIR)/Inc&& pwd)						\
 		-I $(shell cd  $(CMSISDIR)/Inc&& pwd)						\
 		-I $(shell cd  $(CMSIS_DEVICEDIR)/Inc&& pwd)					\
+		-I $(shell cd  $(SYSTEM_TASKS_MANAGERDIR)/Inc&& pwd)				\
 		-I $(shell cd  $(MIDDLE_DRIVERDIR)/Inc && pwd)				\
 	$(addprefix -I, \
 		$(foreach dir,$(wildcard $(MIDDLE_DRIVERDIR)/*/Inc),$(shell cd $(dir) && pwd))\
+	)\
+		-I $(shell cd  $(DEV_DRIVERDIR)/Inc && pwd)				\
+	$(addprefix -I, \
+		$(foreach dir,$(wildcard $(DEV_DRIVERDIR)/*/Inc),$(shell cd $(dir) && pwd))\
 	)
 
 LINKER_SCRIPT = $(DRIVERSDIR)/STM32F103RBTx_FLASH.ld
@@ -101,6 +109,9 @@ $(OBJDIR)/%.o: $(HAL_SRCDIR)/%.c
 	-mkdir -p $(OBJDIR)
 	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
 
+$(OBJDIR)/%.o: $(SYSTEM_TASKS_SRCDIR)/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
 
 $(OBJDIR)/%.o: $(word 1,$(MIDDLE_SRCDIRS))/%.c
 	-mkdir -p $(OBJDIR)
@@ -142,6 +153,26 @@ $(OBJDIR)/%.o: $(word 10,$(MIDDLE_SRCDIRS))/%.c
 	-mkdir -p $(OBJDIR)
 	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
 
+$(OBJDIR)/%.o: $(word 1,$(DEV_SRCDIRS))/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
+
+$(OBJDIR)/%.o: $(word 2,$(DEV_SRCDIRS))/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
+
+$(OBJDIR)/%.o: $(word 3,$(DEV_SRCDIRS))/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
+
+$(OBJDIR)/%.o: $(word 4,$(DEV_SRCDIRS))/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
+
+$(OBJDIR)/%.o: $(word 5,$(DEV_SRCDIRS))/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
+
 $(BINDIR)/$(PROJECT).elf: $(OBJECTS) $(SYS_OBJECTS)
 	-mkdir -p $(BINDIR)
 	$(LD) $(LD_FLAGS) -T $(LINKER_SCRIPT) $(LIBRARY_PATHS) -o $@ $^ -Wl,--start-group $(LIBRARIES) $(LD_SYS_LIBS) -Wl,--end-group
@@ -162,9 +193,7 @@ size: $(BINDIR)/$(PROJECT).elf
 	$(SIZE) $(BINDIR)/$(PROJECT).elf
 
 include:
-	echo $(SRCS)
 	echo $(INCLUDEDIRS)
-
 
 OPENOCDPATH=/home/evaota/app/openocd0.10.0-201601101000-dev/bin
 OPENOCDCONFIGDIR=./Drivers/openocd_configulation

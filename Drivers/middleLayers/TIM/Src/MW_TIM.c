@@ -8,19 +8,23 @@
 
 static TIM_HandleTypeDef htim1 = {
   .Instance = TIM1,
-  .Init.Prescaler = 0,
-  .Init.CounterMode = TIM_COUNTERMODE_UP,
-  .Init.Period = 0,
-  .Init.ClockDivision = TIM_CLOCKDIVISION_DIV1,
-  .Init.RepetitionCounter = 0
+  .Init={
+    .Prescaler = 0,
+    .CounterMode = TIM_COUNTERMODE_UP,
+    .Period = 0,
+    .ClockDivision = TIM_CLOCKDIVISION_DIV1,
+    .RepetitionCounter = 0
+  }
 };
 static TIM_HandleTypeDef htim2 = {
   .Instance = TIM2,
-  .Init.Prescaler = 0,
-  .Init.CounterMode = TIM_COUNTERMODE_UP,
-  .Init.Period = 0,
-  .Init.ClockDivision = TIM_CLOCKDIVISION_DIV1,
-  .Init.RepetitionCounter = 0
+  .Init={
+    .Prescaler = 0,
+    .CounterMode = TIM_COUNTERMODE_UP,
+    .Period = 0,
+    .ClockDivision = TIM_CLOCKDIVISION_DIV1,
+    .RepetitionCounter = 0
+  }
 };
 
 static TIM_HandleTypeDef *timid[2] = {
