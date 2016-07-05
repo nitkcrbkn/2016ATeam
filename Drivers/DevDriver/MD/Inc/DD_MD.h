@@ -21,7 +21,7 @@
 typedef enum{
   D_MMOD_FREE=0,
   D_MMOD_FORWARD=1,
-  D_MMOD_BACK=2,
+  D_MMOD_BACKWARD=2,
   D_MMOD_BRAKE=3,
 } DD_MD_MODE_t;
 

@@ -15,6 +15,7 @@
  * dutyは0...free,1...forward,2...back,3...brake
  */
 #include <stdint.h>
+#include "message.h"
 #include "DD_MD.h"
 #include "DD_Gene.h"
 
@@ -26,6 +27,23 @@ int DD_Send2MD(DD_MD_DRI_t *dmd){
   data[1] = dmd->duty>>8|
     (uint8_t)dmd->mode<<2;
   data[0]=dmd->duty;
+
+  MW_printf("MD(%02x):[",dmd->add);
+  switch(dmd->mode){
+  case D_MMOD_FREE:
+    MW_printf("Fr");
+    break;
+  case D_MMOD_FORWARD:
+    MW_printf("Fw");
+    break;
+  case D_MMOD_BACKWARD:
+    MW_printf("Bw");
+    break;
+  case D_MMOD_BRAKE:
+    MW_printf("Br");
+    break;
+  }
+  MW_printf("],[%d]\n",dmd->duty);
 
   //Send data
   return DD_I2CSend(dmd->add,data,sizeof_data);

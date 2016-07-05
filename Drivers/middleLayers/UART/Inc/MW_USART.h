@@ -10,6 +10,9 @@
 
 #include "stm32f1xx_hal.h"
 
+//これを超えると自動送信
+#define MAX_STRING_LENGTH 900 
+
 typedef enum
 {
 	USART1ID = 0,
