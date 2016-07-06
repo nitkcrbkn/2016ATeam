@@ -3,9 +3,7 @@
 #include "xprintf.h"
 
 #define message(type, fmt, ...) _msg(type, __FUNCTION__, __LINE__, fmt, ## __VA_ARGS__)
-
 void _msg(const char* type,
-	  const char* file,
 	  const char* func,
 	  int line,
 	  const char* fmt,

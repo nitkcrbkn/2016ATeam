@@ -1,5 +1,6 @@
 #include "xprintf.h"
 #include "MW_USART.h"
+#include "message.h"
 #include <stdarg.h>
 
 #define message(type, fmt, ...) _msg(type, __FUNCTION__, __LINE__, fmt, ## __VA_ARGS__)

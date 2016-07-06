@@ -21,7 +21,7 @@
 DD_MD_DRI_t h_md_g[DD_NUM_OF_MD]={
   {0x10,//address
    0,//default duty
-   DD_MMOD_FREE,//mode
+   D_MMOD_FREE,//mode
   },
 };
 #endif
