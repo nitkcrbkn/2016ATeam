@@ -6,92 +6,95 @@
 #include "MW_I2C.h" 
 #include "MW_GPIO.h"
 #include "DD_Gene.h"
+#include "App.h"
 
-volatile uint32_t systemCounter;
+volatile uint32_t SY_systemCounter;
 
-int Initialize(void);
-int I2CConnectionTest(int timeout);
-int WaitForRC(int timeout);
-int ApplicationTask(void);
-void SystemClock_Config(void);
-void GPIOInit(void);
-int DevDriverTasks(void);
+int SY_Initialize(void);
+int SY_I2CConnectionTest(int timeout);
+int SY_WaitForRC(int timeout);
+int SY_ApplicationTask(void);
+void SY_SystemClock_Config(void);
+void SY_GPIOInit(void);
+int SY_DevDriverTasks(void);
 
 int main(void){
   int ret;
 
-  ret = Initialize();
+  ret = SY_Initialize();
   if(ret){
     message("err","initialize Faild%d",ret);
     return EXIT_FAILURE;
   }
-  ret = I2CConnectionTest(10);
+  ret = SY_I2CConnectionTest(10);
   if(ret){
     message("err","I2CConnectionTest Faild%d",ret);
     return EXIT_FAILURE;
   }
-  ret = WaitForRC(10000);//timeout 10000[ms].
+  ret = SY_WaitForRC(10000);//timeout 10000[ms].
   if(ret){
     message("err","WaitForRC Faild%d",ret);
     return EXIT_FAILURE;
   }
-  systemCounter = 0;  
+  SY_systemCounter = 0;  
 
   while(1){
-    ApplicationTask();
-    if(systemCounter % 30 == 0){
+    SY_ApplicationTask();
+    if(SY_systemCounter % 30 == 0){
       flush();//out message.
     }
-    while(systemCounter%_INTERVAL_MS!=_INTERVAL_MS/2-1);
-    if(ret = DevDriverTasks()){
+    while(SY_systemCounter%_INTERVAL_MS!=_INTERVAL_MS/2-1);
+    ret = SY_DevDriverTasks();
+    if(ret){
       message("err","Device Driver Tasks Faild%d",ret);
     }
-    while(systemCounter%_INTERVAL_MS!=0);
+    while(SY_systemCounter%_INTERVAL_MS!=0);
   }
 }
 
-int ApplicationTask(void){
-
-  return EXIT_SUCCESS;
+int SY_ApplicationTask(void){
+  return appTask();
 }
 
-int DevDriverTasks(void){
+int SY_DevDriverTasks(void){
   return DD_Tasks();
 }
 
-int WaitForRC(int timeout){
+int SY_WaitForRC(int timeout){
   UNUSED(timeout);
   return EXIT_SUCCESS;
 }
 
-int I2CConnectionTest(int timeout){
+int SY_I2CConnectionTest(int timeout){
   UNUSED(timeout);
   return EXIT_SUCCESS;
 }
 
-int Initialize(void){
+int SY_Initialize(void){
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
   /* Configure the system clock */
-  SystemClock_Config();
+  SY_SystemClock_Config();
 
   /*Initialize printf null transit*/
   flush();
-
-  GPIOInit();
+  
+  /*Initialize GPIO*/
+  SY_GPIOInit();
 
   /* Initialize all configured peripherals */
-
   MW_SetI2CClockSpeed(I2C1ID,40000);
   MW_I2CInit(I2C1ID);
 
+  /*UART initialize*/
   MW_USARTInit(USART2ID);
+  MW_USARTInit(USART3ID);
 
   return EXIT_SUCCESS;
 }
 
-void SystemClock_Config(void){
+void SY_SystemClock_Config(void){
 
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
@@ -135,7 +138,7 @@ void SystemClock_Config(void){
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
-void GPIOInit(void)
+void SY_GPIOInit(void)
 {
   ENABLECLKGPIOA();
   ENABLECLKGPIOB();
