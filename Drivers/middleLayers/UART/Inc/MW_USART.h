@@ -53,11 +53,6 @@ PC11     ------> USART3_RX
 void MW_USARTInit(usartid_t id);
 
 void MW_SetUSARTMode(usartid_t id,uint32_t Mode);
-void MW_SetHwFlowCtl(usartid_t id,uint32_t HwFlowCtl);
-void MW_SetParity(usartid_t id,uint32_t Parity);
-void MW_SetStopBits(usartid_t id,uint32_t StopBits);
-void MW_SetWordLength(usartid_t id,uint32_t WordLength);
-void MW_SetBaudRate(usartid_t id,uint32_t BaudRate);
 
 int32_t MW_USART1Transmit(const uint8_t *str,uint16_t datanum);
 int32_t MW_USART1Receive(void);
