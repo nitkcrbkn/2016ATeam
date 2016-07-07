@@ -64,7 +64,7 @@ void MW_USARTInit(usartid_t id){
 }
 
 int32_t MW_USART1Transmit(const uint8_t *str, uint16_t datanum){
-  if( HAL_UART_Transmit(&huart1, str, datanum, 0xFFFF) != HAL_OK ){
+  if( HAL_UART_Transmit(&huart1, (uint8_t*)str, datanum, 0xFFFF) != HAL_OK ){
     return -1;
   }
   return 0;
@@ -79,7 +79,7 @@ int32_t MW_USART1Receive(void){
 }
 
 int32_t MW_USART2Transmit(const uint8_t *str, uint16_t datanum){
-  if( HAL_UART_Transmit_DMA(&huart2, str, datanum) != HAL_OK ){
+  if( HAL_UART_Transmit_DMA(&huart2, (uint8_t*)str, datanum) != HAL_OK ){
     return -1;
   }
   return 0;
@@ -94,7 +94,7 @@ int32_t MW_USART2Receive(void){
 }
 
 int32_t MW_USART3Transmit(const uint8_t *str, uint16_t datanum){
-  if( HAL_UART_Transmit(&huart3, str, datanum, 0xFFFF) != HAL_OK ){
+  if( HAL_UART_Transmit(&huart3, (uint8_t*)str, datanum, 0xFFFF) != HAL_OK ){
     return -1;
   }
   return 0;
