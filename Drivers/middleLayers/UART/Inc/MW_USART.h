@@ -10,9 +10,6 @@
 
 #include "stm32f1xx_hal.h"
 
-//これを超えると自動送信
-#define MAX_STRING_LENGTH 900 
-
 typedef enum
 {
 	USART1ID = 0,
@@ -62,11 +59,11 @@ void MW_SetStopBits(usartid_t id,uint32_t StopBits);
 void MW_SetWordLength(usartid_t id,uint32_t WordLength);
 void MW_SetBaudRate(usartid_t id,uint32_t BaudRate);
 
-int32_t MW_USART1Transmit(uint8_t *str,uint16_t datanum);
+int32_t MW_USART1Transmit(const uint8_t *str,uint16_t datanum);
 int32_t MW_USART1Receive(void);
-int32_t MW_USART2Transmit(uint8_t *str,uint16_t datanum);
+int32_t MW_USART2Transmit(const uint8_t *str,uint16_t datanum);
 int32_t MW_USART2Receive(void);
-int32_t MW_USART3Transmit(uint8_t *str,uint16_t datanum);
+int32_t MW_USART3Transmit(const uint8_t *str,uint16_t datanum);
 int32_t MW_USART3Receive(void);
 void MW_Puts(char *str,uint32_t len);
 
