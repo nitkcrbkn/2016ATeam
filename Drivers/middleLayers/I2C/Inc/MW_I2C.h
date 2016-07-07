@@ -45,13 +45,6 @@ typedef enum
 void MW_I2CInit(i2cid_t id);
 
 void MW_SetI2CClockSpeed(i2cid_t id,uint32_t ClockSpeed);
-void MW_SetI2CDutyCycle(i2cid_t id,uint32_t DutyCycle);
-void MW_SetI2COwnAddress1(i2cid_t id,uint32_t OwnAddress1);
-void MW_SetI2COwnAddress2(i2cid_t id,uint32_t OwnAddress2);
-void MW_SetI2CAddressingMode(i2cid_t id,uint32_t AddressingMode);
-void MW_SetI2CDualAddressMode(i2cid_t id,uint32_t DualAddressMode);
-void MW_SetI2CGeneralCallMode(i2cid_t id,uint32_t GeneralCallMode);
-void MW_SetI2CNoStretchMode(i2cid_t id,uint32_t NoStretchMode);
 
 int32_t MW_I2C1Transmit(uint8_t address,const uint8_t *data,uint16_t size);
 int32_t MW_I2C2Transmit(uint8_t address,const uint8_t *data,uint16_t size);
