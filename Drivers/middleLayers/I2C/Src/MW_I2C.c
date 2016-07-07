@@ -51,14 +51,16 @@ void MW_I2CInit(i2cid_t id){
 }
 
 int32_t MW_I2C1Transmit(uint8_t address, const uint8_t *data, uint16_t size){
-  if( HAL_I2C_Master_Transmit(&hi2c1, address, data, size, 10) != HAL_OK ){
+  /*what f**k transmit must not change data, buf argument is NOT constant.*/
+  if( HAL_I2C_Master_Transmit(&hi2c1, address, (uint8_t *)data, size, 10) != HAL_OK ){
     return -1;
   }
   return 0;
 }
 
 int32_t MW_I2C2Transmit(uint8_t address, const uint8_t *data, uint16_t size){
-  if( HAL_I2C_Master_Transmit(&hi2c2, address, data, size, 10) != HAL_OK ){
+  /*what f**k transmit must not change data, buf argument is NOT constant.*/
+  if( HAL_I2C_Master_Transmit(&hi2c2, address, (uint8_t *)data, size, 10) != HAL_OK ){
     return -1;
   }
   return 0;
