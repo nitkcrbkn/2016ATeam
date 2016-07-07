@@ -51,31 +51,6 @@ static UART_HandleTypeDef *uartid[3] = {
   &huart3
 };
 
-void MW_SetUSARTMode(usartid_t id, uint32_t Mode){
-  assert_param(IS_USART_ID(id));
-  uartid[(uint32_t)id]->Init.Mode = Mode;
-}
-
-void MW_SetUSARTHwFlowCtl(usartid_t id, uint32_t HwFlowCtl){
-  assert_param(IS_USART_ID(id));
-  uartid[(uint32_t)id]->Init.HwFlowCtl = HwFlowCtl;
-}
-
-void MW_SetUSARTParity(usartid_t id, uint32_t Parity){
-  assert_param(IS_USART_ID(id));
-  uartid[(uint32_t)id]->Init.Parity = Parity;
-}
-
-void MW_SetUSARTStopBits(usartid_t id, uint32_t StopBits){
-  assert_param(IS_USART_ID(id));
-  uartid[(uint32_t)id]->Init.StopBits = StopBits;
-}
-
-void MW_SetUSARTWordLength(usartid_t id, uint32_t WordLength){
-  assert_param(IS_USART_ID(id));
-  uartid[(uint32_t)id]->Init.WordLength = WordLength;
-}
-
 void MW_SetUSARTBaudRate(usartid_t id, uint32_t BaudRate){
   assert_param(IS_USART_ID(id));
   uartid[(uint32_t)id]->Init.BaudRate = BaudRate;
@@ -131,9 +106,5 @@ int32_t MW_USART3Receive(void){
     return -1;
   }
   return (uint32_t)c;
-}
-
-void MW_Puts(char *str, uint32_t len){
-  MW_USART2Transmit((uint8_t*)str, len);
 }
 
