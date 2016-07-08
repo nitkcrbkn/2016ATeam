@@ -180,9 +180,12 @@ void SysTick_Handler(void)
   * @Note   This function is redefined in "main.h" and related to DMA stream
   *         used for USART data reception
   */
-void DMA1_Channel7_IRQHandler(void)
-{
+void DMA1_Channel7_IRQHandler(void){
   HAL_DMA_IRQHandler(huart2.hdmatx);
+}
+
+void DMA1_Channel3_IRQHandler(void){
+  HAL_DMA_IRQHandler(huart3.hdmarx);
 }
 
 /**
@@ -192,6 +195,10 @@ void DMA1_Channel7_IRQHandler(void)
   * @Note   This function is redefined in "main.h" and related to DMA  
   *         used for USART data transmission     
   */
+
+void USART3_IRQHandler(void){
+  HAL_UART_IRQHandler(&huart3);
+}
 
 void USART2_IRQHandler(void)
 {

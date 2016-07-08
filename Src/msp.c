@@ -644,7 +644,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
   /* USER CODE BEGIN USART3_MspInit 1 */
 
     /* Configure the DMA handler for reception process */
-    hdma_rx.Instance                 = DMA1_Channel2;
+    hdma_rx.Instance                 = DMA1_Channel3;
     hdma_rx.Init.Direction           = DMA_PERIPH_TO_MEMORY;
     hdma_rx.Init.PeriphInc           = DMA_PINC_DISABLE;
     hdma_rx.Init.MemInc              = DMA_MINC_ENABLE;
@@ -654,12 +654,18 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     hdma_rx.Init.Priority            = DMA_PRIORITY_HIGH;
 
     HAL_DMA_Init(&hdma_rx);
+    
 
     /* Associate the initialized DMA handle to the the UART handle */
     __HAL_LINKDMA(huart, hdmarx, hdma_rx);
     /* NVIC configuration for DMA transfer complete interrupt (USARTx_RX) */
-    HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
+    HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Channel3_IRQn);
+
+    /* NVIC configuration for DMA transfer complete interrupt (USART1_RX) */
+    HAL_NVIC_SetPriority(USART3_IRQn, 0, 1);
+    HAL_NVIC_EnableIRQ(USART3_IRQn);
+
   }
 
 }
