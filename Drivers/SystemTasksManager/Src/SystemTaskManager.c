@@ -6,9 +6,10 @@
 #include "MW_I2C.h" 
 #include "MW_GPIO.h"
 #include "DD_Gene.h"
-#include "App.h"
+#include "app.h"
 
 volatile uint32_t SY_systemCounter;
+volatile uint8_t g_data[10];
 
 int SY_Initialize(void);
 int SY_I2CConnectionTest(int timeout);
@@ -38,7 +39,10 @@ int main(void){
   }
   SY_systemCounter = 0;  
 
+  MW_USART3ReceiveMult(8,g_data);
+
   while(1){
+    MW_printf("%d\n",SY_systemCounter);
     SY_ApplicationTask();
     if(SY_systemCounter % 30 == 0){
       flush();//out message.
@@ -164,4 +168,9 @@ void SY_GPIOInit(void)
 
   /*Configure GPIO pin Output Level */
   MW_GPIOWrite(GPIOAID,GPIO_PIN_5,0);
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle){
+  MW_USART3ReceiveMult(8,g_data);
+  message("msg","recieveData%x",g_data[0]);
 }
