@@ -26,8 +26,10 @@ int DD_Send2AB(DD_AB_DRI_t *dab){
   data[0] = dab->dat;
   data[1] = ~dab->dat;
 
-  MW_printf("AB(%02x):[%b]",dab->add,dab->dat);
-
   //Send data
   return DD_I2CSend(dab->add,data,sizeof_data);
+}
+
+void DD_ABPrint(DD_AB_DRI_t *dab){
+  MW_printf("AB(%02x):[%b]",dab->add,dab->dat);
 }
