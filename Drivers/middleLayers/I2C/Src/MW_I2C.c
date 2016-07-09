@@ -4,7 +4,8 @@
  *  Created on: 2016/06/02
  *      Author: evaota
  */
-#include "../Inc/MW_I2C.h"
+#include "MW_I2C.h"
+#include <stdlib.h>
 
 static I2C_HandleTypeDef hi2c1 = {
   .Instance = I2C1,
@@ -44,10 +45,11 @@ void MW_SetI2CClockSpeed(i2cid_t id, uint32_t ClockSpeed){
 }
 
 /* I2C init function */
-void MW_I2CInit(i2cid_t id){
+int MW_I2CInit(i2cid_t id){
   if( HAL_I2C_Init(i2cid[(uint32_t)id]) != HAL_OK ){
-    Error_Handler();
+    return EXIT_FAILURE;
   }
+  return EXIT_SUCCESS;
 }
 
 int32_t MW_I2C1Transmit(uint8_t address, const uint8_t *data, uint16_t size){

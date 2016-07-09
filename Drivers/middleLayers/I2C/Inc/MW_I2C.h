@@ -42,7 +42,7 @@ typedef enum
    PB10     ------> I2C2_SCL
    PB11     ------> I2C2_SDA
 */
-void MW_I2CInit(i2cid_t id);
+int MW_I2CInit(i2cid_t id);
 
 void MW_SetI2CClockSpeed(i2cid_t id,uint32_t ClockSpeed);
 
