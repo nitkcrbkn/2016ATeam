@@ -1,8 +1,0 @@
-#include "RC.h"
-
-static int isConnected = 0;
-
-int DD_RCInit(void){
-
-
-}
