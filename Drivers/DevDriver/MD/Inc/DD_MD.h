@@ -32,5 +32,6 @@ typedef struct{
 }DD_MD_DRI_t;
 
 int DD_Send2MD(DD_MD_DRI_t *dmd);
+void DD_MDPrint(DD_MD_DRI_t *dmd);
 
 #endif

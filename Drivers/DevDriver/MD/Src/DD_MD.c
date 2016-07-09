@@ -28,6 +28,11 @@ int DD_Send2MD(DD_MD_DRI_t *dmd){
     (uint8_t)dmd->mode<<2;
   data[0]=dmd->duty;
 
+  //Send data
+  return DD_I2CSend(dmd->add,data,sizeof_data);
+}
+
+void DD_MDprint(DD_MD_DRI_t *dmd){
   MW_printf("MD(%02x):[",dmd->add);
   switch(dmd->mode){
   case D_MMOD_FREE:
@@ -44,7 +49,4 @@ int DD_Send2MD(DD_MD_DRI_t *dmd){
     break;
   }
   MW_printf("],[%d]\n",dmd->duty);
-
-  //Send data
-  return DD_I2CSend(dmd->add,data,sizeof_data);
 }
