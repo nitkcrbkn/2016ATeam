@@ -17,7 +17,7 @@ int SY_Initialize(void);
 int SY_I2CConnectionTest(int timeout);
 int SY_WaitForRC(int timeout);
 int SY_ApplicationTask(void);
-void SY_SystemClock_Config(void);
+int SY_SystemClock_Config(void);
 void SY_GPIOInit(void);
 int SY_DevDriverTasks(void);
 
@@ -34,7 +34,6 @@ int main(void){
     message("err","I2CConnectionTest Faild%d",ret);
     return EXIT_FAILURE;
   }
-  ret = SY_WaitForRC(10000);//timeout 10000[ms].
   if(ret){
     message("err","WaitForRC Faild%d",ret);
     return EXIT_FAILURE;
@@ -44,6 +43,7 @@ int main(void){
   while(1){
     SY_ApplicationTask();
     if(SY_systemCounter % 30 == 0){
+      DD_RCPrint((uint8_t*)g_rc_data);
       flush();//out message.
     }
     while(SY_systemCounter%_INTERVAL_MS!=_INTERVAL_MS/2-1);
@@ -57,17 +57,11 @@ int main(void){
 }
 
 int SY_ApplicationTask(void){
-  DD_RCPrint((uint8_t*)g_rc_data);
   return appTask();
 }
 
 int SY_DevDriverTasks(void){
   return DD_Tasks();
-}
-
-int SY_WaitForRC(int timeout){
-  UNUSED(timeout);
-  return EXIT_SUCCESS;
 }
 
 int SY_I2CConnectionTest(int timeout){
@@ -77,10 +71,14 @@ int SY_I2CConnectionTest(int timeout){
 
 int SY_Initialize(void){
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+  if(HAL_Init()){
+    return EXIT_FAILURE;
+  }
 
   /* Configure the system clock */
-  SY_SystemClock_Config();
+  if(SY_SystemClock_Config()){
+    return EXIT_FAILURE;
+  }
 
   /*Initialize printf null transit*/
   flush();
@@ -90,7 +88,9 @@ int SY_Initialize(void){
 
   /* Initialize all configured peripherals */
   MW_SetI2CClockSpeed(I2C1ID,20000);
-  MW_I2CInit(I2C1ID);
+  if(MW_I2CInit(I2C1ID)){
+    return EXIT_FAILURE;
+  }
 
   /*UART initialize*/
   MW_USARTInit(USART2ID);
@@ -103,7 +103,7 @@ int SY_Initialize(void){
   return EXIT_SUCCESS;
 }
 
-void SY_SystemClock_Config(void){
+int SY_SystemClock_Config(void){
 
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
@@ -116,28 +116,28 @@ void SY_SystemClock_Config(void){
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-    {
-      //    Error_Handler();
-    }
-
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
+    message("err","oscConfigFaild");
+    return EXIT_FAILURE;
+  }
+  
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
     |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
-    {
-      //    Error_Handler();
-    }
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK){
+    message("err","clockConfigFaild");
+    return EXIT_FAILURE;
+  }
 
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
   PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-    {
-      //    Error_Handler();
-    }
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK){
+    message("err","HAL_RCCEx_PeriphCLKConfig");
+    return EXIT_FAILURE;
+  }
 
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
@@ -145,6 +145,8 @@ void SY_SystemClock_Config(void){
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+
+  return EXIT_SUCCESS;
 }
 
 void SY_GPIOInit(void)
@@ -177,5 +179,6 @@ void SY_GPIOInit(void)
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle){
+  UNUSED(UartHandle);
   DD_RCTask(rc_rcv, (uint8_t*)g_rc_data);
 }
