@@ -19,7 +19,7 @@
 /*Address Definition*/
 #if DD_NUM_OF_MD
 DD_MD_DRI_t h_md_g[DD_NUM_OF_MD]={
-  {0x10,//address
+  {0x20,//address
    0,//default duty
    D_MMOD_FREE,//mode
   },
