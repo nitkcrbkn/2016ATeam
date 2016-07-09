@@ -16,5 +16,6 @@
 #define DD_NUM_OF_AB 0
 
 int DD_I2CSend(uint8_t add,uint8_t *data,uint8_t size);
+void DD_Print(void);
 
 #endif

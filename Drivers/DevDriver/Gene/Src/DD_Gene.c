@@ -54,3 +54,17 @@ int DD_Tasks(void){
 #endif
   return EXIT_SUCCESS;
 }
+
+void DD_Print(void){
+  int i;
+#if DD_NUM_OF_MD
+  for(i=0;i<DD_NUM_OF_MD;i++){
+    DD_MDPrint(&h_md_g[i]);
+  }
+#endif
+#if DD_NUM_OF_AB
+  for(i=0;i<DD_NUM_OF_AB;i++){
+    DD_ABPrint(&h_ab_g[i]);
+  }
+#endif
+}
