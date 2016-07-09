@@ -1,0 +1,23 @@
+#include "RC.h"
+#include <stdlib.h>
+
+static int isNOTConnected = 7;
+
+int DD_RCInit(uint8_t rc_data[8]){
+  MW_USARTInit(USART3ID);
+
+  return DD_RCTask(rc_data);
+}
+
+int DD_RCTask(const uint8_t rc_data[8],int out_data[8]){
+  int i;
+  for(i=0;i<7;i++){
+    out_data[rc_data[i]>>6]=rc_data[i]&(0xFF>>2);
+  }
+  MW_USART3ReceiveMult(8,g_data);  
+}
+
+int DD_print(uint8_t data[8]){
+  if(isNOTConnected)return EXIT_FAILURE;
+  if(
+}
