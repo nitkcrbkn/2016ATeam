@@ -7,9 +7,11 @@
 #include "MW_GPIO.h"
 #include "DD_Gene.h"
 #include "app.h"
+#include "DD_RC.h"
 
 volatile uint32_t SY_systemCounter;
-volatile uint8_t g_data[10];
+volatile uint8_t g_rc_data[8];
+static uint8_t rc_rcv[8];
 
 int SY_Initialize(void);
 int SY_I2CConnectionTest(int timeout);
@@ -38,16 +40,14 @@ int main(void){
     return EXIT_FAILURE;
   }
   SY_systemCounter = 0;  
-
-  MW_USART3ReceiveMult(8,g_data);
-
+  message("msg","start!!\n");
   while(1){
-    MW_printf("%d\n",SY_systemCounter);
     SY_ApplicationTask();
     if(SY_systemCounter % 30 == 0){
       flush();//out message.
     }
     while(SY_systemCounter%_INTERVAL_MS!=_INTERVAL_MS/2-1);
+
     ret = SY_DevDriverTasks();
     if(ret){
       message("err","Device Driver Tasks Faild%d",ret);
@@ -57,6 +57,7 @@ int main(void){
 }
 
 int SY_ApplicationTask(void){
+  DD_RCPrint((uint8_t*)g_rc_data);
   return appTask();
 }
 
@@ -88,13 +89,17 @@ int SY_Initialize(void){
   SY_GPIOInit();
 
   /* Initialize all configured peripherals */
-  MW_SetI2CClockSpeed(I2C1ID,40000);
+  MW_SetI2CClockSpeed(I2C1ID,20000);
   MW_I2CInit(I2C1ID);
 
   /*UART initialize*/
   MW_USARTInit(USART2ID);
-  MW_USARTInit(USART3ID);
 
+  if(DD_RCInit((uint8_t*)g_rc_data,10000)){
+    message("err","RC initialize faild!\n");
+    return EXIT_FAILURE;
+  }
+  
   return EXIT_SUCCESS;
 }
 
@@ -146,6 +151,7 @@ void SY_GPIOInit(void)
 {
   ENABLECLKGPIOA();
   ENABLECLKGPIOB();
+  ENABLECLKGPIOC();
   ENABLECLKGPIOD();
   
   /*Configure GPIO pin : PC13 */
@@ -171,6 +177,5 @@ void SY_GPIOInit(void)
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle){
-  MW_USART3ReceiveMult(8,g_data);
-  message("msg","recieveData%x",g_data[0]);
+  DD_RCTask(rc_rcv, (uint8_t*)g_rc_data);
 }
