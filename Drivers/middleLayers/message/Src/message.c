@@ -43,9 +43,7 @@ void _msg(const char* type,
   }
   _xprintf("\n");
 
-  if(outptr-buff>MAX_STRING_LENGTH){
-    flush();
-  }
+  flush();
 }
 
 void flush(void){
