@@ -18,7 +18,7 @@ PROJECT = Test
 
 #use debugger?
 DEBUG = 1
-
+APPDIR = ./App
 DRIVERSDIR = ./Drivers
 HALDIR = $(DRIVERSDIR)/STM32F1xx_HAL_Driver
 CMSISDIR = $(DRIVERSDIR)/CMSIS
@@ -29,7 +29,7 @@ SYSTEM_TASKS_MANAGERDIR = $(DRIVERSDIR)/SystemTasksManager
 
 OBJDIR=./obj
 
-USR_SRCDIR = ./Src
+USR_SRCDIR = $(APPDIR)/Src
 HAL_SRCDIR = $(HALDIR)/Src
 MIDDLE_SRCDIRS = $(wildcard $(MIDDLE_DRIVERDIR)/*/Src)
 DEV_SRCDIRS =  $(wildcard $(DEV_DRIVERDIR)/*/Src)
@@ -50,7 +50,7 @@ SRCS   = 	\
 SYS_OBJECTS = 	$(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))\
 		$(OBJDIR)/$(STARTUP_OBJ)
 
-INCLUDEDIRS =   -I $(shell cd ./Inc &&  pwd)							\
+INCLUDEDIRS =   -I $(shell cd $(APPDIR)/Inc &&  pwd)							\
 	 	-I $(shell cd  $(HALDIR)/Inc&& pwd)						\
 		-I $(shell cd  $(CMSISDIR)/Inc&& pwd)						\
 		-I $(shell cd  $(CMSIS_DEVICEDIR)/Inc&& pwd)					\
