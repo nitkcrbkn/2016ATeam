@@ -25,6 +25,7 @@ typedef struct{
 }DD_AB_DRI_t;
 
 int DD_Send2AB(DD_AB_DRI_t *dab);
+void DD_ABPrint(DD_AB_DRI_t *dab);
 
 #endif
 
