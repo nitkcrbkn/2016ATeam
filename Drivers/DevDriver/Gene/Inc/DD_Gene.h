@@ -15,7 +15,10 @@
 #define DD_NUM_OF_MD 1
 #define DD_NUM_OF_AB 0
 
-int DD_I2CSend(uint8_t add,uint8_t *data,uint8_t size);
-void DD_Print(void);
-
+/*I2Cのサポート用関数*/
+int DD_I2CSend(uint8_t add,const uint8_t *data,uint8_t size);
+/*Deviceのハンドラーの表示用関数*/
+void DD_print(void);
+/*DeviceDriverのタスク*/
+int DD_doTasks(void);
 #endif

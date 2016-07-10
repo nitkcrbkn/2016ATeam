@@ -18,7 +18,8 @@
 
 /*Address Definition*/
 #if DD_NUM_OF_MD
-DD_MD_DRI_t h_md_g[DD_NUM_OF_MD]={
+/*MD Definition*/
+DD_MDHand_t h_md_g[DD_NUM_OF_MD]={
   {0x20,//address
    0,//default duty
    D_MMOD_FREE,//mode
@@ -26,45 +27,49 @@ DD_MD_DRI_t h_md_g[DD_NUM_OF_MD]={
 };
 #endif
 #if DD_NUM_OF_AB
-DD_AB_DRI_t h_ab_g[DD_NUM_OF_AB]={
+/*AB Definition*/
+DD_ABHand_t h_ab_g[DD_NUM_OF_AB]={
   {0x30,//address
    0x00,//data
   },
 };
 #endif
 
-int DD_I2CSend(uint8_t add,uint8_t *data,uint8_t size){
+/*I2Cのサポート用関数*/
+int DD_I2CSend(uint8_t add,const uint8_t *data,uint8_t size){
   return MW_I2C1Transmit(add,data,size);
 }
 
-int DD_Tasks(void){
+/*DeviceDriverのタスク*/
+int DD_doTasks(void){
   int i;
   int ret;
 #if DD_NUM_OF_MD
   for(i=0;i<DD_NUM_OF_MD;i++){
-    ret = DD_Send2MD(&h_md_g[i]);
+    ret = DD_send2MD(&h_md_g[i]);
     if(ret)return ret;
   }
 #endif
 #if DD_NUM_OF_AB
   for(i=0;i<DD_NUM_OF_AB;i++){
-    ret = DD_Send2AB(&h_ab_g[i]);
+    ret = DD_send2AB(&h_ab_g[i]);
     if(ret)return ret;
   }
 #endif
   return EXIT_SUCCESS;
 }
 
+/*Deviceのハンドラー表示用関数*/
 void DD_Print(void){
   int i;
 #if DD_NUM_OF_MD
   for(i=0;i<DD_NUM_OF_MD;i++){
-    DD_MDPrint(&h_md_g[i]);
+    DD_MDHandPrint(&h_md_g[i]);
   }
 #endif
 #if DD_NUM_OF_AB
   for(i=0;i<DD_NUM_OF_AB;i++){
-    DD_ABPrint(&h_ab_g[i]);
+    DD_ABHandPrint(&h_ab_g[i]);
   }
 #endif
 }
