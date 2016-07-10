@@ -61,7 +61,7 @@ int SY_ApplicationTask(void){
 }
 
 int SY_DevDriverTasks(void){
-  return DD_Tasks();
+  return DD_doTasks();
 }
 
 int SY_I2CConnectionTest(int timeout){
