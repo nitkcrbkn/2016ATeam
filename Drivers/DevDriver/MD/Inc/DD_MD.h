@@ -8,12 +8,8 @@
  * MDの通信プロトコルを定める。
  *
  * ・I2Cのみのサポート
- *
- * ２バイト送信。
- * [0(7:4)|dir(3:2)|duty[9:8](1:0)][duty[7:0](7:0)]
- *
- * dutyは0...free,1...forward,2...back,3...brake
  */
+
 #ifndef __MD_H
 #define __MD_H
 #include <stdint.h>
@@ -23,15 +19,28 @@ typedef enum{
   D_MMOD_FORWARD=1,
   D_MMOD_BACKWARD=2,
   D_MMOD_BRAKE=3,
-} DD_MD_MODE_t;
+} DD_MDMode_t;
 
 typedef struct{
   uint8_t add;
   uint16_t duty;
-  DD_MD_MODE_t mode;
-}DD_MD_DRI_t;
+  DD_MDMode_t mode;
+}DD_MDHand_t;
 
-int DD_Send2MD(DD_MD_DRI_t *dmd);
-void DD_MDPrint(DD_MD_DRI_t *dmd);
+/*
+ * ２バイト送信。
+ * [0(7:4)|dir(3:2)|duty[9:8](1:0)][duty[7:0](7:0)]
+ *
+ * dirは0...free,1...forward,2...back,3...brake
+ */
+int DD_send2MD(DD_MDHand_t *dmd);
+
+
+/*
+ *MD handlerを表示。
+ *
+ *MD(Add:hex):[Fr,Fw,Bw,Br],[duty:dec]
+ */
+void DD_MDHandPrint(DD_MDHand_t *dmd);
 
 #endif
