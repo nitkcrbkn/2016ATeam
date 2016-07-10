@@ -25,24 +25,24 @@ int DD_send2MD(DD_MDHand_t *dmd){
   uint8_t data[2];
   const uint8_t sizeof_data = 2;
 
-  //Merge Data merge
-  data[1] = dmd->duty>>8|
-    (uint8_t)dmd->mode<<2;
-  data[0]=dmd->duty;
+  /* Merge Data merge */
+  data[1] = dmd->duty >> 8 |
+            (uint8_t)dmd->mode << 2;
+  data[0] = dmd->duty;
 
-  //Send data
-  return DD_I2CSend(dmd->add,data,sizeof_data);
+  /* Send data */
+  return DD_I2CSend(dmd->add, data, sizeof_data);
 }
 
 /*
- *MD handlerを表示。
+ * *MD handlerを表示。
  *
- *MD(Add:hex):[Fr,Fw,Bw,Br],[duty:dec]
+ **MD(Add:hex):[Fr,Fw,Bw,Br],[duty:dec]
  */
 
 void DD_MDHandPrint(DD_MDHand_t *dmd){
-  MW_printf("MD(%02x):[",dmd->add);
-  switch(dmd->mode){
+  MW_printf("MD(%02x):[", dmd->add);
+  switch( dmd->mode ){
   case D_MMOD_FREE:
     MW_printf("Fr");
     break;
@@ -56,5 +56,6 @@ void DD_MDHandPrint(DD_MDHand_t *dmd){
     MW_printf("Br");
     break;
   }
-  MW_printf("],[%d]\n",dmd->duty);
+  MW_printf("],[%d]\n", dmd->duty);
 }
+

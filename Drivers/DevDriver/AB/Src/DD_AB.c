@@ -25,12 +25,12 @@ int DD_sendtoAB(DD_ABHand_t *dab){
   uint8_t data[2];
   const uint8_t sizeof_data = 2;
 
-  //Merge data
+  /* Merge data */
   data[0] = dab->dat;
   data[1] = ~dab->dat;
 
-  //Send data
-  return DD_I2CSend(dab->add,data,sizeof_data);
+  /* Send data */
+  return DD_I2CSend(dab->add, data, sizeof_data);
 }
 
 /*
@@ -38,5 +38,5 @@ int DD_sendtoAB(DD_ABHand_t *dab){
  * AB(Add:hex):[data:binary]
  */
 void DD_ABPrint(DD_ABHand_t *dab){
-  MW_printf("AB(%02x):[%b]",dab->add,dab->dat);
+  MW_printf("AB(%02x):[%b]", dab->add, dab->dat);
 }
