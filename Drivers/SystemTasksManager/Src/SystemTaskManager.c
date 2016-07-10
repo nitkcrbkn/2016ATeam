@@ -2,34 +2,39 @@
 #include "stm32f1xx_hal.h"
 #include "SystemTaskManager.h"
 #include "MW_USART.h"
-#include "message.h"
 #include "MW_I2C.h" 
 #include "MW_GPIO.h"
 #include "DD_Gene.h"
+#include "message.h"
 #include "app.h"
 #include "DD_RC.h"
 
-volatile uint32_t SY_systemCounter;
-volatile uint8_t g_rc_data[8];
-static uint8_t rc_rcv[8];
+volatile uint32_t g_SY_system_counter;
+volatile uint8_t g_rc_data[RC_DATA_NUM];
+static uint8_t rc_rcv[RC_DATA_NUM];
 
-int SY_Initialize(void);
-int SY_I2CConnectionTest(int timeout);
-int SY_WaitForRC(int timeout);
-int SY_ApplicationTask(void);
-int SY_SystemClock_Config(void);
+static
+int SY_init(void);
+static
+int SY_I2CConnTest(int timeout);
+static
+int SY_doAppTasks(void);
+static
+int SY_clockInit(void);
+static
 void SY_GPIOInit(void);
-int SY_DevDriverTasks(void);
+static
+int SY_doDevDriverTasks(void);
 
 int main(void){
   int ret;
 
-  ret = SY_Initialize();
+  ret = SY_init();
   if(ret){
     message("err","initialize Faild%d",ret);
     return EXIT_FAILURE;
   }
-  ret = SY_I2CConnectionTest(10);
+  ret = SY_I2CConnTest(10);
   if(ret){
     message("err","I2CConnectionTest Faild%d",ret);
     return EXIT_FAILURE;
@@ -38,45 +43,47 @@ int main(void){
     message("err","WaitForRC Faild%d",ret);
     return EXIT_FAILURE;
   }
-  SY_systemCounter = 0;  
+  g_SY_system_counter = 0;  
+
   message("msg","start!!\n");
   while(1){
-    SY_ApplicationTask();
-    if(SY_systemCounter % 30 == 0){
+    SY_doAppTasks();
+    if(g_SY_system_counter % _MESSAGE_INTERVAL_MS == 0){
       DD_RCPrint((uint8_t*)g_rc_data);
       flush();//out message.
     }
-    while(SY_systemCounter%_INTERVAL_MS!=_INTERVAL_MS/2-1);
+    while(g_SY_system_counter%_INTERVAL_MS!=_INTERVAL_MS/2-1);
 
-    ret = SY_DevDriverTasks();
+    ret = SY_doDevDriverTasks();
     if(ret){
       message("err","Device Driver Tasks Faild%d",ret);
     }
-    while(SY_systemCounter%_INTERVAL_MS!=0);
+    while(g_SY_system_counter%_INTERVAL_MS!=0);
   }
 }
 
-int SY_ApplicationTask(void){
+int SY_doAppTasks(void){
   return appTask();
 }
 
-int SY_DevDriverTasks(void){
+int SY_doDevDriverTasks(void){
   return DD_doTasks();
 }
 
-int SY_I2CConnectionTest(int timeout){
+int SY_I2CConnTest(int timeout){
   UNUSED(timeout);
   return EXIT_SUCCESS;
 }
 
-int SY_Initialize(void){
+static
+int SY_init(void){
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   if(HAL_Init()){
     return EXIT_FAILURE;
   }
 
   /* Configure the system clock */
-  if(SY_SystemClock_Config()){
+  if(SY_clockInit()){
     return EXIT_FAILURE;
   }
 
@@ -87,7 +94,7 @@ int SY_Initialize(void){
   SY_GPIOInit();
 
   /* Initialize all configured peripherals */
-  MW_SetI2CClockSpeed(I2C1ID,20000);
+  MW_SetI2CClockSpeed(I2C1ID,_I2C_SPEED_BPS);
   if(MW_I2CInit(I2C1ID)){
     return EXIT_FAILURE;
   }
@@ -95,15 +102,18 @@ int SY_Initialize(void){
   /*UART initialize*/
   MW_USARTInit(USART2ID);
 
+  message("msg","wait for RC connection...");
   if(DD_RCInit((uint8_t*)g_rc_data,10000)){
     message("err","RC initialize faild!\n");
     return EXIT_FAILURE;
   }
+  message("msg","RC connected sucess");
   
   return EXIT_SUCCESS;
 }
 
-int SY_SystemClock_Config(void){
+static
+int SY_clockInit(void){
 
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
@@ -149,6 +159,7 @@ int SY_SystemClock_Config(void){
   return EXIT_SUCCESS;
 }
 
+static
 void SY_GPIOInit(void)
 {
   ENABLECLKGPIOA();
