@@ -50,9 +50,9 @@ PC11     ------> USART3_RX
 **/
 
 /* USART init function */
-void MW_USARTInit(usartid_t id);
+int MW_USARTInit(usartid_t id);
 
-void MW_SetBaudRate(usartid_t id,uint32_t BaudRate);
+void MW_USARTSetBaudRate(usartid_t id,uint32_t BaudRate);
 
 int32_t MW_USART1Transmit(const uint8_t *str,uint16_t datanum);
 int32_t MW_USART1Receive(void);

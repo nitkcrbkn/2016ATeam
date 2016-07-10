@@ -5,6 +5,7 @@
  *      Author: evaota
  */
 #include "MW_USART.h"
+#include <stdlib.h>
 
 UART_HandleTypeDef huart1 = {
   .Instance = USART1,
@@ -51,16 +52,17 @@ static UART_HandleTypeDef *uartid[3] = {
   &huart3
 };
 
-void MW_SetUSARTBaudRate(usartid_t id, uint32_t BaudRate){
+void MW_USARTSetBaudRate(usartid_t id, uint32_t BaudRate){
   assert_param(IS_USART_ID(id));
   uartid[(uint32_t)id]->Init.BaudRate = BaudRate;
 }
 
 /* USART init function */
-void MW_USARTInit(usartid_t id){
+int MW_USARTInit(usartid_t id){
   if( HAL_UART_Init(uartid[(uint32_t)id]) != HAL_OK ){
-    /* Error_Handler(); */
+    return EXIT_FAILURE;
   }
+  return EXIT_SUCCESS;
 }
 
 int32_t MW_USART1Transmit(const uint8_t *str, uint16_t datanum){
