@@ -186,6 +186,7 @@ HAL_StatusTypeDef HAL_SPI_Init(SPI_HandleTypeDef *hspi)
 */
 uint8_t SPI_ISCRCErrorValid(SPI_HandleTypeDef *hspi)
 {
+  UNUSED(hspi);
 #if defined (STM32F101xE) || defined (STM32F103xE)
   /* Check how to handle this CRC error (workaround to be applied or not) */
   /* If CRC errors could be wrongly detected (issue 2.15.2 in STM32F10xxC/D/E silicon limitations ES (DocID14732 Rev 13) */
