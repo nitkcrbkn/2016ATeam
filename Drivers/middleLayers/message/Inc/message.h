@@ -1,6 +1,5 @@
 #ifndef __MESSAGE_H
 #define __MESSAGE_H
-#include "xprintf.h"
 
 //auto transmit.(>900)
 #define MAX_STRING_LENGTH 900 
