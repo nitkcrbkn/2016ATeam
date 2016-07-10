@@ -53,23 +53,23 @@ void DD_RCTask(const uint8_t rc_data[RC_DATA_NUM], uint8_t out_data[RC_DATA_NUM]
   MW_USART3ReceiveMult(8, rc_data);
 }
 
-int DD_RCGetLX(uint8_t data[RC_DATA_NUM]){
+int DD_RCGetLX(volatile uint8_t data[RC_DATA_NUM]){
   return data[__RC_LX] - correct[__RC_LX];
 }
 
-int DD_RCGetLY(uint8_t data[RC_DATA_NUM]){
+int DD_RCGetLY(volatile uint8_t data[RC_DATA_NUM]){
   return data[__RC_LY] - correct[__RC_LY];
 }
 
-int DD_RCGetRX(uint8_t data[RC_DATA_NUM]){
+int DD_RCGetRX(volatile uint8_t data[RC_DATA_NUM]){
   return data[__RC_RX] - correct[__RC_RX];
 }
 
-int DD_RCGetRY(uint8_t data[RC_DATA_NUM]){
+int DD_RCGetRY(volatile uint8_t data[RC_DATA_NUM]){
   return data[__RC_RY] - correct[__RC_RY];
 }
 
-int DD_RCPrint(uint8_t data[RC_DATA_NUM]){
+int DD_RCPrint(volatile uint8_t data[RC_DATA_NUM]){
   if( is_not_avaiable ){
     return EXIT_FAILURE;
   }

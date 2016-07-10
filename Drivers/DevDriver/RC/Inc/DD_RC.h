@@ -2,10 +2,18 @@
 #define __RC_H
 #include <stdint.h>
 
-extern uint8_t g_rc_dat[8];
+#define RC_DATA_NUM 8
 
-int DD_RCInit(uint8_t setdata[8],uint32_t timeout);
-void DD_RCTask(const uint8_t rcv_data[8],uint8_t setdata[8]);
-int DD_RCPrint(uint8_t data[8]);
+int DD_RCInit(uint8_t setdata[RC_DATA_NUM],uint32_t timeout);
+void DD_RCTask(const uint8_t rcv_data[RC_DATA_NUM],uint8_t setdata[RC_DATA_NUM]);
+int DD_RCPrint(volatile uint8_t data[RC_DATA_NUM]);
 
+/*アナログデータ取得*/
+int DD_RCGetLX(volatile uint8_t data[RC_DATA_NUM]);
+int DD_RCGetLY(volatile uint8_t data[RC_DATA_NUM]);
+int DD_RCGetRX(volatile uint8_t data[RC_DATA_NUM]);
+int DD_RCGetRY(volatile uint8_t data[RC_DATA_NUM]);
+
+#define DD_RC_ANALOG_MAX 16
+  
 #endif

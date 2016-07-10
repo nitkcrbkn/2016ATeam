@@ -14,6 +14,8 @@
 #define __MD_H
 #include <stdint.h>
 
+#define DD_MD_MAX_DUTY 10000
+
 typedef enum{
   D_MMOD_FREE=0,
   D_MMOD_FORWARD=1,

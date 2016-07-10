@@ -25,6 +25,12 @@ int DD_send2MD(DD_MDHand_t *dmd){
   uint8_t data[2];
   const uint8_t sizeof_data = 2;
 
+  /*upto 999*/
+  dmd->duty /= 10;
+  if(dmd->duty <= 1000){
+    message("err","duty over flow(%d)",dmd->duty);
+  }
+  
   /* Merge Data merge */
   data[1] = dmd->duty >> 8 |
             (uint8_t)dmd->mode << 2;
