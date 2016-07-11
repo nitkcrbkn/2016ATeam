@@ -15,7 +15,7 @@
 #include "DD_MD.h"
 #include "DD_AB.h"
 
-#define DD_NUM_OF_MD 1
+#define DD_NUM_OF_MD 2
 #define DD_NUM_OF_AB 0
 
 #if DD_NUM_OF_MD
