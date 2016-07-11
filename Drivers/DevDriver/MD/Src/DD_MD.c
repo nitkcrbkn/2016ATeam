@@ -27,14 +27,14 @@ int DD_send2MD(DD_MDHand_t *dmd){
 
   /*upto 999*/
   dmd->duty /= 10;
-  if(dmd->duty <= 1000){
-    message("err","duty over flow(%d)",dmd->duty);
+  if(dmd->duty >= 1000){
+    message("err","[%x]duty over flow(%d)",dmd->add,dmd->duty);
   }
   
   /* Merge Data merge */
-  data[1] = dmd->duty >> 8 |
+  data[0] = dmd->duty >> 8 |
             (uint8_t)dmd->mode << 2;
-  data[0] = dmd->duty;
+  data[1] = dmd->duty;
 
   /* Send data */
   return DD_I2CSend(dmd->add, data, sizeof_data);
