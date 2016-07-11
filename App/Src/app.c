@@ -17,7 +17,7 @@ int suspentionSystem(void);
  */
 
 int appTask(void){
-  int ret;
+  int ret=0;
 
   ret = suspentionSystem();
   if(ret){
@@ -46,6 +46,7 @@ int suspentionSystem(void){
     /*is in centre?*/
     if(abs(rc_analogdata)<CENTRAL_THRESHOLD){
       g_md_h[idx].mode = D_MMOD_FREE;
+      g_md_h[idx].duty = 0;
     }
     else{
       if(rc_analogdata > 0){
