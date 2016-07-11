@@ -48,8 +48,9 @@ int main(void){
   message("msg", "start!!\n");
   while( 1 ){
     SY_doAppTasks();
-    if( g_SY_system_counter % _MESSAGE_INTERVAL_MS == 0 ){
+    if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
       DD_RCPrint((uint8_t*)g_rc_data);
+      DD_Print();
       flush(); /* out message. */
     }
     while( g_SY_system_counter % _INTERVAL_MS != _INTERVAL_MS / 2 - 1 ){
