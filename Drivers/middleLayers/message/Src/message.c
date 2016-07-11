@@ -48,9 +48,8 @@ void _msg(const char* type,
 
 void flush(void){
   if( outptr != 0 ){
-    MW_printf("\n%d\n",outptr - buff);
     *outptr++ = '\n';
-    MW_USART2Transmit((uint8_t*)buff, outptr - buff);
+    MW_USART2Transmit((uint8_t*)buff, outptr - buff-1);
   }
   outptr = buff;
 }
