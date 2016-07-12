@@ -39,10 +39,6 @@ int main(void){
     message("err", "I2CConnectionTest Faild%d", ret);
     return EXIT_FAILURE;
   }
-  if( ret ){
-    message("err", "WaitForRC Faild%d", ret);
-    return EXIT_FAILURE;
-  }
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
@@ -50,13 +46,14 @@ int main(void){
     SY_doAppTasks();
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
       DD_RCPrint((uint8_t*)g_rc_data);
-      DD_Print();
+      DD_print();
       flush(); /* out message. */
     }
     while( g_SY_system_counter % _INTERVAL_MS != _INTERVAL_MS / 2 - 1 ){
     }
-
+#if !_NO_DEVICE
     ret = SY_doDevDriverTasks();
+#endif
     if( ret ){
       message("err", "Device Driver Tasks Faild%d", ret);
     }
@@ -93,6 +90,11 @@ int SY_init(void){
     return EXIT_FAILURE;
   }
 
+  /*UART initialize*/
+  MW_USARTInit(USART2ID);
+
+  appInit();
+
   /*Initialize printf null transit*/
   flush();
 
@@ -105,9 +107,6 @@ int SY_init(void){
   if( ret ){
     return EXIT_FAILURE;
   }
-
-  /*UART initialize*/
-  MW_USARTInit(USART2ID);
 
   message("msg", "wait for RC connection...");
   if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
@@ -197,5 +196,10 @@ void SY_GPIOInit(void){
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle){
   UNUSED(UartHandle);
   DD_RCTask(rc_rcv, (uint8_t*)g_rc_data);
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle){
+  UNUSED(UartHandle);
+  MW_hadCompleted();
 }
 
