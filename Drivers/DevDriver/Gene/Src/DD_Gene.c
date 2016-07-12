@@ -11,6 +11,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include "app.h"
 #include "MW_I2C.h"
 #include "DD_Gene.h"
 #include "DD_MD.h"
@@ -68,7 +69,7 @@ int DD_doTasks(void){
 }
 
 /*Deviceのハンドラー表示用関数*/
-void DD_Print(void){
+void DD_print(void){
   int i;
 #if DD_NUM_OF_MD
   for( i = 0; i < DD_NUM_OF_MD; i++ ){

@@ -15,9 +15,6 @@
 #include "DD_MD.h"
 #include "DD_AB.h"
 
-#define DD_NUM_OF_MD 2
-#define DD_NUM_OF_AB 0
-
 #if DD_NUM_OF_MD
 extern DD_MDHand_t g_md_h[DD_NUM_OF_MD];
 #endif
