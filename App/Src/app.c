@@ -1,9 +1,9 @@
+#include "app.h"
 #include "DD_Gene.h"
-#include "DD_RC.h"
 #include "DD_RCDefinition.h"
 #include "SystemTaskManager.h"
-#include "app.h"
 #include <stdlib.h>
+#include "message.h"
 
 /*足回り*/
 static
@@ -16,9 +16,18 @@ int suspentionSystem(void);
  *g_rc_data...RCのデータ
  */
 
+int appInit(void){
+  message("msg","ApplicationInitialize");
+  /*GPIO の設定などでMW,GPIOではHALを叩く*/
+  return EXIT_SUCCESS;
+}
+
+/*application tasks*/
 int appTask(void){
   int ret=0;
 
+  /*それぞれの機構ごとに処理をする*/
+  /*途中必ず定数回で終了すること。*/
   ret = suspentionSystem();
   if(ret){
     return ret;
@@ -27,34 +36,43 @@ int appTask(void){
   return EXIT_SUCCESS;
 }
 
+/*プライベート 足回りシステム*/
 static
 int suspentionSystem(void){
-  const int num_of_motor = 2;
-  int rc_analogdata;
-  unsigned int idx;
+  const int num_of_motor = 2;/*モータの個数*/
+  int rc_analogdata;/*アナログデータ*/
+  unsigned int idx;/*インデックス*/
   int i;
 
   /*for each motor*/
   for(i=0;i<num_of_motor;i++){
-    /*diff*/
+    /*それぞれの差分*/
     switch(i){
-    case 0: rc_analogdata = DD_RCGetRY(g_rc_data);idx = MECHA1_MD1;break;
-    case 1: rc_analogdata = DD_RCGetLY(g_rc_data);idx = MECHA1_MD2;break;
+    case 0:
+      rc_analogdata = DD_RCGetRY(g_rc_data);
+      idx = MECHA1_MD1;
+      break;
+    case 1:
+      rc_analogdata = DD_RCGetLY(g_rc_data);
+      idx = MECHA1_MD2;
+      break;
     default:return EXIT_FAILURE;
     }
 
-    /*is in centre?*/
+    /*これは中央か?±3程度余裕を持つ必要がある。*/
     if(abs(rc_analogdata)<CENTRAL_THRESHOLD){
       g_md_h[idx].mode = D_MMOD_FREE;
       g_md_h[idx].duty = 0;
     }
     else{
       if(rc_analogdata > 0){
+	/*前後の向き判定*/
 	g_md_h[idx].mode = D_MMOD_FORWARD;
       }
       else{
 	g_md_h[idx].mode = D_MMOD_BACKWARD;
       }
+      /*絶対値を取りDutyに格納*/
       g_md_h[idx].duty = abs(rc_analogdata) * MD_GAIN;
     }
   }
