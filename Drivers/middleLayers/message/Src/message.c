@@ -2,21 +2,18 @@
 #include "MW_USART.h"
 #include "message.h"
 #include <stdarg.h>
+#include <stdbool.h>
 
 #define message(type, fmt, ...) _msg(type, __FUNCTION__, __LINE__, fmt, ## __VA_ARGS__)
-
-const char *HalStatus_m[] = {
-  "HAL_OK",
-  "HAL_ERROR",
-  "HAL_BUSY",
-  "HAL_TIMEOUT"
-};
 
 static
 void _xprintf(char *fmt, ...);
 
 static
 char buff[1024];
+
+static
+volatile bool had_completed = true;
 
 void MW_printf(const char* fmt, ...){
   va_list arp;
@@ -47,9 +44,11 @@ void _msg(const char* type,
 }
 
 void flush(void){
+  while(!had_completed);
   if( outptr != 0 ){
     *outptr++ = '\n';
-    MW_USART2Transmit((uint8_t*)buff, outptr - buff-1);
+    MW_USART2Transmit((uint8_t*)buff, outptr - buff);
+    had_completed = false;
   }
   outptr = buff;
 }
@@ -62,3 +61,6 @@ void _xprintf(char *fmt, ...){
   va_end(arp);
 }
 
+void MW_hadCompleted(void){
+  had_completed = true;
+}
