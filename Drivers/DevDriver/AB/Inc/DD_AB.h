@@ -32,15 +32,6 @@ int DD_send2AB(DD_ABHand_t *dab);
  * 表示内容
  * AB(Add:hex):[data:binary]
  */
-void DD_ABPrint(DD_ABHand_t *dab);
+void DD_ABHandPrint(DD_ABHand_t *dab);
 
 #endif
-
-
-
-
-
-
-
-
-

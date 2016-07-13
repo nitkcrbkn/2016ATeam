@@ -21,7 +21,7 @@
  * ２バイト送信。dataのそれぞれのビットに各電磁弁のOnOff情報を入れる。
  * 開放、未使用時は0とする。1でOnとなる。
  */
-int DD_sendtoAB(DD_ABHand_t *dab){
+int DD_send2AB(DD_ABHand_t *dab){
   uint8_t data[2];
   const uint8_t sizeof_data = 2;
 
@@ -37,6 +37,6 @@ int DD_sendtoAB(DD_ABHand_t *dab){
  * 表示内容
  * AB(Add:hex):[data:binary]
  */
-void DD_ABPrint(DD_ABHand_t *dab){
+void DD_ABHandPrint(DD_ABHand_t *dab){
   MW_printf("AB(%02x):[%b]", dab->add, dab->dat);
 }
