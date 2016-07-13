@@ -38,5 +38,5 @@ int DD_send2AB(DD_ABHand_t *dab){
  * AB(Add:hex):[data:binary]
  */
 void DD_ABHandPrint(DD_ABHand_t *dab){
-  MW_printf("AB(%02x):[%b]", dab->add, dab->dat);
+  MW_printf("AB(%02x):[%08b]", dab->add, dab->dat);
 }
