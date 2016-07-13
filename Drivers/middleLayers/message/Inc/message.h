@@ -15,4 +15,6 @@ void MW_printf(const char* fmt,...);
 
 void flush(void);
 
+void MW_hadCompleted(void);
+
 #endif
