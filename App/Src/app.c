@@ -5,9 +5,35 @@
 #include <stdlib.h>
 #include "message.h"
 
-/*足回り*/
+/*Address Definition*/
+#if DD_NUM_OF_MD
+/*MD Definition*/
+DD_MDHand_t g_md_h[DD_NUM_OF_MD] = {
+  { 0x10, /* address */
+    0, /* default duty */
+    D_MMOD_FREE, /* mode */
+  },
+  { 0x10, /* address */
+    0, /* default duty */
+    D_MMOD_FREE, /* mode */
+  },
+};
+#endif
+#if DD_NUM_OF_AB
+/*AB Definition*/
+DD_ABHand_t g_ab_h[DD_NUM_OF_AB] = {
+  { 0x11, /* address */
+    0x00, /* data */
+  },
+};
+#endif
+
+/*suspentionSystem*/
 static
 int suspentionSystem(void);
+/*ABSystem*/
+static 
+int ABSystem(void);
 
 /*メモ
  *g_ab_h...ABのハンドラ
@@ -32,7 +58,26 @@ int appTask(void){
   if(ret){
     return ret;
   }
+
+  ret = ABSystem();
+  if(ret){
+    return ret;
+  }
   
+  return EXIT_SUCCESS;
+}
+
+static 
+int ABSystem(void){
+
+  g_ab_h[0].dat = 0x00;
+  if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
+    g_ab_h[0].dat |= AB0;
+  }
+  if(__RC_ISPRESSED_CROSS(g_rc_data)){
+    g_ab_h[0].dat |= AB1;
+  }
+
   return EXIT_SUCCESS;
 }
 
