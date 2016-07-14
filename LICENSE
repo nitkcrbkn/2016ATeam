@@ -1,10 +1,12 @@
+# Copyright
 
 Copyright (c) 2016, KNCT RBKN
 All rights reserved.
 
+HAL、CMSIS、その他割り込みハンドラー等
+COPYRIGHT(c) 2016 STMicroelectronics
 
-本ライセンスはＨＡＬドライバ、ＣＭＳＩＳには適用されません。ソースコードにある通りです。
-BSD-3にのっとったものです。原文のままの提供ですが一応簡単に日本語要約すると再配布に関しては免責事項、著作者表示をすることが大本となります。たとえ著作者の一人であるともこれらのライセンスには従うものとします。
+BSD-3にのっとったものです。原文のままの提供ですが一応参考までに簡単に日本語要約(?すると再配布に関しては免責事項、著作者表示をすることが大本となります。たとえ著作者の一人であるともこれらのライセンスには従うものとします。
 
 
 Redistribution and use in source and binary forms, with or without
