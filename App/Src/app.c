@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include "message.h"
 
-/*suspentionSystem*/
+/*suspensionSystem*/
 static
-int suspentionSystem(void);
+int suspensionSystem(void);
 /*ABSystem*/
 static 
 int ABSystem(void);
@@ -31,7 +31,7 @@ int appTask(void){
 
   /*それぞれの機構ごとに処理をする*/
   /*途中必ず定数回で終了すること。*/
-  ret = suspentionSystem();
+  ret = suspensionSystem();
   if(ret){
     return ret;
   }
@@ -60,7 +60,7 @@ int ABSystem(void){
 
 /*プライベート 足回りシステム*/
 static
-int suspentionSystem(void){
+int suspensionSystem(void){
   const int num_of_motor = 2;/*モータの個数*/
   int rc_analogdata;/*アナログデータ*/
   unsigned int idx;/*インデックス*/
