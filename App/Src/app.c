@@ -20,7 +20,7 @@ int ABSystem(void);
  */
 
 int appInit(void){
-  message("msg","ApplicationInitialize");
+  message("msg","hell");
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
