@@ -60,6 +60,15 @@ void DD_print(void){
 #endif
 }
 
-void DD_Initialize(void){
+int DD_initialize(void){
   message("msg","device initialize\n");
+  
+  /* Initialize all configured peripherals */
+  MW_SetI2CClockSpeed(I2C1ID, _I2C_SPEED_BPS);
+  ret = MW_I2CInit(I2C1ID);
+  if( ret ){
+    return EXIT_FAILURE;
+  }
+
+  return EXIT_SUCCESS;
 }
