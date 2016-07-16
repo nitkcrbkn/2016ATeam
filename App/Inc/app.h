@@ -16,7 +16,7 @@ int appInit(void);
 #define ROB1_DRIL 0
 #define ROB1_DRIR 1
 
-#define CENTRAL_THRESHOLD 4
+#define CENTRAL_THRESHOLD 5
 
 #define MD_MAX_DUTY_DRIL DD_MD_MAX_DUTY
 #define MD_MAX_DUTY_DRIR DD_MD_MAX_DUTY

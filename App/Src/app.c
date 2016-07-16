@@ -52,6 +52,8 @@ int suspensionSystem(void){
     case ROB1_DRIL:
       rc_analogdata = DD_RCGetLY(g_rc_data);
       md_gain=MD_GAIN_DRIL;
+      /* 前後の向きを反転 */
+      rc_analogdata *=-1;
       idx = ROB1_DRIL;
       break;
     case ROB1_DRIR:
