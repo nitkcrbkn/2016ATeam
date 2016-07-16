@@ -93,6 +93,11 @@ int SY_init(void){
   /*UART initialize*/
   MW_USARTInit(USART2ID);
 
+  ret = DD_initialize();
+  if(ret){
+    return ret;
+  }
+
   appInit();
 
   /*Initialize printf null transit*/
@@ -100,13 +105,6 @@ int SY_init(void){
 
   /*Initialize GPIO*/
   SY_GPIOInit();
-
-  /* Initialize all configured peripherals */
-  MW_SetI2CClockSpeed(I2C1ID, _I2C_SPEED_BPS);
-  ret = MW_I2CInit(I2C1ID);
-  if( ret ){
-    return EXIT_FAILURE;
-  }
 
   message("msg", "wait for RC connection...");
   if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
