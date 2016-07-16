@@ -11,7 +11,7 @@ int appTask(void);
 int appInit(void);
 
 #define DD_NUM_OF_MD 2
-#define DD_NUM_OF_AB 1
+#define DD_NUM_OF_AB 0
 
 #define ROB1_DRIL 0
 #define ROB1_DRIR 1
