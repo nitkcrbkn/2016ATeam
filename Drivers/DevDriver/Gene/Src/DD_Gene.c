@@ -60,3 +60,6 @@ void DD_print(void){
 #endif
 }
 
+void DD_Initialize(void){
+  message("msg","device initialize\n");
+}
