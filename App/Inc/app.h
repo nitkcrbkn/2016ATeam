@@ -13,8 +13,8 @@ int appInit(void);
 #define DD_NUM_OF_MD 2
 #define DD_NUM_OF_AB 1
 
-#define MECHA1_MD1 0
-#define MECHA1_MD2 1
+#define ROB1_DRIL 0
+#define ROB1_DRIR 1
 #define CENTRAL_THRESHOLD 4
 
 #define AB0 (1<<0)
