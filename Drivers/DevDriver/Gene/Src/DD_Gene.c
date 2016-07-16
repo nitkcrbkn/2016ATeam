@@ -16,6 +16,7 @@
 #include "DD_Gene.h"
 #include "DD_MD.h"
 #include "DD_AB.h"
+#include "message.h"
 
 /*I2Cのサポート用関数*/
 int DD_I2CSend(uint8_t add, const uint8_t *data, uint8_t size){
@@ -60,7 +61,9 @@ void DD_print(void){
 #endif
 }
 
+/*初期化関数*/
 int DD_initialize(void){
+  int ret;
   message("msg","device initialize\n");
   
   /* Initialize all configured peripherals */
