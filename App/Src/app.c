@@ -43,21 +43,22 @@ int suspensionSystem(void){
   int rc_analogdata;/*アナログデータ*/
   unsigned int idx;/*インデックス*/
   unsigned int md_gain;/*アナログデータの補正値 */
-  int i;
+  int ctl_motor_kind;
 
   /*for each motor*/
-  for(i=0;i<num_of_motor;i++){
+  for(ctl_motor_kind=ROB1_DRIL; ctl_motor_kind<num_of_motor; ctl_motor_kind++){
     /*それぞれの差分*/
-    switch(i){
-    case 0:
-      rc_analogdata = DD_RCGetRY(g_rc_data);
+    switch(ctl_motor_kind){
+    case ROB1_DRIL:
+      rc_analogdata = DD_RCGetLY(g_rc_data);
       md_gain=MD_GAIN_DRIL;
       idx = ROB1_DRIL;
       break;
-    case 1:
-      rc_analogdata = DD_RCGetLY(g_rc_data);
+    case ROB1_DRIR:
+      rc_analogdata = DD_RCGetRY(g_rc_data);
       md_gain=MD_GAIN_DRIR;
-      rc_analogdata *=-1;//前後の向きを反転
+      /* 前後の向きを反転 */
+      rc_analogdata *=-1;
       idx = ROB1_DRIR;
       break;
     default:return EXIT_FAILURE;
