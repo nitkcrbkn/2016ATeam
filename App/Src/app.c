@@ -42,6 +42,7 @@ int suspensionSystem(void){
   const int num_of_motor = 2;/*モータの個数*/
   int rc_analogdata;/*アナログデータ*/
   unsigned int idx;/*インデックス*/
+  unsigned int md_gain;/*アナログデータの補正値 */
   int i;
 
   /*for each motor*/
@@ -50,10 +51,12 @@ int suspensionSystem(void){
     switch(i){
     case 0:
       rc_analogdata = DD_RCGetRY(g_rc_data);
+      md_gain=MD_GAIN_DRIL;
       idx = ROB1_DRIL;
       break;
     case 1:
       rc_analogdata = DD_RCGetLY(g_rc_data);
+      md_gain=MD_GAIN_DRIR;
       rc_analogdata *=-1;//前後の向きを反転
       idx = ROB1_DRIR;
       break;
@@ -74,7 +77,7 @@ int suspensionSystem(void){
 	g_md_h[idx].mode = D_MMOD_BACKWARD;
       }
       /*絶対値を取りDutyに格納*/
-      g_md_h[idx].duty = abs(rc_analogdata) * MD_GAIN;
+      g_md_h[idx].duty = abs(rc_analogdata) * md_gain;
     }
   }
   return EXIT_SUCCESS;
