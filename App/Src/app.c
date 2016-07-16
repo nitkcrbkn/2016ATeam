@@ -54,6 +54,7 @@ int suspensionSystem(void){
       break;
     case 1:
       rc_analogdata = DD_RCGetLY(g_rc_data);
+      rc_analogdata *=-1;//前後の向きを反転
       idx = ROB1_DRIR;
       break;
     default:return EXIT_FAILURE;
