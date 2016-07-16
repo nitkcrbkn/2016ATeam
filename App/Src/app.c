@@ -8,9 +8,6 @@
 /*suspensionSystem*/
 static
 int suspensionSystem(void);
-/*ABSystem*/
-static 
-int ABSystem(void);
 
 /*メモ
  *g_ab_h...ABのハンドラ
@@ -35,26 +32,7 @@ int appTask(void){
   if(ret){
     return ret;
   }
-
-  ret = ABSystem();
-  if(ret){
-    return ret;
-  }
   
-  return EXIT_SUCCESS;
-}
-
-static 
-int ABSystem(void){
-
-  g_ab_h[0].dat = 0x00;
-  if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
-    g_ab_h[0].dat |= AB0;
-  }
-  if(__RC_ISPRESSED_CROSS(g_rc_data)){
-    g_ab_h[0].dat |= AB1;
-  }
-
   return EXIT_SUCCESS;
 }
 
