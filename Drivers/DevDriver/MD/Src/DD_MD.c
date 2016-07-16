@@ -43,7 +43,7 @@ int DD_send2MD(DD_MDHand_t *dmd){
 /*
  * *MD handlerを表示。
  *
- **MD(Add:hex):[Fr,Fw,Bw,Br],[duty:dec]
+ * MD(Add:hex):[Fr,Fw,Bw,Br],[duty:dec]
  */
 
 void DD_MDHandPrint(DD_MDHand_t *dmd){

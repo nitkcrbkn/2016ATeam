@@ -15,6 +15,8 @@
 #include "DD_MD.h"
 #include "DD_AB.h"
 
+#define _I2C_SPEED_BPS 200000
+
 #if DD_NUM_OF_MD
 extern DD_MDHand_t g_md_h[DD_NUM_OF_MD];
 #endif
@@ -28,4 +30,8 @@ int DD_I2CSend(uint8_t add,const uint8_t *data,uint8_t size);
 void DD_print(void);
 /*DeviceDriverのタスク*/
 int DD_doTasks(void);
+/*初期化関数*/
+int DD_initialize(void);
+
+
 #endif
