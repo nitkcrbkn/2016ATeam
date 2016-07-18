@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include "message.h"
 
+#define min2(x,y) ((x)<(y) ? (x):(y))
+
 /*suspensionSystem*/
 static
 int suspensionSystem(void);
@@ -40,10 +42,15 @@ int appTask(void){
 static
 int suspensionSystem(void){
   const int num_of_motor = 2;/*モータの個数*/
+  const int rising_val = 20;/* 立ち上がり値 */
+  const int falling_val = 20;/* 立ち下がり値 */
   int rc_analogdata;/*アナログデータ*/
+  int ctrl_val;/* 制御値 */
   unsigned int idx;/*インデックス*/
   unsigned int md_gain;/*アナログデータの補正値 */
-  int ctl_motor_kind;
+  int ctl_motor_kind;/* 現在制御しているモータ */
+  int target_duty;/* 目標値 */
+  int prev_duty;/* 現在の値 */
 
   /*for each motor*/
   for(ctl_motor_kind=ROB1_DRIL; ctl_motor_kind<num_of_motor; ctl_motor_kind++){
@@ -68,20 +75,43 @@ int suspensionSystem(void){
 
     /*これは中央か?±3程度余裕を持つ必要がある。*/
     if(abs(rc_analogdata)<CENTRAL_THRESHOLD){
-      g_md_h[idx].mode = D_MMOD_FREE;
-      g_md_h[idx].duty = 0;
+      // g_md_h[idx].mode = D_MMOD_FREE;
+      target_duty=0;
+    }else{
+      target_duty=abs(rc_analogdata) * md_gain;
+    }
+    
+    if(rc_analogdata > 0){
+      /*前後の向き判定*/
+      g_md_h[idx].mode = D_MMOD_FORWARD;
     }
     else{
-      if(rc_analogdata > 0){
-	/*前後の向き判定*/
-	g_md_h[idx].mode = D_MMOD_FORWARD;
-      }
-      else{
-	g_md_h[idx].mode = D_MMOD_BACKWARD;
-      }
-      /*絶対値を取りDutyに格納*/
-      g_md_h[idx].duty = abs(rc_analogdata) * md_gain;
+      g_md_h[idx].mode = D_MMOD_BACKWARD;
     }
+
+    /*絶対値を取りDutyに格納*/
+    prev_duty=g_md_h[idx].duty;
+
+    if(prev_duty < target_duty){
+      ctrl_val=prev_duty+min2(rising_val,target_duty-prev_duty);
+    }else if(prev_duty > target_duty){
+      ctrl_val=prev_duty-min2(falling_val,prev_duty-target_duty);
+    }else{
+      ctrl_val=target_duty;
+    }
+
+    g_md_h[idx].duty = ctrl_val;
+   
   }
   return EXIT_SUCCESS;
 }
+
+
+
+
+
+
+
+
+
+
