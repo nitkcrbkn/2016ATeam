@@ -4,6 +4,7 @@
 #include "SystemTaskManager.h"
 #include <stdlib.h>
 #include "message.h"
+#include "MW_flash.h"
 
 /*suspensionSystem*/
 static
@@ -19,9 +20,44 @@ int ABSystem(void);
  *g_rc_data...RCのデータ
  */
 
+#define WRITE_ADDR (const void*)(0x8000000+0x400*(128-1))/*128[KiB]*/
+flashError_t checkFlashWrite(void){
+  const char data[]="HelloWorld!!TestDatas!!!\n"
+    "however you like this microcomputer, you don`t be kind to this computer.";
+  return MW_flashWrite(data,WRITE_ADDR,sizeof(data));
+}
+
 int appInit(void){
   message("msg","hell");
-  /*GPIO の設定などでMW,GPIOではHALを叩く*/
+
+  switch(checkFlashWrite()){
+  case MW_FLASH_OK:
+    MW_printf("FLASH WRITE TEST SUCCESS\n");
+    break;
+  case MW_FLASH_LOCK_FAILURE:
+    MW_printf("FLASH WRITE TEST LOCK FAILURE\n");
+    break;
+  case MW_FLASH_UNLOCK_FAILURE:
+    MW_printf("FLASH WRITE TEST UNLOCK FAILURE\n");
+    break;
+  case MW_FLASH_ERASE_VERIFY_FAILURE:
+    MW_printf("FLASH ERASE VERIFY FAILURE\n");
+    break;
+  case MW_FLASH_ERASE_FAILURE:
+    MW_printf("FLASH ERASE FAILURE\n");
+    break;
+  case MW_FLASH_WRITE_VERIFY_FAILURE:
+    MW_printf("FLASH WRITE TEST VERIFY FAILURE\n");
+    break;
+  case MW_FLASH_WRITE_FAILURE:
+    MW_printf("FLASH WRITE TEST FAILURE\n");
+    break;        
+  default:
+    MW_printf("FLASH WRITE TEST UNKNOWN FAILURE\n");
+    break;
+  }
+    
+    /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
 
