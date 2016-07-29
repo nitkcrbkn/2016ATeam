@@ -1,3 +1,14 @@
+ /* ===Kisarazu RBKN Library===
+ *
+ * autor          : Oishi
+ * version        : v0.10
+ * last update    : 20160703
+ *
+ * **overview***
+ * システムのタスクを記述
+ *
+ */
+
 #include <stdlib.h>
 #include "stm32f1xx_hal.h"
 #include "SystemTaskManager.h"
