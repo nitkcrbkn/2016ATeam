@@ -3,6 +3,8 @@
 #include "DD_RCDefinition.h"
 #include "SystemTaskManager.h"
 #include <stdlib.h>
+#include "MW_GPIO.h"
+#include "MW_IWDG.h"
 #include "message.h"
 
 /*suspensionSystem*/
@@ -21,6 +23,15 @@ int ABSystem(void);
 
 int appInit(void){
   message("msg","hell");
+  while(1)
+    {
+      if(MW_GPIORead(GPIOCID,GPIO_PIN_13))
+	{
+	  MW_IWDGClr();//ウォッチドッグのカウンターを再セット
+	}
+      else
+	MW_GPIOWrite(GPIOAID,GPIO_PIN_5,1);//nucleoのLED点灯
+    }
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
