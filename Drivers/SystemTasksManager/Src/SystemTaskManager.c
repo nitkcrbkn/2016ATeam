@@ -98,13 +98,13 @@ int SY_init(void){
     return ret;
   }
 
-  appInit();
-
   /*Initialize printf null transit*/
   flush();
 
   /*Initialize GPIO*/
   SY_GPIOInit();
+
+  appInit();
 
   message("msg", "wait for RC connection...");
   if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
