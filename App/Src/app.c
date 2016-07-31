@@ -56,7 +56,8 @@ int appInit(void){
     MW_printf("FLASH WRITE TEST UNKNOWN FAILURE\n");
     break;
   }
-    
+  flush();
+  
     /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
