@@ -9,6 +9,7 @@
 #define MIDLEWARE_INC_MW_TIM_H_
 
 #include "stm32f1xx_hal.h"
+#include <stdlib.h>
 
 typedef enum
 {
@@ -37,7 +38,7 @@ HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);\
 HAL_NVIC_EnableIRQ(TIM2_IRQn);\
   }
 
-void MW_TIMInit(timid_t id);
+uint32_t MW_TIMInit(timid_t id);
 
 void MW_SetTIMPrescaler(timid_t id,uint32_t Prescaler);
 void MW_SetTIMCounterMode(timid_t id,uint32_t CounterMode);

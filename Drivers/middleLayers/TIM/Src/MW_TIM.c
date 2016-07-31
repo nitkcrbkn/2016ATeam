@@ -4,7 +4,7 @@
  *  Created on: 2016/06/05
  *      Author: evaota
  */
-#include "../Inc/MW_TIM.h"
+#include "MW_TIM.h"
 
 static TIM_HandleTypeDef htim1 = {
   .Instance = TIM1,
@@ -94,17 +94,18 @@ void MW_SetTIMMasterSlaveMode(timid_t id, uint32_t MasterSlaveMode){
 }
 
 /* TIMx init function */
-void MW_TIMInit(timid_t id){
+uint32_t MW_TIMInit(timid_t id){
   assert_param(IS_TIM_ID(id));
   if( HAL_TIM_Base_Init(timid[(uint32_t)id]) != HAL_OK ){
-    Error_Handler();
+    return EXIT_FAILURE;
   }
   if( HAL_TIM_ConfigClockSource(timid[(uint32_t)id], clockconfigid[(uint32_t)id]) != HAL_OK ){
-    Error_Handler();
+    return EXIT_FAILURE;
   }
   if( HAL_TIMEx_MasterConfigSynchronization(timid[(uint32_t)id], masterconfigid[(uint32_t)id]) != HAL_OK ){
-    Error_Handler();
+    return EXIT_FAILURE;
   }
+  return EXIT_SUCCESS;
 }
 
 void MW_TIMStartIT(timid_t id){
