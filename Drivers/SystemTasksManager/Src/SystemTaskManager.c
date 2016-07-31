@@ -109,10 +109,10 @@ int SY_init(void){
     return ret;
   }
 
-  appInit();
-
   /*Initialize printf null transit*/
   flush();
+
+  appInit();
 
   /*Initialize GPIO*/
   SY_GPIOInit();
@@ -209,5 +209,5 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle){
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle){
   UNUSED(UartHandle);
-  MW_TransitionCompletedCallBack();
+  MW_messageTransitionCompletedCallBack();
 }
