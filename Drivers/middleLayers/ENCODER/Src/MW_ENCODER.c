@@ -33,7 +33,7 @@ static TIM_HandleTypeDef *encoderid[2] = {
 
 
 /* TIM3 init function */
-uint32_t MW_EncoderInit(encoderid_t id)
+int32_t MW_EncoderInit(encoderid_t id)
 {
   assert_param(IS_ENCODER_ID(id));
   
@@ -64,7 +64,7 @@ uint32_t MW_EncoderInit(encoderid_t id)
   return EXIT_SUCCESS;
 }
 
-uint32_t MW_GetEncoderVal(encoderid_t id){
+int32_t MW_GetEncoderVal(encoderid_t id){
   assert_param(IS_ENCODER_ID(id));
   return __HAL_TIM_GET_COUNTER(encoderid[(uint32_t)id]);
 }
