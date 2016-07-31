@@ -94,7 +94,7 @@ void MW_SetTIMMasterSlaveMode(timid_t id, uint32_t MasterSlaveMode){
 }
 
 /* TIMx init function */
-uint32_t MW_TIMInit(timid_t id){
+int32_t MW_TIMInit(timid_t id){
   assert_param(IS_TIM_ID(id));
   if( HAL_TIM_Base_Init(timid[(uint32_t)id]) != HAL_OK ){
     return EXIT_FAILURE;
