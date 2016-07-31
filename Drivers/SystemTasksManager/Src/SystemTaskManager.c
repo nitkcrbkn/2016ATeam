@@ -209,5 +209,5 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle){
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle){
   UNUSED(UartHandle);
-  MW_hadCompleted();
+  MW_TransitionCompletedCallBack();
 }
