@@ -15,6 +15,8 @@ void MW_printf(const char* fmt,...);
 
 void flush(void);
 
-void MW_hadCompleted(void);
+void MW_messageTransitionCompletedCallBack(void);
+int MW_waitForMessageTransitionComplete(int timeout);
+
 
 #endif
