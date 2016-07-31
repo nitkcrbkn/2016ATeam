@@ -9,12 +9,14 @@
 #define MIDLEWARE_INC_MW_ENCODER_H_
 
 #include "stm32f1xx_hal.h"
+#include <stdlib.h>
 
 typedef enum
-{
-	ENCODER1ID,
-	ENCODER2ID
-}encoderid_t;
+  {
+    ENCODER1ID = 0,
+    ENCODER2ID = 1
+  }encoderid_t;
+
 /**Sample code(main)
  *
  *
@@ -24,7 +26,7 @@ typedef enum
  */
 
 /******************************* TIM ID *******************************/
-#define IS_TIM_ID(ID) (((ID) == TIM1ID) || \
-						 ((ID) == TIM2ID))
+#define IS_ENCODER_ID(ID) (((ID) == ENCODER1ID) ||	\
+		       ((ID) == ENCODER2ID))
 
 #endif /* MIDLEWARE_INC_MW_ENCODER_H_ */
