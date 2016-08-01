@@ -67,8 +67,8 @@ void _xprintf(char *fmt, ...){
   va_end(arp);
 }
 
-int MW_waitForMessageTransitionComplete(int timeout){
-  int time;
+int MW_waitForMessageTransitionComplete(uint32_t timeout){
+  uint32_t time;
   time = g_SY_system_counter;
   while(!had_completed&&time+timeout>g_SY_system_counter);
   if(time+timeout<=g_SY_system_counter)return EXIT_FAILURE;
@@ -78,3 +78,13 @@ int MW_waitForMessageTransitionComplete(int timeout){
 void MW_messageTransitionCompletedCallBack(void){
   had_completed = true;
 }
+
+
+
+
+
+
+
+
+
+
