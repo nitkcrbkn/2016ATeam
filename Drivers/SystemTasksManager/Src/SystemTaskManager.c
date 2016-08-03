@@ -62,14 +62,17 @@ int main(void){
   }
 } /* main */
 
+static
 int SY_doAppTasks(void){
   return appTask();
 }
 
+static
 int SY_doDevDriverTasks(void){
   return DD_doTasks();
 }
 
+static
 int SY_I2CConnTest(int timeout){
   UNUSED(timeout);
   return EXIT_SUCCESS;
@@ -93,15 +96,15 @@ int SY_init(void){
   /*UART initialize*/
   MW_USARTInit(USART2ID);
 
+  /*Initialize printf null transit*/
+  flush();
+  
   ret = DD_initialize();
   if(ret){
     return ret;
   }
 
   appInit();
-
-  /*Initialize printf null transit*/
-  flush();
 
   /*Initialize GPIO*/
   SY_GPIOInit();
