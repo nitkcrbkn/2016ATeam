@@ -66,7 +66,7 @@ flashError_t MW_flashWrite(const void *ptr,/*!write here!*/const void *flash_add
   }
   
   address = (uint32_t)flash_add;
-  for(;address < (uint32_t)flash_add + size;address+=2){
+  for(;address + 1 < (uint32_t)flash_add + size;address+=2){
     if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD,address,*(const uint16_t*)ptr)!=HAL_OK){
       return MW_FLASH_WRITE_FAILURE;
     }
@@ -80,14 +80,3 @@ flashError_t MW_flashWrite(const void *ptr,/*!write here!*/const void *flash_add
   
   return EXIT_SUCCESS;
 }
-
-
-
-
-
-
-
-
-
-
-
