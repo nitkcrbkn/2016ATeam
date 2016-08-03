@@ -29,7 +29,6 @@ flashError_t MW_flashElase(/*!erase here!*/const void *flash_add,size_t size){
       return MW_FLASH_ERASE_FAILURE;
     }
   }
-  HAL_Delay(10);
 
   {
     uint32_t i;
@@ -67,12 +66,11 @@ flashError_t MW_flashWrite(const void *ptr,/*!write here!*/const void *flash_add
   }
   
   address = (uint32_t)flash_add;
-  for(;address < (uint32_t)flash_add + size;address++){
-    if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD,address,*(const uint8_t*)ptr)!=HAL_OK){
+  for(;address < (uint32_t)flash_add + size;address+=2){
+    if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD,address,*(const uint16_t*)ptr)!=HAL_OK){
       return MW_FLASH_WRITE_FAILURE;
     }
-    HAL_Delay(1);
-    if(*(const uint8_t*)ptr++!=*(uint8_t*)address){
+    if(*(const uint16_t*)ptr++!=*(uint16_t*)address){
       return MW_FLASH_WRITE_VERIFY_FAILURE;
     }
   }  
@@ -82,6 +80,13 @@ flashError_t MW_flashWrite(const void *ptr,/*!write here!*/const void *flash_add
   
   return EXIT_SUCCESS;
 }
+
+
+
+
+
+
+
 
 
 
