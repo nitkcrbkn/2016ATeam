@@ -34,8 +34,11 @@ static
 int SY_clockInit(void);
 static
 void SY_GPIOInit(void);
+
+#if !_NO_DEVICE
 static
 int SY_doDevDriverTasks(void);
+#endif
 
 int main(void){
   int ret;
@@ -43,11 +46,13 @@ int main(void){
   ret = SY_init();
   if( ret ){
     message("err", "initialize Faild%d", ret);
+    MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
   }
   ret = SY_I2CConnTest(10);
   if( ret ){
     message("err", "I2CConnectionTest Faild%d", ret);
+    MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
   }
   g_SY_system_counter = 0;
@@ -78,10 +83,12 @@ int SY_doAppTasks(void){
   return appTask();
 }
 
+#if !_NO_DEVICE
 static
 int SY_doDevDriverTasks(void){
   return DD_doTasks();
 }
+#endif
 
 static
 int SY_I2CConnTest(int timeout){
