@@ -72,7 +72,7 @@ flashError_t MW_flashWrite(const void *ptr,/*!write here!*/const void *flash_add
       return MW_FLASH_WRITE_FAILURE;
     }
     HAL_Delay(1);
-    if(*(const uint8_t*)ptr++==*(uint8_t*)address){
+    if(*(const uint8_t*)ptr++!=*(uint8_t*)address){
       return MW_FLASH_WRITE_VERIFY_FAILURE;
     }
   }  
