@@ -110,7 +110,7 @@ int32_t MW_USART3Receive(void){
   return (uint32_t)c;
 }
 
-int32_t MW_USART3ReceiveMult(int size,const uint8_t *data){
+int32_t MW_USART3ReceiveMult(int size, const uint8_t *data){
   if( HAL_UART_Receive_DMA(&huart3, (uint8_t*)data, size) != HAL_OK ){
     return -1;
   }

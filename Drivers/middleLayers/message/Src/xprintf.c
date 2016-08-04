@@ -1,6 +1,9 @@
 /*------------------------------------------------------------------------/
  *      /  Universal string handler for user console interface
- *      /-------------------------------------------------------------------------/
+ *
+ *
+ *
+ *   /-------------------------------------------------------------------------/
  *      /
  *      /  Copyright (C) 2011, ChaN, all right reserved.
  *      /
@@ -11,7 +14,11 @@
  *      / * Redistributions of source code must retain the above copyright
  * notice.
  *      /
- *      /-------------------------------------------------------------------------*/
+ *
+ *
+ *
+ *
+ *  /-------------------------------------------------------------------------*/
 
 #include "xprintf.h"
 
@@ -56,7 +63,7 @@ void xfputs(                                    /* Put a string to the specified
                                                  *device */
   void ( *func )(unsigned char),        /* Pointer to the output function */
   const char*     str                                   /* Pointer to the string
-                                                         **/
+                                                        **/
   ){
   void ( *pf )(unsigned char);
 
@@ -106,18 +113,18 @@ void xvprintf(
     }
     f = 0;
     c = *fmt++;                                                 /* Get first
-                                                                 *char of the
-                                                                 *sequense */
+                                                                * *char of the
+                                                                *sequense */
     if( c == '0' ){                                     /* Flag: '0' padded */
       f = 1; c = *fmt++;
     } else {
       if( c == '-' ){                                   /* Flag: left justified
-                                                         **/
+                                                        **/
         f = 2; c = *fmt++;
       }
     }
     for( w = 0; c >= '0' && c <= '9'; c = *fmt++ ){             /* Minimum width
-                                                                 **/
+                                                                **/
       w = w * 10 + c - '0';
     }
     if( c == 'l' || c == 'L' ){                 /* Prefix: Size is long int */
@@ -152,12 +159,12 @@ void xvprintf(
     case 'D':                                                   /* Signed
                                                                  *decimal */
     case 'U':                                                   /* Unsigned
-                                                                 *decimal */
+                                                                *decimal */
       r = 10; break;
     case 'X':                                                   /* Hexdecimal */
       r = 16; break;
     default:                                                    /* Unknown type
-                                                                 *(passthrough)
+                                                                 * *(passthrough)
                                                                  **/
       xputc(c); continue;
     }
@@ -191,7 +198,7 @@ void xvprintf(
 } /* xvprintf */
 
 void xprintf(                   /* Put a formatted string to the default device
-                                 **/
+                                **/
   const char*     fmt,          /* Pointer to the format string */
   ...                                           /* Optional arguments */
   ){
@@ -225,7 +232,7 @@ void xfprintf(                                  /* Put a formatted string to the
                                                  *specified device */
   void ( *func )(unsigned char),        /* Pointer to the output function */
   const char*     fmt,                          /* Pointer to the format string
-                                                 **/
+                                                **/
   ...                                                           /* Optional
                                                                  *arguments */
   ){
@@ -251,7 +258,7 @@ void put_dump(
   const void* buff,                     /* Pointer to the array to be dumped */
   unsigned long addr,                   /* Heading address value */
   int len,                                      /* Number of items to be dumped
-                                                 **/
+                                                **/
   int width                                     /* Size of the items (DF_CHAR,
                                                  *DF_SHORT, DF_LONG) */
   ){
@@ -277,8 +284,8 @@ void put_dump(
   case DW_SHORT:
     sp = buff;
     do {                                                                        /*
-                                                                                 *Hexdecimal
-                                                                                 *dump
+                                                                                 * *Hexdecimal
+                                                                                 * *dump
                                                                                  **/
       xprintf(" %04X", *sp++);
     } while( --len );
@@ -286,8 +293,8 @@ void put_dump(
   case DW_LONG:
     lp = buff;
     do {                                                                        /*
-                                                                                 *Hexdecimal
-                                                                                 *dump
+                                                                                 * *Hexdecimal
+                                                                                 * *dump
                                                                                  **/
       xprintf(" %08LX", *lp++);
     } while( --len );
@@ -316,7 +323,7 @@ int xgets(              /* 0:End of stream, 1:A line arrived */
 
   if( !xfunc_in ){
     return 0;                                   /* No input function specified
-                                                 **/
+                                                **/
   }
   i = 0;
   for(;; ){
@@ -351,7 +358,7 @@ int xgets(              /* 0:End of stream, 1:A line arrived */
 
 int xfgets(     /* 0:End of stream, 1:A line arrived */
   unsigned char ( *func )(void),        /* Pointer to the input stream function
-                                         **/
+                                        **/
   char* buff,           /* Pointer to the buffer */
   int len               /* Buffer length */
   ){
@@ -412,14 +419,14 @@ int xatoi(                      /* 0:Failed, 1:Successful */
       }
       if( c < '0' || c > '9' ){
         return 0;                                               /* invalid char
-                                                                 **/
+                                                                **/
       }
       r = 8;                            /* octal */
     }
   } else {
     if( c < '0' || c > '9' ){
       return 0;                                         /* EOL or invalid char
-                                                         **/
+                                                        **/
     }
     r = 10;                             /* decimal */
   }

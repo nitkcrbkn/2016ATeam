@@ -25,7 +25,7 @@ void MW_printf(const char* fmt, ...){
   va_start(arp, fmt);
   xvprintf(fmt, arp);
   va_end(arp);
-  if(outptr-buff>MAX_STRING_LENGTH){
+  if( outptr - buff > MAX_STRING_LENGTH ){
     flush();
   }
 }
@@ -50,7 +50,9 @@ void _msg(const char* type,
 }
 
 void flush(void){
-  if(MW_waitForMessageTransitionComplete(100)!=EXIT_SUCCESS)return;  
+  if( MW_waitForMessageTransitionComplete(100) != EXIT_SUCCESS ){
+    return;
+  }
   if( outptr != 0 ){
     *outptr++ = '\n';
     MW_USART2Transmit((uint8_t*)buff, outptr - buff);
@@ -70,21 +72,15 @@ void _xprintf(char *fmt, ...){
 int MW_waitForMessageTransitionComplete(uint32_t timeout){
   uint32_t time;
   time = g_SY_system_counter;
-  while(!had_completed&&time+timeout>g_SY_system_counter);
-  if(time+timeout<=g_SY_system_counter)return EXIT_FAILURE;
+  while( !had_completed && time + timeout > g_SY_system_counter ){
+  }
+  if( time + timeout <= g_SY_system_counter ){
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
 }
 
 void MW_messageTransitionCompletedCallBack(void){
   had_completed = true;
 }
-
-
-
-
-
-
-
-
-
 
