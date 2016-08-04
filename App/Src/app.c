@@ -111,7 +111,7 @@ int suspensionSystem(void){
     }else{
       g_md_h[idx].mode = D_MMOD_BRAKE;
     }
-
+    //   message("msg","%d,%d,%d",target_duty,prev_duty,ctrl_val);
     g_md_h[idx].duty = abs(ctrl_val);
     
   }
