@@ -289,5 +289,6 @@ int adjust(void){
 }
 
 int ad_main(void){
+  ad = *(adjust_t*)WRITE_ADDR;
   return  adjust();
 }
