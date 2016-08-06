@@ -32,7 +32,7 @@ flashError_t MW_flashElase(/*!erase here!*/ const void *flash_add, size_t size){
 
   {
     uint32_t i;
-    for( i = 0; i < size / 2; i++ ){
+    for( i = 0; i + 1 < size / 2; i++ ){
       if(((uint16_t*)flash_add )[i] != 0xFFFF ){
         return MW_FLASH_ERASE_VERIFY_FAILURE;
       }
