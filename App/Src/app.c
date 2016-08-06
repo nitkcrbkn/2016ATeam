@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "message.h"
 #include "MW_flash.h"
+#include "constManager.h"
 
 /*suspensionSystem*/
 static
@@ -30,6 +31,8 @@ flashError_t checkFlashWrite(void){
 int appInit(void){
   message("msg","hell");
 
+  ad_main();
+  
   switch(checkFlashWrite()){
   case MW_FLASH_OK:
     MW_printf("FLASH WRITE TEST SUCCESS\n");
