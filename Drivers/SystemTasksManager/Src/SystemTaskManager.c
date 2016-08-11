@@ -46,12 +46,13 @@ int main(void){
   if(MW_EncoderInit(ENCODER1ID)==EXIT_FAILURE)
     {
       message("error","Fialed initialize encoder");
-      flush();
+      flush();while(1);
     }
   while(1)
     {
       message("test","ENCODER Value is %d now",MW_GetEncoderVal(ENCODER1ID));
       flush();
+      
     }
   while( 1 ){
     
