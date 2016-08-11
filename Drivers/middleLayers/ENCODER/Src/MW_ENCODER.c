@@ -68,7 +68,7 @@ int32_t MW_EncoderInit(encoderid_t id)
   
 }
 
-uint32_t MW_GetEncoderVal(encoderid_t id){
+uint16_t MW_GetEncoderVal(encoderid_t id){
   assert_param(IS_ENCODER_ID(id));
   return __HAL_TIM_GET_COUNTER(encoderid[(uint32_t)id]);
 }
