@@ -8,6 +8,7 @@
 #include "message.h"
 #include "app.h"
 #include "DD_RC.h"
+#include "MW_ENCODER.h"
 
 volatile uint32_t g_SY_system_counter;
 volatile uint8_t g_rc_data[RC_DATA_NUM];
@@ -42,7 +43,13 @@ int main(void){
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
+  MW_EncoderInit(ENCODER1ID);
+  while(1)
+    {
+      message("test","ENCODER Value is %d now",MW_GetEncoderVal(ENCODER1ID));
+    }
   while( 1 ){
+    
     SY_doAppTasks();
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
       DD_RCPrint((uint8_t*)g_rc_data);
