@@ -35,11 +35,11 @@ int main(void){
     message("err", "initialize Faild%d", ret);
     return EXIT_FAILURE;
   }
-  ret = SY_I2CConnTest(10);
+  /*ret = SY_I2CConnTest(10);
   if( ret ){
     message("err", "I2CConnectionTest Faild%d", ret);
     return EXIT_FAILURE;
-  }
+    }*/
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
@@ -113,13 +113,13 @@ int SY_init(void){
   /*Initialize GPIO*/
   SY_GPIOInit();
 
-  message("msg", "wait for RC connection...");
+  /*message("msg", "wait for RC connection...");
   if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
     message("err", "RC initialize faild!\n");
     return EXIT_FAILURE;
   }
   message("msg", "RC connected sucess");
-
+  */
   return EXIT_SUCCESS;
 } /* SY_init */
 
