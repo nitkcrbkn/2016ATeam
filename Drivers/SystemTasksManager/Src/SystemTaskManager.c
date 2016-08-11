@@ -43,10 +43,15 @@ int main(void){
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
-  MW_EncoderInit(ENCODER1ID);
+  if(MW_EncoderInit(ENCODER1ID)==EXIT_FAILURE)
+    {
+      message("error","Fialed initialize encoder");
+      flush();
+    }
   while(1)
     {
       message("test","ENCODER Value is %d now",MW_GetEncoderVal(ENCODER1ID));
+      flush();
     }
   while( 1 ){
     
