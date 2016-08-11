@@ -11,7 +11,7 @@ static TIM_HandleTypeDef htim3 = {
   .Init = {
     .Prescaler = 0,
     .CounterMode = TIM_COUNTERMODE_UP,
-    .Period = 0,
+    .Period = 0xFFFF,//counter max value is 0XFFFF
     .ClockDivision = TIM_CLOCKDIVISION_DIV1
   }
 };
@@ -21,7 +21,7 @@ static TIM_HandleTypeDef htim4 = {
   .Init = {
     .Prescaler = 0,
     .CounterMode = TIM_COUNTERMODE_UP,
-    .Period = 0,
+    .Period = 0xFFFF,//counter max value is 0XFFFF
     .ClockDivision = TIM_CLOCKDIVISION_DIV1
   }
 };
@@ -61,10 +61,14 @@ int32_t MW_EncoderInit(encoderid_t id)
     {
       return EXIT_FAILURE;
     }
+
+  HAL_TIM_Base_Start(encoderid[id]);//enable counter
+  
   return EXIT_SUCCESS;
+  
 }
 
-int32_t MW_GetEncoderVal(encoderid_t id){
+uint32_t MW_GetEncoderVal(encoderid_t id){
   assert_param(IS_ENCODER_ID(id));
   return __HAL_TIM_GET_COUNTER(encoderid[(uint32_t)id]);
 }
