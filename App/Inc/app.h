@@ -4,6 +4,10 @@
 /*NO Device mode*/
 #define _NO_DEVICE 0
 
+/*モータを反転させるか(１で反転) */
+#define _REVERSE_DRIL 1
+#define _REVERSE_DRIR 1
+
 #include "DD_RC.h"
 #include "DD_MD.h"
 
