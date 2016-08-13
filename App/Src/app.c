@@ -10,6 +10,9 @@
 /*suspensionSystem*/
 static
 int suspensionSystem(void);
+/*pushSystem*/
+static
+int pushSystem(void);
 
 /*メモ
  * *g_ab_h...ABのハンドラ
@@ -31,6 +34,11 @@ int appTask(void){
   /*それぞれの機構ごとに処理をする*/
   /*途中必ず定数回で終了すること。*/
   ret = suspensionSystem();
+  if( ret ){
+    return ret;
+  }
+
+  ret = pushSystem();
   if( ret ){
     return ret;
   }
@@ -128,4 +136,36 @@ int suspensionSystem(void){
   }
   return EXIT_SUCCESS;
 } /* suspensionSystem */
+
+int pushSystem(void){
+  if(__RC_ISPRESSED_UP(g_rc_data)){
+#if _REVERSE_PSH
+    g_md_h[ROB1_PSH].mode = D_MMOD_FORWARD;
+#else 
+    g_md_h[ROB1_PSH].mode = D_MMOD_BACKWARD;
+#endif
+    g_md_h[ROB1_PSH].duty = MD_MAX_DUTY_PSH;
+  }else if(__RC_ISPRESSED_DOWN(g_rc_data)){
+#if _REVERSE_PSH
+    g_md_h[ROB1_PSH].mode = D_MMOD_BACKWARD;
+#else 
+    g_md_h[ROB1_PSH].mode = D_MMOD_FORWARD;
+#endif
+    g_md_h[ROB1_PSH].duty = MD_MAX_DUTY_PSH;
+  }else{
+    g_md_h[ROB1_PSH].mode = D_MMOD_BRAKE;
+    g_md_h[ROB1_PSH].duty = 0;
+  }
+
+  return EXIT_SUCCESS;
+}
+
+
+
+
+
+
+
+
+
 
