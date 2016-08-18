@@ -60,7 +60,10 @@ int appInit(void){
   /* flush(); */
 
   ad_init();
-    /*GPIO の設定などでMW,GPIOではHALを叩く*/
+
+  message("msg","plz confirm\n%d\n",g_adjust.rightadjust.value);
+  while(1);
+  /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
 

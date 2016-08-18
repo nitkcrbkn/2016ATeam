@@ -11,33 +11,11 @@
 #define _SCR_CURSOR_SET(x,y) MW_printf("\033[%d;%dH",(int)(y)+1,(int)(x)+1)
 #define _SCR_CLEAR() MW_printf("\033[2J")
 
-#define _NAME_LEN 15
-#define _UNIT_LEN 5
-#define _NAME_LEN_STR "15"
-#define _UNIT_LEN_STR "5"
-
 #define _MAX(x,y) ((x)>(y)?(x):(y))
 #define _MIN(x,y) ((x)<(y)?(x):(y))
 
 /*exclude dumy*/
 #define _EDITLIST_NUM  ((sizeof(editlist)/sizeof(editlist[0])))
-
-typedef struct {
-  int value;
-  int maxvalue;
-  int minvalue;
-  char display_name[_NAME_LEN+1];
-  char display_unit[_UNIT_LEN+1];
-} const_element_t;
-
-/*first, add menber to this list.*/
-typedef struct {
-  const_element_t leftadjust;
-  const_element_t rightadjust;
-  const_element_t steeringtime;
-  const_element_t rctimeout;
-  const_element_t rc_centre_thereshold;
-} adjust_t;
 
 /*second, write const description.*/
 static const adjust_t defaultad={
@@ -88,16 +66,15 @@ static const adjust_t defaultad={
   */
 };
 
-static
-adjust_t ad;
+adjust_t g_adjust;
 
 /*finary, add edit list.*/
 static const_element_t *editlist[]={
-  &(ad.rightadjust),
-  &(ad.leftadjust),
-  &(ad.steeringtime),
-  &(ad.rctimeout),
-  &(ad.rc_centre_thereshold),
+  &(g_adjust.rightadjust),
+  &(g_adjust.leftadjust),
+  &(g_adjust.steeringtime),
+  &(g_adjust.rctimeout),
+  &(g_adjust.rc_centre_thereshold),
 };
 
 int data[_EDITLIST_NUM+1];
@@ -108,7 +85,7 @@ int saveData(void);
 /* reload default value */
 static
 void reloadDefault(void){
-  ad = defaultad;
+  g_adjust = defaultad;
 }
 
 static
