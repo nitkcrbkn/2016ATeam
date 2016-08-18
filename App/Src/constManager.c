@@ -249,7 +249,11 @@ int ad_keyTask(void){
   /*screen update*/
   flush();
 
-  return select==_EDITLIST_NUM?0:1;
+  if(select==_EDITLIST_NUM){
+    select = 0;
+    return 0;
+  }
+  return 1;
 }
 
 static
