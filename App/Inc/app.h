@@ -1,7 +1,6 @@
 #ifndef __APP_H
 #define __APP_H
 
-
 #include "DD_RC.h"
 #include "DD_MD.h"
 
@@ -9,10 +8,10 @@
 #define _NO_DEVICE 0
 
 /*モータを反転させるか(１で反転) */
-#define _REVERSE_DRIL 1
-#define _REVERSE_DRIR 1
-#define _REVERSE_DRIBL 0
-#define _REVERSE_DRIBR 0
+#define _IS_REVERSE_DRIL 1
+#define _IS_REVERSE_DRIR 1
+#define _IS_REVERSE_DRIBL 0
+#define _IS_REVERSE_DRIBR 0
 
 #define DD_NUM_OF_MD 4
 #define DD_NUM_OF_AB 0
