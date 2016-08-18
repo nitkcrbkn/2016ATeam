@@ -33,7 +33,7 @@ flashError_t MW_flashElase(/*!erase here!*/ const void *flash_add, size_t size){
   {
     uint32_t i;
     for( i = 0; i + 1 < size / 2; i++ ){
-      if(((uint16_t*)flash_add )[i] != 0xFFFF ){
+      if(((const uint16_t*)flash_add )[i] != 0xFFFF ){
         return MW_FLASH_ERASE_VERIFY_FAILURE;
       }
     }
@@ -73,11 +73,11 @@ flashError_t MW_flashWrite(const void *ptr, /*!write here!*/ const void *flash_a
   }
 
   address = (uint32_t)flash_add;
-  for(; address + 1 < (uint32_t)flash_add + size; address += 2 ){
+  for(; address + 1 < (uint32_t)flash_add + size; address += 2 ,ptr += 2){
     if( HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address, *(const uint16_t*)ptr) != HAL_OK ){
       return MW_FLASH_WRITE_FAILURE;
     }
-    if( *(const uint16_t*)ptr++ != *(uint16_t*)address ){
+    if( *(const uint16_t*)ptr != *(uint16_t*)address ){
       return MW_FLASH_WRITE_VERIFY_FAILURE;
     }
   }
