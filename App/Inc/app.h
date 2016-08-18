@@ -1,6 +1,10 @@
 #ifndef __APP_H
 #define __APP_H
 
+
+#include "DD_RC.h"
+#include "DD_MD.h"
+
 /*NO Device mode*/
 #define _NO_DEVICE 0
 
@@ -9,12 +13,6 @@
 #define _REVERSE_DRIR 1
 #define _REVERSE_DRIBL 0
 #define _REVERSE_DRIBR 0
-
-#include "DD_RC.h"
-#include "DD_MD.h"
-
-int appTask(void);
-int appInit(void);
 
 #define DD_NUM_OF_MD 4
 #define DD_NUM_OF_AB 0
@@ -35,6 +33,9 @@ int appInit(void);
 #define MD_GAIN_DRIR ( MD_MAX_DUTY_DRIR / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIBL ( MD_MAX_DUTY_DRIBL / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIBR ( MD_MAX_DUTY_DRIBR / DD_RC_ANALOG_MAX )
+
+int appTask(void);
+int appInit(void);
 
 #endif
 
