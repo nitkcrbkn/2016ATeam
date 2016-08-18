@@ -1,4 +1,0 @@
-#include "MW_flash.h"
-
- checkFlashWrite(void){
-  
