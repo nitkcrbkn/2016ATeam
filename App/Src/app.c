@@ -62,44 +62,44 @@ int suspensionSystem(void){
   int prev_duty; /* 現在の値 */
 
   /*for each motor*/
-  for( ctl_motor_kind = ROB1_DRIL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
+  for( ctl_motor_kind = ROB0_DRIL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
     /*それぞれの差分*/
     switch( ctl_motor_kind ){
-    case ROB1_DRIL:
+    case ROB0_DRIL:
       rc_analogdata = DD_RCGetLY(g_rc_data);
       md_gain = MD_GAIN_DRIL;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIL
       rc_analogdata = -rc_analogdata;
 #endif
-      idx = ROB1_DRIL;
+      idx = ROB0_DRIL;
       break;
-    case ROB1_DRIR:
+    case ROB0_DRIR:
       rc_analogdata = DD_RCGetRY(g_rc_data);
       md_gain = MD_GAIN_DRIR;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIL
       rc_analogdata = -rc_analogdata;
 #endif
-      idx = ROB1_DRIR;
+      idx = ROB0_DRIR;
       break;
-    case ROB1_DRIBL:
+    case ROB0_DRIBL:
       rc_analogdata = DD_RCGetLY(g_rc_data);
       md_gain = MD_GAIN_DRIBL;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIBL
       rc_analogdata = -rc_analogdata;
 #endif
-      idx = ROB1_DRIBL;
+      idx = ROB0_DRIBL;
       break;
-    case ROB1_DRIBR:
+    case ROB0_DRIBR:
       rc_analogdata = DD_RCGetRY(g_rc_data);
       md_gain = MD_GAIN_DRIBR;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIBR
       rc_analogdata = -rc_analogdata;
 #endif
-      idx = ROB1_DRIBR;
+      idx = ROB0_DRIBR;
       break;
     default: return EXIT_FAILURE;
     }
@@ -148,23 +148,23 @@ int suspensionSystem(void){
 } /* suspensionSystem */
 
 int armSystem(void){
-  g_md_h[ROB1_ARMT].duty = MD_MAX_DUTY_ARMT;  
+  g_md_h[ROB0_ARMT].duty = MD_MAX_DUTY_ARMT;  
 
   if(__RC_ISPRESSED_R1(g_rc_data)){
 #if _IS_REVERSE_ARMT
-    g_md_h[ROB1_ARMT].mode = D_MMOD_BACKWARD;
+    g_md_h[ROB0_ARMT].mode = D_MMOD_BACKWARD;
 #else
-    g_md_h[ROB1_ARMT].mode = D_MMOD_FORWARD;
+    g_md_h[ROB0_ARMT].mode = D_MMOD_FORWARD;
 #endif
   }else if(__RC_ISPRESSED_R1(g_rc_data)){
 #if _IS_REVERSE_ARMT
-    g_md_h[ROB1_ARMT].mode = D_MMOD_FORWARD;
+    g_md_h[ROB0_ARMT].mode = D_MMOD_FORWARD;
 #else
-    g_md_h[ROB1_ARMT].mode = D_MMOD_BACKWARD;
+    g_md_h[ROB0_ARMT].mode = D_MMOD_BACKWARD;
 #endif
   }else{
-    g_md_h[ROB1_ARMT].duty = 0;  
-    g_md_h[ROB1_ARMT].mode = D_MMOD_BRAKE;
+    g_md_h[ROB0_ARMT].duty = 0;  
+    g_md_h[ROB0_ARMT].mode = D_MMOD_BRAKE;
   }
 
   return EXIT_SUCCESS;

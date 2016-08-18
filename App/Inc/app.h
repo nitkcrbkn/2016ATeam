@@ -17,11 +17,11 @@
 #define DD_NUM_OF_MD 5
 #define DD_NUM_OF_AB 0
 
-#define ROB1_DRIL 0
-#define ROB1_DRIR 1
-#define ROB1_DRIBL 2
-#define ROB1_DRIBR 3
-#define ROB1_ARMT 4
+#define ROB0_DRIL 0
+#define ROB0_DRIR 1
+#define ROB0_DRIBL 2
+#define ROB0_DRIBR 3
+#define ROB0_ARMT 4
 
 #define CENTRAL_THRESHOLD 5
 
