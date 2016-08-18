@@ -31,36 +31,36 @@ flashError_t checkFlashWrite(void){
 int appInit(void){
   message("msg","hell");
 
+  /* switch(checkFlashWrite()){ */
+  /* case MW_FLASH_OK: */
+  /*   message("msg","FLASH WRITE TEST SUCCESS\n%s",(const char*)WRITE_ADDR); */
+  /*   break; */
+  /* case MW_FLASH_LOCK_FAILURE: */
+  /*   message("err","FLASH WRITE TEST LOCK FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_UNLOCK_FAILURE: */
+  /*   message("err","FLASH WRITE TEST UNLOCK FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_ERASE_VERIFY_FAILURE: */
+  /*   message("err","FLASH ERASE VERIFY FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_ERASE_FAILURE: */
+  /*   message("err","FLASH ERASE FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_WRITE_VERIFY_FAILURE: */
+  /*   message("err","FLASH WRITE TEST VERIFY FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_WRITE_FAILURE: */
+  /*   message("err","FLASH WRITE TEST FAILURE\n"); */
+  /*   break;         */
+  /* default: */
+  /*   message("err","FLASH WRITE TEST UNKNOWN FAILURE\n"); */
+  /*   break; */
+  /* } */
+  /* flush(); */
+
   ad_main();
-  
-  switch(checkFlashWrite()){
-  case MW_FLASH_OK:
-    MW_printf("FLASH WRITE TEST SUCCESS\n");
-    break;
-  case MW_FLASH_LOCK_FAILURE:
-    MW_printf("FLASH WRITE TEST LOCK FAILURE\n");
-    break;
-  case MW_FLASH_UNLOCK_FAILURE:
-    MW_printf("FLASH WRITE TEST UNLOCK FAILURE\n");
-    break;
-  case MW_FLASH_ERASE_VERIFY_FAILURE:
-    MW_printf("FLASH ERASE VERIFY FAILURE\n");
-    break;
-  case MW_FLASH_ERASE_FAILURE:
-    MW_printf("FLASH ERASE FAILURE\n");
-    break;
-  case MW_FLASH_WRITE_VERIFY_FAILURE:
-    MW_printf("FLASH WRITE TEST VERIFY FAILURE\n");
-    break;
-  case MW_FLASH_WRITE_FAILURE:
-    MW_printf("FLASH WRITE TEST FAILURE\n");
-    break;        
-  default:
-    MW_printf("FLASH WRITE TEST UNKNOWN FAILURE\n");
-    break;
-  }
-  flush();
-  
+    
     /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
@@ -138,5 +138,6 @@ int suspensionSystem(void){
       g_md_h[idx].duty = abs(rc_analogdata) * MD_GAIN;
     }
   }
+
   return EXIT_SUCCESS;
 }
