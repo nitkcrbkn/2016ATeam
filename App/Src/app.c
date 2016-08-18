@@ -148,9 +148,9 @@ int suspensionSystem(void){
 } /* suspensionSystem */
 
 int armSystem(void){
-  g_md_h[ROB0_ARMT].duty = MD_MAX_DUTY_ARMT;  
+  g_md_h[ROB0_ARMT].duty = MD_MAX_DUTY;  
 
-  if(__RC_ISPRESSED_R1(g_rc_data)){
+  if(__RC_ISPRESSED_L1(g_rc_data)){
 #if _IS_REVERSE_ARMT
     g_md_h[ROB0_ARMT].mode = D_MMOD_BACKWARD;
 #else
