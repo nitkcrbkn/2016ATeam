@@ -37,7 +37,6 @@ typedef struct {
   const_element_t steeringtime;
   const_element_t rctimeout;
   const_element_t rc_centre_thereshold;
-  const_element_t dumy;/*may be destroy.*/
 } adjust_t;
 
 /*second, write const description.*/
@@ -250,7 +249,7 @@ int ad_keyTask(void){
   /*reload value*/
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
     MW_printf("load default value");
-    load();
+    reloadDefault();
     adjustPrint(select);
   }
 
@@ -258,11 +257,13 @@ int ad_keyTask(void){
   if(__RC_ISPRESSED_SQARE(g_rc_data)){
     if(save()==EXIT_SUCCESS){
       message("msg","save success");
+      message("msg","plz reset");
       while(1);
       return 0;
     }
     else{
       message("err","save failure");
+      message("msg","plz reset");
       while(1);
       return EXIT_FAILURE;
     }
@@ -311,8 +312,11 @@ int adjust(void){
 }
 
 
+void ad_init(void){
+  reloadDefault();
+  load();
+}
 
 int ad_main(void){
-  reloadDefault();
   return  adjust();
 }
