@@ -20,7 +20,7 @@
 #define _MIN(x,y) ((x)<(y)?(x):(y))
 
 /*exclude dumy*/
-#define _EDITLIST_NUM  ((sizeof(editlist)/sizeof(editlist[0]))-1)
+#define _EDITLIST_NUM  ((sizeof(editlist)/sizeof(editlist[0])))
 
 typedef struct {
   int value;
@@ -87,16 +87,9 @@ static const adjust_t defaultad={
     .display_unit = "",
   },
   */
-  .dumy = {
-    .value = 0,
-    .maxvalue = 0,
-    .minvalue = 0,
-    .display_name = "N/A",
-    .display_unit = "N/A",
-  },
 };
 
-static 
+static
 adjust_t ad;
 
 /*finary, add edit list.*/
@@ -108,10 +101,33 @@ static const_element_t *editlist[]={
   &(ad.rc_centre_thereshold),
 };
 
+int data[_EDITLIST_NUM+1];
+
+static
+int saveData(void);
+
 /* reload default value */
 static
 void reloadDefault(void){
   ad = defaultad;
+}
+
+static
+void load(void){
+  int i;
+  for(i=0;i<(int)_EDITLIST_NUM;i++){
+    editlist[i]->value = ((int*)WRITE_ADDR)[i];
+  }
+}
+
+static
+int save(void){
+  int i;
+  for(i=0;i<(int)_EDITLIST_NUM;i++){
+    data[i] = editlist[i]->value;
+  }
+
+  return saveData();  
 }
 
 /*print a element*/
@@ -130,7 +146,7 @@ void ad_const_elementPrint(int i,const_element_t *list){
 static
 int saveData(void){
   /*the boundary of size cause write failure, so this is arrenged the size.*/
-  if(MW_flashWrite(&ad, WRITE_ADDR, sizeof(ad)&0xFFFFFFFE)==MW_FLASH_OK){
+  if(MW_flashWrite(data, WRITE_ADDR, sizeof(data)&0xFFFFFFFE)==MW_FLASH_OK){
     return EXIT_SUCCESS;
   }
   else{
@@ -161,10 +177,10 @@ void adjustPrint(int point){
   }
   flush();
   MW_printf("+---------------------+--------------------+\n");
-  MW_printf("| %s...%*s|%s...%*s|\n","↑",15,"CURSOR UP","↓",15,"CURSOR DOWN");
-  MW_printf("| %s...%*s|%s...%*s|\n","L1",15,"VALUE DEC@1","R1",15,"VALUE INC@1");
-  MW_printf("| %s...%*s|%s...%*s|\n","L2",15,"VALUE DEC@10","R2",15,"VALUE INC@10");
-  MW_printf("| %s...%*s|%s...%*s|\n","△",15,"LOAD DEFAULT","□",15,"SAVE DATA");
+  MW_printf("| %s...%15s|%s...%15s|\n","↑ ","CURSOR UP","↓ ","CURSOR DOWN");
+  MW_printf("| %s...%15s|%s...%15s|\n","L1","VALUE DEC@1","R1","VALUE INC@1");
+  MW_printf("| %s...%15s|%s...%15s|\n","L2","VALUE DEC@10","R2","VALUE INC@10");
+  MW_printf("| %s...%15s|%s...%15s|\n","△ ","LOAD ","□ ","SAVE ");
   MW_printf("+---------------------+--------------------+\n");
   flush();
 }
@@ -216,10 +232,10 @@ int ad_keyTask(void){
 	editlist[select]->value = _MIN(editlist[select]->value+10, editlist[select]->maxvalue);
       }
       else if(is_pressed_L1){
-	editlist[select]->value = _MAX(editlist[select]->value-1, editlist[select]->maxvalue);
+	editlist[select]->value = _MAX(editlist[select]->value-1, editlist[select]->minvalue);
       }
       else if(is_pressed_L2){
-	editlist[select]->value = _MAX(editlist[select]->value-10, editlist[select]->maxvalue);
+	editlist[select]->value = _MAX(editlist[select]->value-10, editlist[select]->minvalue);
       }
 
       _SCR_CURSOR_SET(2, select+2);
@@ -234,17 +250,20 @@ int ad_keyTask(void){
   /*reload value*/
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
     MW_printf("load default value");
-    reloadDefault();    
+    load();
+    adjustPrint(select);
   }
 
   /*save data*/
   if(__RC_ISPRESSED_SQARE(g_rc_data)){
-    if(saveData()==EXIT_SUCCESS){
-      MW_printf("save success");
+    if(save()==EXIT_SUCCESS){
+      message("msg","save success");
+      while(1);
       return 0;
     }
     else{
-      MW_printf("save failure");
+      message("err","save failure");
+      while(1);
       return EXIT_FAILURE;
     }
   }
@@ -275,7 +294,7 @@ int adjust(void){
       __RC_ISPRESSED_SQARE(g_rc_data);
     
     if(had_key_pressed){
-      if(count == 0||(count < 80&&count % 10==0)){
+      if(count == 0||(count > 30&&count % 5==0)){
 	ret = ad_keyTask();
       }
       count++;
@@ -283,12 +302,17 @@ int adjust(void){
     else{
       count = 0;
     }
+
+    while(g_SY_system_counter%10==0);
+    while(g_SY_system_counter%10!=0);
   }
   
   return ret == 1?EXIT_SUCCESS:EXIT_FAILURE;
 }
 
+
+
 int ad_main(void){
-  ad = *(adjust_t*)WRITE_ADDR;
+  reloadDefault();
   return  adjust();
 }
