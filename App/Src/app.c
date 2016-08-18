@@ -50,7 +50,7 @@ int appTask(void){
 /*プライベート 足回りシステム*/
 static
 int suspensionSystem(void){
-  const int num_of_motor = 4; /*モータの個数*/
+  const int num_of_motor = 3; /*モータの個数*/
   const int rising_val = 200; /* 立ち上がり値 */
   const int falling_val = 200; /* 立ち下がり値 */
   int rc_analogdata; /*アナログデータ*/
@@ -83,23 +83,14 @@ int suspensionSystem(void){
 #endif
       idx = ROB0_DRIR;
       break;
-    case ROB0_DRIBL:
+    case ROB0_DRIB:
       rc_analogdata = DD_RCGetLY(g_rc_data);
-      md_gain = MD_GAIN_DRIBL;
+      md_gain = MD_GAIN_DRIB;
       /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIBL
+#if _IS_REVERSE_DRIB
       rc_analogdata = -rc_analogdata;
 #endif
-      idx = ROB0_DRIBL;
-      break;
-    case ROB0_DRIBR:
-      rc_analogdata = DD_RCGetRY(g_rc_data);
-      md_gain = MD_GAIN_DRIBR;
-      /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIBR
-      rc_analogdata = -rc_analogdata;
-#endif
-      idx = ROB0_DRIBR;
+      idx = ROB0_DRIB;
       break;
     default: return EXIT_FAILURE;
     }
