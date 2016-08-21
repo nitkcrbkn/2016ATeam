@@ -60,8 +60,8 @@ int suspensionSystem(void){
       rc_analogdata = DD_RCGetLY(g_rc_data);
       md_gain = MD_GAIN_DRIL;
       /* 前後の向きを反転 */
-#if _REVERSE_DRIL
-      rc_analogdata *= -1;
+#if _IS_REVERSE_DRIL
+      rc_analogdata = -rc_analogdata;
 #endif
       idx = ROB1_DRIL;
       break;
@@ -69,8 +69,8 @@ int suspensionSystem(void){
       rc_analogdata = DD_RCGetRY(g_rc_data);
       md_gain = MD_GAIN_DRIR;
       /* 前後の向きを反転 */
-#if _REVERSE_DRIL
-      rc_analogdata *= -1;
+#if _IS_REVERSE_DRIL
+      rc_analogdata = -rc_analogdata;
 #endif
       idx = ROB1_DRIR;
       break;

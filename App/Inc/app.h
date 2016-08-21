@@ -1,18 +1,16 @@
 #ifndef __APP_H
 #define __APP_H
 
-/*NO Device mode*/
-#define _NO_DEVICE 0
-
-/*モータを反転させるか(１で反転) */
-#define _REVERSE_DRIL 1
-#define _REVERSE_DRIR 1
 
 #include "DD_RC.h"
 #include "DD_MD.h"
 
-int appTask(void);
-int appInit(void);
+/*NO Device mode*/
+#define _NO_DEVICE 0
+
+/*モータを反転させるか(１で反転) */
+#define _IS_REVERSE_DRIL 1
+#define _IS_REVERSE_DRIR 0
 
 #define DD_NUM_OF_MD 2
 #define DD_NUM_OF_AB 0
@@ -27,6 +25,9 @@ int appInit(void);
 
 #define MD_GAIN_DRIL ( MD_MAX_DUTY_DRIL / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIR ( MD_MAX_DUTY_DRIR / DD_RC_ANALOG_MAX )
+
+int appTask(void);
+int appInit(void);
 
 #endif
 
