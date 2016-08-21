@@ -10,9 +10,14 @@
 /*suspensionSystem*/
 static
 int suspensionSystem(void);
+
 /*pushSystem*/
 static
 int pushSystem(void);
+
+/*ABSystem*/
+static
+int ABSystem(void);
 
 /*メモ
  * *g_ab_h...ABのハンドラ
@@ -39,6 +44,11 @@ int appTask(void){
   }
 
   ret = pushSystem();
+  if( ret ){
+    return ret;
+  }
+
+  ret = ABSystem();
   if( ret ){
     return ret;
   }
@@ -159,6 +169,36 @@ int pushSystem(void){
 
   return EXIT_SUCCESS;
 }
+
+int ABSystem(void){
+  if(__RC_ISPRESSED_R1(g_rc_data)){
+    if(g_ab_h[AB].dat == 0x00){
+      g_ab_h[AB].dat |= LIFTL;
+      g_ab_h[AB].dat |= LIFTR;
+    }
+  }else{
+    g_ab_h[AB].dat = 0x00;
+  }
+  
+  if(__RC_ISPRESSED_L1(g_rc_data)){
+    if(g_ab_h[AB].dat == 0x00){
+      g_ab_h[AB].dat |= PNCHL;
+      g_ab_h[AB].dat |= PNCHR;
+    }
+  }else{
+    g_ab_h[AB].dat = 0x00;
+  }
+  
+  return EXIT_SUCCESS;
+}
+
+
+
+
+
+
+
+
 
 
 
