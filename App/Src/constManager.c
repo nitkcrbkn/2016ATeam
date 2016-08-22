@@ -17,6 +17,8 @@
 /*exclude dumy*/
 #define _EDITLIST_NUM  ((sizeof(editlist)/sizeof(editlist[0])))
 
+#define _RC_ADJUST_NUM 4
+
 /*second, write const description.*/
 static const adjust_t defaultad={
   .leftadjust = {
@@ -77,7 +79,7 @@ static const_element_t *editlist[]={
   &(g_adjust.rc_centre_thereshold),
 };
 
-int data[_EDITLIST_NUM+1];
+int data[_RC_ADJUST_NUM+_EDITLIST_NUM+1];
 
 static
 int saveData(void);
@@ -221,13 +223,14 @@ int ad_keyTask(void){
     }
   }
 
-  _SCR_CURSOR_SET(0, _EDITLIST_NUM+8);
+  _SCR_CURSOR_SET(0, _EDITLIST_NUM+10);
   
   /*reload value*/
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
-    MW_printf("load default value");
+    message("msg","load default value");
     reloadDefault();
     adjustPrint(select);
+    wait(1000);
   }
 
   /*save data*/
@@ -254,6 +257,61 @@ int ad_keyTask(void){
     return 0;
   }
   return 1;
+}
+
+static
+void interval_10ms(void){
+    while(g_SY_system_counter%10==0);
+    while(g_SY_system_counter%10!=0);
+}
+
+static
+void wait(int ms){
+  int old = g_SY_system_counter;
+  while(old + ms > g_SY_system_counter);
+}
+
+static
+int RC_adjust_Zero(void){
+  _SCR_CLEAR();
+  _SCR_CURSOR_SET(0, 5);
+  MW_printf("adjust zero\n");
+  MW_printf("○ ... adjust\n× ... cancel\n");
+  flush();
+
+  while(1){
+    _SCR_CURSOR_SET(0, 0);
+    MW_printf("(%d,%d),(%d,%d)\n",
+	      __RC_GET_LX_VAL(g_rc_data),
+	      __RC_GET_LY_VAL(g_rc_data),
+	      __RC_GET_RX_VAL(g_rc_data),
+	      __RC_GET_RY_VAL(g_rc_data)
+	      );
+    flush();
+    interval_10ms();
+    if(__RC_ISPRESSED_ROUND(g_rc_data)){
+      data[_EDITLIST_NUM+0] = __RC_GET_LX_VAL(g_rc_data);
+      data[_EDITLIST_NUM+1] = __RC_GET_LY_VAL(g_rc_data);
+      data[_EDITLIST_NUM+2] = __RC_GET_RX_VAL(g_rc_data);
+      data[_EDITLIST_NUM+3] = __RC_GET_RY_VAL(g_rc_data);
+      message("msg","adjusted");
+      wait(1000);
+      return EXIT_SUCCESS;
+    }
+    else if(__RC_ISPRESSED_CROSS(g_rc_data)){
+      message("msg","canceled");
+      wait(1000);
+      return EXIT_SUCCESS;
+    }
+  }
+  return EXIT_SUCCESS;
+}
+
+static
+int RC_adjust(void){
+  if(RC_adjust_Zero()!=EXIT_SUCCESS)return EXIT_FAILURE;
+  
+  return EXIT_SUCCESS;
 }
 
 static
@@ -284,9 +342,8 @@ int adjust(void){
     else{
       count = 0;
     }
-
-    while(g_SY_system_counter%10==0);
-    while(g_SY_system_counter%10!=0);
+    
+    interval_10ms();
   }
   
   return ret == 1?EXIT_SUCCESS:EXIT_FAILURE;
