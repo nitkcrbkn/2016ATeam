@@ -26,6 +26,7 @@ extern DD_ABHand_t g_ab_h[DD_NUM_OF_AB];
 
 /*I2Cのサポート用関数*/
 int DD_I2CSend(uint8_t add,const uint8_t *data,uint8_t size);
+int DD_I2CReceive(uint8_t add, const uint8_t *data, uint8_t size);
 /*Deviceのハンドラーの表示用関数*/
 void DD_print(void);
 /*DeviceDriverのタスク*/

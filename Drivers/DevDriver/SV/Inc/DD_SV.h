@@ -12,21 +12,6 @@
 
 #ifndef __DD_SV_H
 #define __MD_SV_H
-/*sample code
-uint8_t servonum = 0;
-while(1)
-{
-  for(uint16_t len=SERVOMIN;len<SERVOMAX;len++)
-    setPWM(servonum,0,len);
-  delay(500);
-  for(uint16_t len2=SERVOMAX;len2>SERVOMIN;len2--)
-    setPWM(servonum,0,len2);
-  delay(500);
-  servonum++;
-  if(servonum>7)servonum = 0;
-}
-*/
-#include <stdint.h>
 
 #define PCA9685_MODE1 0x0
 #define PCA9685_PRESCALE 0xFE
@@ -40,5 +25,15 @@ while(1)
 #define ALLLED_ON_H 0xFB
 #define ALLLED_OFF_L 0xFC
 #define ALLLED_OFF_H 0xFD
+
+typedef struct
+{
+  uint8_t i2cadd;
+  uint8_t pin;
+  uint16_t val;
+}DD_SV_t;
+
+int32_t SV_Init(DD_SV_t *dsv);
+uint32_t SV_SetRad(DD_SV_t *dsv) ;
 
 #endif

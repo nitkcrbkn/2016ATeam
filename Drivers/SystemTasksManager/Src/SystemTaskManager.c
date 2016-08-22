@@ -1,4 +1,4 @@
- /* ===Kisarazu RBKN Library===
+/* ===Kisarazu RBKN Library===
  *
  * autor          : Oishi
  * version        : v0.10
@@ -15,6 +15,7 @@
 #include "MW_USART.h"
 #include "MW_I2C.h"
 #include "MW_GPIO.h"
+#include "DD_SV.h"
 #include "DD_Gene.h"
 #include "message.h"
 #include "app.h"
@@ -49,15 +50,38 @@ int main(void){
     MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
   }
-  ret = SY_I2CConnTest(10);
-  if( ret ){
-    message("err", "I2CConnectionTest Faild%d", ret);
-    MW_waitForMessageTransitionComplete(100);
-    return EXIT_FAILURE;
-  }
+  /*  ret = SY_I2CConnTest(10);
+      if( ret ){
+      message("err", "I2CConnectionTest Faild%d", ret);
+      MW_waitForMessageTransitionComplete(100);
+      return EXIT_FAILURE;
+      }*/
+  #define SERVOMIN 150
+  #define SERVOMAX 600
+  
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
+  while(1)
+    {
+      DD_SV_t test;
+      test.i2cadd = 0x00;
+      test.pin = 0;
+      test.val = 0;
+      SV_Init(&test);
+      
+      while(1)
+	{
+	  for(test.val=SERVOMIN;test.val<SERVOMAX;test.val++)
+	    SV_SetRad(&test);
+	  HAL_Delay(500);
+	  for(test.val=SERVOMAX;test.val>SERVOMIN;test.val--)
+	    SV_SetRad(&test);
+	  HAL_Delay(500);
+	  test.pin++;
+	  if(test.pin>7)test.pin = 0;
+	}
+    }
   while( 1 ){
     SY_doAppTasks();
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
@@ -90,17 +114,17 @@ int SY_doDevDriverTasks(void){
 }
 #endif
 
-static
+/*static
 int SY_I2CConnTest(int timeout){
   UNUSED(timeout);
   return EXIT_SUCCESS;
-}
+  }*/
 
 static
 int SY_init(void){
   int ret;
   /* Reset of all peripherals, Initializes the Flash interface and the Systick.
-   **/
+  **/
   if( HAL_Init()){
     return EXIT_FAILURE;
   }
@@ -159,7 +183,7 @@ int SY_clockInit(void){
   }
 
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-                                | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+    | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;

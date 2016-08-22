@@ -22,6 +22,9 @@
 int DD_I2CSend(uint8_t add, const uint8_t *data, uint8_t size){
   return MW_I2C1Transmit(add, data, size);
 }
+int DD_I2CReceive(uint8_t add, const uint8_t *data, uint8_t size){
+  return MW_I2C1Receive(add, data, size);
+}
 
 /*DeviceDriverのタスク*/
 int DD_doTasks(void){
