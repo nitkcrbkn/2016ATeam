@@ -139,7 +139,7 @@ void adjustPrint(int point){
   _SCR_CURSOR_SET(0, 0);
   MW_printf("  [NO] <%-"_NAME_LEN_STR"s> [MIN - MAX][Val][%"_UNIT_LEN_STR"s]\n","Name","Unit");
   MW_printf("-------------------------------------------------\n");
-  for(i=0;i<(int)_EDITLIST_NUM+1;i++){
+  for(i=0;i<(int)_EDITLIST_NUM;i++){
     if(i==point){
       MW_printf("> ");
     }else{
@@ -149,19 +149,29 @@ void adjustPrint(int point){
       ad_const_elementPrint(i,editlist[i]);
       MW_printf("\n");
     }
-    if(i==_EDITLIST_NUM+0){
-      MW_printf("exit\n");
-    }
   }
   flush();
   MW_printf("+---------------------+--------------------+\n");
   MW_printf("| %s...%15s|%s...%15s|\n","↑ ","CURSOR UP","↓ ","CURSOR DOWN");
   MW_printf("| %s...%15s|%s...%15s|\n","L1","VALUE DEC@1","R1","VALUE INC@1");
   MW_printf("| %s...%15s|%s...%15s|\n","L2","VALUE DEC@10","R2","VALUE INC@10");
-  MW_printf("| %s...%15s|%s...%15s|\n","△ ","LOAD ","□ ","SAVE ");
+  MW_printf("| %s...%15s|%s...%15s|\n","× ","OK","○ ","N/A");
+  MW_printf("| %s...%15s|%s...%15s|\n","△ ","LOAD DEF","□ ","SAVE 2 FLASH");
   MW_printf("+---------------------+--------------------+\n");
   flush();
 }
+static
+void interval_10ms(void){
+    while(g_SY_system_counter%10==0);
+    while(g_SY_system_counter%10!=0);
+}
+
+static
+void wait(int ms){
+  int old = g_SY_system_counter;
+  while(old + ms > g_SY_system_counter);
+}
+
 
 /*do key task*/
 static
@@ -230,7 +240,6 @@ int ad_keyTask(void){
     message("msg","load default value");
     reloadDefault();
     adjustPrint(select);
-    wait(1000);
   }
 
   /*save data*/
@@ -252,23 +261,12 @@ int ad_keyTask(void){
   /*screen update*/
   flush();
 
-  if(select==_EDITLIST_NUM){
-    select = 0;
+  if(__RC_ISPRESSED_CROSS(g_rc_data)){
+    message("msg","canceled");
+    wait(1000);
     return 0;
   }
   return 1;
-}
-
-static
-void interval_10ms(void){
-    while(g_SY_system_counter%10==0);
-    while(g_SY_system_counter%10!=0);
-}
-
-static
-void wait(int ms){
-  int old = g_SY_system_counter;
-  while(old + ms > g_SY_system_counter);
 }
 
 static
@@ -289,6 +287,7 @@ int RC_adjust_Zero(void){
 	      );
     flush();
     interval_10ms();
+
     if(__RC_ISPRESSED_ROUND(g_rc_data)){
       data[_EDITLIST_NUM+0] = __RC_GET_LX_VAL(g_rc_data);
       data[_EDITLIST_NUM+1] = __RC_GET_LY_VAL(g_rc_data);
@@ -304,6 +303,7 @@ int RC_adjust_Zero(void){
       return EXIT_SUCCESS;
     }
   }
+
   return EXIT_SUCCESS;
 }
 
@@ -319,6 +319,7 @@ int adjust(void){
   int count = 0;
   bool ret = true;
   bool had_key_pressed;
+
   _SCR_CLEAR();
   adjustPrint(0);
 
@@ -331,7 +332,8 @@ int adjust(void){
       __RC_ISPRESSED_R1(g_rc_data)||
       __RC_ISPRESSED_R2(g_rc_data)||
       __RC_ISPRESSED_TRIANGLE(g_rc_data)||
-      __RC_ISPRESSED_SQARE(g_rc_data);
+      __RC_ISPRESSED_SQARE(g_rc_data)||
+      __RC_ISPRESSED_CROSS(g_rc_data);
     
     if(had_key_pressed){
       if(count == 0||(count > 30&&count % 5==0)){
