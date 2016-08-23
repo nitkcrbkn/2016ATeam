@@ -22,13 +22,6 @@ int Servotest(void);
  *g_rc_data...RCのデータ
  */
 
-#define WRITE_ADDR (const void*)(0x8000000+0x400*(128-1))/*128[KiB]*/
-flashError_t checkFlashWrite(void){
-  const char data[]="HelloWorld!!TestDatas!!!\n"
-    "however you like this microcomputer, you don`t be kind to this computer.";
-  return MW_flashWrite(data,WRITE_ADDR,sizeof(data));
-}
-
 int appInit(void){
   message("msg","hell");
   /* switch(checkFlashWrite()){ */

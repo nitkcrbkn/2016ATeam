@@ -63,6 +63,6 @@ void DD_MDHandPrint(DD_MDHand_t *dmd){
     MW_printf("Br");
     break;
   }
-  MW_printf("],[%d]\n", dmd->duty);
+  MW_printf("],[%4d]\n", dmd->duty);
 }
 
