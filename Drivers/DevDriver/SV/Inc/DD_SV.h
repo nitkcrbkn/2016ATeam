@@ -11,7 +11,9 @@
  */
 
 #ifndef __DD_SV_H
-#define __MD_SV_H
+#define __DD_SV_H
+
+#include "app.h"
 
 #define PCA9685_MODE1 0x0
 #define PCA9685_PRESCALE 0xFE
