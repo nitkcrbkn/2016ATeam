@@ -8,16 +8,15 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
-#define _SCR_CURSOR_SET(x,y) MW_printf("\033[%d;%dH",(int)(y)+1,(int)(x)+1)
-#define _SCR_CLEAR() MW_printf("\033[2J")
-
-#define _MAX(x,y) ((x)>(y)?(x):(y))
-#define _MIN(x,y) ((x)<(y)?(x):(y))
-
 /*exclude dumy*/
-#define _EDITLIST_NUM  ((sizeof(editlist)/sizeof(editlist[0])))
+#define _EDITLIST_NUM  (sizeof(editlist)/sizeof(editlist[0]))
 
 #define _RC_ADJUST_NUM 4
+
+typedef enum{
+  DM_HELP,
+  DM_RC_VAL
+} ad_disp_mode_t;
 
 /*second, write const description.*/
 static const adjust_t defaultad={
@@ -79,6 +78,8 @@ static const_element_t *editlist[]={
   &(g_adjust.rc_centre_thereshold),
 };
 
+static
+ad_disp_mode_t mode = DM_HELP;
 int data[_RC_ADJUST_NUM+_EDITLIST_NUM+1];
 
 static
@@ -151,15 +152,27 @@ void adjustPrint(int point){
     }
   }
   flush();
-  MW_printf("+---------------------+--------------------+\n");
-  MW_printf("| %s...%15s|%s...%15s|\n","↑ ","CURSOR UP","↓ ","CURSOR DOWN");
-  MW_printf("| %s...%15s|%s...%15s|\n","L1","VALUE DEC@1","R1","VALUE INC@1");
-  MW_printf("| %s...%15s|%s...%15s|\n","L2","VALUE DEC@10","R2","VALUE INC@10");
-  MW_printf("| %s...%15s|%s...%15s|\n","× ","OK","○ ","N/A");
-  MW_printf("| %s...%15s|%s...%15s|\n","△ ","LOAD DEF","□ ","SAVE 2 FLASH");
-  MW_printf("+---------------------+--------------------+\n");
-  flush();
+
+  _SCR_CURSOR_SET(0, _EDITLIST_NUM+3);
+  switch(mode){
+  case DM_HELP:
+    MW_printf("+-----\033[1;33mHELP\033[0;39m---------------+------------------------+\n");
+    MW_printf("| %s...%-18s| %s...%-18s|\n","↑ ","CURSOR UP","↓ ","CURSOR DOWN");
+    MW_printf("| %s...%-18s| %s...%-18s|\n","L1","VALUE DEC@1","R1","VALUE INC@1");
+    MW_printf("| %s...%-18s| %s...%-18s|\n","L2","VALUE DEC@10","R2","VALUE INC@10");
+    MW_printf("| %s...%-18s| %s...%-18s|\n","× ","OK","○ ","sw HELP/RC data");
+    MW_printf("| %s...%-18s| %s...%-18s|\n","△ ","LOAD DEF","□ ","SAVE 2 FLASH");
+    MW_printf("+------------------------+------------------------+\n");
+    flush();
+    break;
+  case DM_RC_VAL:
+    MW_printf("------\033[1;33mRC VAL\033[0;39m--------------------------------------\n");
+    DD_RCPrint(g_rc_data);
+    flush();
+    break;
+  }
 }
+
 static
 void interval_10ms(void){
     while(g_SY_system_counter%10==0);
@@ -167,8 +180,8 @@ void interval_10ms(void){
 }
 
 static
-void wait(int ms){
-  int old = g_SY_system_counter;
+void wait(unsigned int ms){
+  unsigned int old = g_SY_system_counter;
   while(old + ms > g_SY_system_counter);
 }
 
@@ -192,7 +205,7 @@ int ad_keyTask(void){
       if( is_pressed_up ){
 	select = _MAX(0, select-1);
       } else if( is_pressed_down ){
-	select = _MIN((int)_EDITLIST_NUM, select+1);
+	select = _MIN((int)_EDITLIST_NUM-1, select+1);
       }
       _SCR_CURSOR_SET(0, select+2);
       MW_printf(">");
@@ -264,6 +277,8 @@ int ad_keyTask(void){
   if(__RC_ISPRESSED_CROSS(g_rc_data)){
     message("msg","canceled");
     wait(1000);
+    _SCR_CLEAR();
+    _SCR_CURSOR_SET(0,0);
     return 0;
   }
   return 1;
@@ -288,7 +303,7 @@ int RC_adjust_Zero(void){
     flush();
     interval_10ms();
 
-    if(__RC_ISPRESSED_ROUND(g_rc_data)){
+    if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
       data[_EDITLIST_NUM+0] = __RC_GET_LX_VAL(g_rc_data);
       data[_EDITLIST_NUM+1] = __RC_GET_LY_VAL(g_rc_data);
       data[_EDITLIST_NUM+2] = __RC_GET_RX_VAL(g_rc_data);
@@ -319,7 +334,8 @@ int adjust(void){
   int count = 0;
   bool ret = true;
   bool had_key_pressed;
-
+  bool has_circle_pressed = false;
+  
   _SCR_CLEAR();
   adjustPrint(0);
 
@@ -343,6 +359,24 @@ int adjust(void){
     }
     else{
       count = 0;
+    }
+
+    if(!has_circle_pressed&&__RC_ISPRESSED_CIRCLE(g_rc_data)){
+      if(mode==DM_HELP)mode = DM_RC_VAL;
+      else mode = DM_HELP;
+      _SCR_CLEAR();
+      adjustPrint(0);
+      has_circle_pressed = true;
+    }
+    if(!__RC_ISPRESSED_CIRCLE(g_rc_data)){
+      has_circle_pressed = false;
+    }
+
+    if(mode == DM_RC_VAL){
+      _SCR_CURSOR_SET(0, _EDITLIST_NUM + 3);
+      MW_printf("------\033[1;33mRC VAL\033[0;39m--------------------------------------\n");
+      DD_RCPrint(g_rc_data);
+      flush();
     }
     
     interval_10ms();

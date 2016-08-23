@@ -184,7 +184,7 @@ int DD_RCPrint(volatile uint8_t data[RC_DATA_NUM]){
   }  
   MW_printf("\n");
   
-  MW_printf("(%d,%d),(%d,%d)\n",
+  MW_printf("(%3d,%3d),(%3d,%3d)\n",
 	    DD_RCGetLX(data),
 	    DD_RCGetLY(data),
 	    DD_RCGetRX(data),
