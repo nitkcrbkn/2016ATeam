@@ -56,8 +56,8 @@ int main(void){
       MW_waitForMessageTransitionComplete(100);
       return EXIT_FAILURE;
       }*/
-  #define SERVOMIN 150
-  #define SERVOMAX 600
+#define SERVOMIN 130
+#define SERVOMAX 600
   
   g_SY_system_counter = 0;
 
@@ -65,7 +65,7 @@ int main(void){
   while(1)
     {
       DD_SV_t test;
-      test.i2cadd = 0x00;
+      test.i2cadd = 0b01010110;
       test.pin = 0;
       test.val = 0;
       SV_Init(&test);
@@ -73,13 +73,17 @@ int main(void){
       while(1)
 	{
 	  for(test.val=SERVOMIN;test.val<SERVOMAX;test.val++)
-	    SV_SetRad(&test);
-	  HAL_Delay(500);
+	    {
+	      SV_SetRad(&test);
+	      HAL_Delay(1);
+	    }
 	  for(test.val=SERVOMAX;test.val>SERVOMIN;test.val--)
-	    SV_SetRad(&test);
-	  HAL_Delay(500);
+	    {
+	      SV_SetRad(&test);
+	      HAL_Delay(1);
+	    }
 	  test.pin++;
-	  if(test.pin>7)test.pin = 0;
+	  if(test.pin>0)test.pin = 0;
 	}
     }
   while( 1 ){
@@ -115,7 +119,7 @@ int SY_doDevDriverTasks(void){
 #endif
 
 /*static
-int SY_I2CConnTest(int timeout){
+  int SY_I2CConnTest(int timeout){
   UNUSED(timeout);
   return EXIT_SUCCESS;
   }*/
@@ -153,11 +157,11 @@ int SY_init(void){
   SY_GPIOInit();
 
   /*  message("msg", "wait for RC connection...");
-  if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
-    message("err", "RC initialize faild!\n");
-    return EXIT_FAILURE;
-  }
-  message("msg", "RC connected sucess");
+      if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
+      message("err", "RC initialize faild!\n");
+      return EXIT_FAILURE;
+      }
+      message("msg", "RC connected sucess");
   */
   appInit();
 
