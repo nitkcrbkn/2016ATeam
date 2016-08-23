@@ -27,7 +27,7 @@ DD_ABHand_t g_ab_h[DD_NUM_OF_AB] = {
 
 #if DD_NUM_OF_SV
 DD_SV_t g_sv_h = {
-  0x00,/*address*/
+  0x40,/*address*/
   {
     0,0,0,0
   }

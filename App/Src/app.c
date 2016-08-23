@@ -8,12 +8,13 @@
 #include "constManager.h"
 
 /*suspensionSystem*/
-static
-int suspensionSystem(void);
+//static
+//int suspensionSystem(void);
 /*ABSystem*/
-static 
-int ABSystem(void);
-
+//static 
+//int ABSystem(void);
+static
+int Servotest(void);
 /*メモ
  *g_ab_h...ABのハンドラ
  *g_md_h...MDのハンドラ
@@ -30,7 +31,6 @@ flashError_t checkFlashWrite(void){
 
 int appInit(void){
   message("msg","hell");
-
   /* switch(checkFlashWrite()){ */
   /* case MW_FLASH_OK: */
   /*   message("msg","FLASH WRITE TEST SUCCESS\n%s",(const char*)WRITE_ADDR); */
@@ -80,20 +80,40 @@ int appTask(void){
   
   /*それぞれの機構ごとに処理をする*/
   /*途中必ず定数回で終了すること。*/
-  ret = suspensionSystem();
-  if(ret){
-    return ret;
-  }
+  /* ret = suspensionSystem(); */
+  /* if(ret){ */
+  /*   return ret; */
+  /* } */
 
-  ret = ABSystem();
-  if(ret){
-    return ret;
-  }
-  
+  /* ret = ABSystem(); */
+  /* if(ret){ */
+  /*   return ret; */
+  /* } */
+  ret = Servotest();
+  if(ret){ 
+     return ret; 
+   } 
   return EXIT_SUCCESS;
 }
 
-static 
+static int Servotest(void)
+{
+  if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
+    g_sv_h.val[0] = 350;
+    g_sv_h.val[1] = 350;
+    g_sv_h.val[2] = 350;
+    g_sv_h.val[3] = 350;
+  }
+  if(__RC_ISPRESSED_CROSS(g_rc_data)){
+    g_sv_h.val[0] = 150;
+    g_sv_h.val[1] = 150;
+    g_sv_h.val[2] = 150;
+    g_sv_h.val[3] = 150;
+  }
+  return EXIT_SUCCESS;
+}
+
+/*static 
 int ABSystem(void){
 
   g_ab_h[0].dat = 0x00;
@@ -106,47 +126,48 @@ int ABSystem(void){
 
   return EXIT_SUCCESS;
 }
+*/
 
 /*プライベート 足回りシステム*/
-static
-int suspensionSystem(void){
-  const int num_of_motor = 2;/*モータの個数*/
-  int rc_analogdata;/*アナログデータ*/
-  unsigned int idx;/*インデックス*/
-  int i;
+/* static */
+/* int suspensionSystem(void){ */
+/*   const int num_of_motor = 2;/\*モータの個数*\/ */
+/*   int rc_analogdata;/\*アナログデータ*\/ */
+/*   unsigned int idx;/\*インデックス*\/ */
+/*   int i; */
 
-  /*for each motor*/
-  for(i=0;i<num_of_motor;i++){
-    /*それぞれの差分*/
-    switch(i){
-    case 0:
-      rc_analogdata = DD_RCGetRY(g_rc_data);
-      idx = MECHA1_MD1;
-      break;
-    case 1:
-      rc_analogdata = DD_RCGetLY(g_rc_data);
-      idx = MECHA1_MD2;
-      break;
-    default:return EXIT_FAILURE;
-    }
+/*   /\*for each motor*\/ */
+/*   for(i=0;i<num_of_motor;i++){ */
+/*     /\*それぞれの差分*\/ */
+/*     switch(i){ */
+/*     case 0: */
+/*       rc_analogdata = DD_RCGetRY(g_rc_data); */
+/*       idx = MECHA1_MD1; */
+/*       break; */
+/*     case 1: */
+/*       rc_analogdata = DD_RCGetLY(g_rc_data); */
+/*       idx = MECHA1_MD2; */
+/*       break; */
+/*     default:return EXIT_FAILURE; */
+/*     } */
 
-    /*これは中央か?±3程度余裕を持つ必要がある。*/
-    if(abs(rc_analogdata)<CENTRAL_THRESHOLD){
-      g_md_h[idx].mode = D_MMOD_FREE;
-      g_md_h[idx].duty = 0;
-    }
-    else{
-      if(rc_analogdata > 0){
-	/*前後の向き判定*/
-	g_md_h[idx].mode = D_MMOD_FORWARD;
-      }
-      else{
-	g_md_h[idx].mode = D_MMOD_BACKWARD;
-      }
-      /*絶対値を取りDutyに格納*/
-      g_md_h[idx].duty = abs(rc_analogdata) * MD_GAIN;
-    }
-  }
+/*     /\*これは中央か?±3程度余裕を持つ必要がある。*\/ */
+/*     if(abs(rc_analogdata)<CENTRAL_THRESHOLD){ */
+/*       g_md_h[idx].mode = D_MMOD_FREE; */
+/*       g_md_h[idx].duty = 0; */
+/*     } */
+/*     else{ */
+/*       if(rc_analogdata > 0){ */
+/* 	/\*前後の向き判定*\/ */
+/* 	g_md_h[idx].mode = D_MMOD_FORWARD; */
+/*       } */
+/*       else{ */
+/* 	g_md_h[idx].mode = D_MMOD_BACKWARD; */
+/*       } */
+/*       /\*絶対値を取りDutyに格納*\/ */
+/*       g_md_h[idx].duty = abs(rc_analogdata) * MD_GAIN; */
+/*     } */
+/*   } */
 
-  return EXIT_SUCCESS;
-}
+/*   return EXIT_SUCCESS; */
+/* } */

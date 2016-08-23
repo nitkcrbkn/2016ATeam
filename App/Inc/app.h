@@ -2,13 +2,13 @@
 #define __APP_H
 
 /*NO Device mode*/
-#define _NO_DEVICE 1
+#define _NO_DEVICE 0
 
 int appTask(void);
 int appInit(void);
 
-#define DD_NUM_OF_MD 2
-#define DD_NUM_OF_AB 1
+#define DD_NUM_OF_MD 0
+#define DD_NUM_OF_AB 0
 #define DD_NUM_OF_SV 4
 
 #include "DD_RC.h"
