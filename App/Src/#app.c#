@@ -31,21 +31,6 @@ flashError_t checkFlashWrite(void){
 }
 
 int appInit(void){
-  message("msg","hell");
-  MW_SetIWDGPrescaler(IWDG_PRESCALER_16);
-  MW_SetIWDGReload(4095);
-  MW_IWDGInit();
-  while(1)
-    {
-      if(MW_GPIORead(GPIOCID,GPIO_PIN_13))
-	{
-	  MW_IWDGClr();//ウォッチドッグのカウンターを再セット
-	  MW_GPIOWrite(GPIOAID,GPIO_PIN_5,1);//nucleoのLED点灯
-	}
-      else
-	MW_GPIOWrite(GPIOAID,GPIO_PIN_5,0);//nucleoのLED点灯
-    }
-
   /* switch(checkFlashWrite()){ */
   /* case MW_FLASH_OK: */
   /*   message("msg","FLASH WRITE TEST SUCCESS\n%s",(const char*)WRITE_ADDR); */

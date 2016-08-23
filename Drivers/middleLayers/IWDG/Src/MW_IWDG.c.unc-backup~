@@ -6,7 +6,7 @@
  */
 #include "MW_IWDG.h"
 
-static IWDG_HandleTypeDef hiwdg = {
+static IWDG_HandleTypeDef hiwdg ={
   .Instance = IWDG,
   .Init.Prescaler = IWDG_PRESCALER_4,
   .Init.Reload = 4095
