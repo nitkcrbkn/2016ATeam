@@ -50,42 +50,16 @@ int main(void){
     MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
   }
-  /*  ret = SY_I2CConnTest(10);
-      if( ret ){
-      message("err", "I2CConnectionTest Faild%d", ret);
-      MW_waitForMessageTransitionComplete(100);
-      return EXIT_FAILURE;
-      }*/
-#define SERVOMIN 130
-#define SERVOMAX 600
+  ret = SY_I2CConnTest(10);
+  if( ret ){
+    message("err", "I2CConnectionTest Faild%d", ret);
+    MW_waitForMessageTransitionComplete(100);
+    return EXIT_FAILURE;
+  }
   
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
-  while(1)
-    {
-      DD_SV_t test;
-      test.i2cadd = 0b01010110;
-      test.pin = 0;
-      test.val = 0;
-      SV_Init(&test);
-      
-      while(1)
-	{
-	  for(test.val=SERVOMIN;test.val<SERVOMAX;test.val++)
-	    {
-	      SV_SetRad(&test);
-	      HAL_Delay(1);
-	    }
-	  for(test.val=SERVOMAX;test.val>SERVOMIN;test.val--)
-	    {
-	      SV_SetRad(&test);
-	      HAL_Delay(1);
-	    }
-	  test.pin++;
-	  if(test.pin>0)test.pin = 0;
-	}
-    }
   while( 1 ){
     SY_doAppTasks();
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
@@ -118,11 +92,11 @@ int SY_doDevDriverTasks(void){
 }
 #endif
 
-/*static
-  int SY_I2CConnTest(int timeout){
+static
+int SY_I2CConnTest(int timeout){
   UNUSED(timeout);
   return EXIT_SUCCESS;
-  }*/
+}
 
 static
 int SY_init(void){
@@ -156,13 +130,13 @@ int SY_init(void){
   /*Initialize GPIO*/
   SY_GPIOInit();
 
-  /*  message("msg", "wait for RC connection...");
-      if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
-      message("err", "RC initialize faild!\n");
-      return EXIT_FAILURE;
-      }
-      message("msg", "RC connected sucess");
-  */
+  message("msg", "wait for RC connection...");
+  if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
+    message("err", "RC initialize faild!\n");
+    return EXIT_FAILURE;
+  }
+  message("msg", "RC connected sucess");
+  
   appInit();
 
   return EXIT_SUCCESS;

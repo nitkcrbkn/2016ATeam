@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include "message.h"
 #include "DD_Gene.h"
-#include "DD_SV.h"
+#include "app.h"
 #include "stm32f1xx_hal.h"
 
 static uint8_t SV_Read8(uint8_t _i2caddr,const uint8_t addr) {
@@ -56,22 +56,24 @@ int32_t SV_Init(DD_SV_t *dsv) {
   return EXIT_SUCCESS;
 }
 
-uint32_t SV_SetRad(DD_SV_t *dsv) {
+int32_t SV_SetRad(DD_SV_t *dsv) {
+  static uint8_t ch = 0;
   uint8_t data[5];
 
-  if(dsv->val>4095)
+  if(dsv->val[ch]>4095)
     {
-      message("err","servo[%d] is over flow",dsv->pin);
-      dsv->val = 4095;
+      message("err","servo[%d] is over flow",ch);
+      dsv->val[ch] = 4095;
     }
-  MW_printf("SV[%d](%d)\n",dsv->pin, dsv->val);
-  flush();
+  MW_printf("SV[%d](%d)\n",ch, dsv->val[ch]);
   
-  data[0] = LED0_ON_L+4*dsv->pin;
+  data[0] = LED0_ON_L+4*ch;
   data[1] = 0x00;
   data[2] = 0x00;
-  data[3] = dsv->val;//off time is always 0.
-  data[4] = dsv->val>>8;
+  data[3] = dsv->val[ch];//off time is always 0.
+  data[4] = dsv->val[ch]>>8;
+
+  ch++;
   
   /* Send data */
   return DD_I2CSend(dsv->i2cadd, data, 5);  

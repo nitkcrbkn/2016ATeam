@@ -29,11 +29,10 @@
 typedef struct
 {
   uint8_t i2cadd;
-  uint8_t pin;
-  uint16_t val;
+  uint16_t val[DD_NUM_OF_SV];
 }DD_SV_t;
 
 int32_t SV_Init(DD_SV_t *dsv);
-uint32_t SV_SetRad(DD_SV_t *dsv) ;
+int32_t SV_SetRad(DD_SV_t *dsv);
 
 #endif

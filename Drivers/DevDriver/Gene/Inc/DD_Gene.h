@@ -14,6 +14,7 @@
 
 #include "DD_MD.h"
 #include "DD_AB.h"
+#include "DD_SV.h"
 
 #define _I2C_SPEED_BPS 200000
 
@@ -22,6 +23,9 @@ extern DD_MDHand_t g_md_h[DD_NUM_OF_MD];
 #endif
 #if DD_NUM_OF_AB
 extern DD_ABHand_t g_ab_h[DD_NUM_OF_AB];
+#endif
+#if DD_NUM_OF_SV
+extern DD_SV_t g_sv_h;
 #endif
 
 /*I2Cのサポート用関数*/

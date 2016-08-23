@@ -1,4 +1,4 @@
- /* ===Kisarazu RBKN Library===
+/* ===Kisarazu RBKN Library===
  *
  * autor          : Oishi
  * version        : v0.10
@@ -46,6 +46,12 @@ int DD_doTasks(void){
     }
   }
 #endif
+#if DD_NUM_OF_SV
+  ret = SV_SetRad(&g_sv_h);
+  if( ret ){
+      return ret;
+    }
+#endif
   return EXIT_SUCCESS;
 }
 
@@ -75,5 +81,12 @@ int DD_initialize(void){
     return EXIT_FAILURE;
   }
 
+#if DD_NUM_OF_SV
+  ret = SV_Init(&g_sv_h);
+  if( ret ){
+    return EXIT_FAILURE;
+  }
+#endif
+  
   return EXIT_SUCCESS;
 }
