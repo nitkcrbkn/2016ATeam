@@ -68,6 +68,9 @@ void DD_print(void){
     DD_ABHandPrint(&g_ab_h[i]);
   }
 #endif
+#if DD_NUM_OF_SV
+  SV_print(&g_sv_h);
+#endif
 }
 
 /*初期化関数*/

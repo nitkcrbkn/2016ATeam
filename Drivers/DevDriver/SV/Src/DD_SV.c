@@ -14,6 +14,8 @@
 #include "app.h"
 #include "stm32f1xx_hal.h"
 
+static uint8_t ch = 0;
+
 static uint8_t SV_Read8(uint8_t _i2caddr,const uint8_t addr) {
   uint8_t Rdata;
   /* Send register data */
@@ -25,7 +27,7 @@ static uint8_t SV_Read8(uint8_t _i2caddr,const uint8_t addr) {
   return Rdata;
 }
 
-static uint32_t SV_Write8(uint8_t _i2caddr,uint8_t addr, uint8_t d) {
+static int SV_Write8(uint8_t _i2caddr,uint8_t addr, uint8_t d) {
   uint8_t data[2];
   
   /* Set register data */
@@ -37,7 +39,7 @@ static uint32_t SV_Write8(uint8_t _i2caddr,uint8_t addr, uint8_t d) {
 
 }
 
-int32_t SV_Init(DD_SV_t *dsv) {
+int SV_Init(DD_SV_t *dsv) {
 
   SV_Write8(dsv->i2cadd,PCA9685_MODE1, 0x0);
   
@@ -56,8 +58,7 @@ int32_t SV_Init(DD_SV_t *dsv) {
   return EXIT_SUCCESS;
 }
 
-int32_t SV_SetRad(DD_SV_t *dsv) {
-  static uint8_t ch = 0;
+int SV_SetRad(DD_SV_t *dsv) {
   uint8_t data[5];
 
   if(dsv->val[ch]>4095)
@@ -65,7 +66,6 @@ int32_t SV_SetRad(DD_SV_t *dsv) {
       message("err","servo[%d] is over flow",ch);
       dsv->val[ch] = 4095;
     }
-  MW_printf("SV[%d](%d)\n",ch, dsv->val[ch]);
   
   data[0] = LED0_ON_L+4*ch;
   data[1] = 0x00;
@@ -74,8 +74,13 @@ int32_t SV_SetRad(DD_SV_t *dsv) {
   data[4] = dsv->val[ch]>>8;
 
   ch++;
-  
+  if(ch==DD_NUM_OF_SV)ch = 0;
   /* Send data */
   return DD_I2CSend(dsv->i2cadd, data, 5);  
 }
 
+int SV_print(DD_SV_t *dsv)
+{
+  MW_printf("SV[%d](%d)\n",ch, dsv->val[ch]);
+  return EXIT_SUCCESS;
+}

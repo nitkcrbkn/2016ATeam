@@ -34,7 +34,8 @@ typedef struct
   uint16_t val[DD_NUM_OF_SV];
 }DD_SV_t;
 
-int32_t SV_Init(DD_SV_t *dsv);
-int32_t SV_SetRad(DD_SV_t *dsv);
+int SV_Init(DD_SV_t *dsv);
+int SV_SetRad(DD_SV_t *dsv);
+int SV_print(DD_SV_t *dsv);
 
 #endif
