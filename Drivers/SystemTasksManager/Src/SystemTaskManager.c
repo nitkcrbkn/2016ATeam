@@ -152,13 +152,13 @@ int SY_init(void){
   /*Initialize GPIO*/
   SY_GPIOInit();
 
-  message("msg", "wait for RC connection...");
+  /*  message("msg", "wait for RC connection...");
   if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
     message("err", "RC initialize faild!\n");
     return EXIT_FAILURE;
   }
   message("msg", "RC connected sucess");
-
+  */
   appInit();
 
   return EXIT_SUCCESS;
