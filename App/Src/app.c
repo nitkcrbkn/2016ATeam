@@ -82,7 +82,7 @@ int suspensionSystem(void){
       rc_analogdata = DD_RCGetRY(g_rc_data);
       md_gain = MD_GAIN_DRIR;
       /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIL
+#if _IS_REVERSE_DRIR
       reverse_flg = 1;
 #endif
       idx = ROB1_DRIR;
