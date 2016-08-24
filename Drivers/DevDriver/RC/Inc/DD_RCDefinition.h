@@ -45,10 +45,10 @@
 #define __RC_ISPRESSED_UP(x) !(x[__RC_Zyuzi]&__RC_Up)
 #define __RC_ISPRESSED_DOWN(x) !(x[__RC_Zyuzi]&__RC_Down)
 
-#define __RC_ISPRESSED_L1(x) !(x[__RC_LR]&__RC_Left)
-#define __RC_ISPRESSED_R1(x) !(x[__RC_LR]&__RC_Right)
-#define __RC_ISPRESSED_L2(x) !(x[__RC_LR]&__RC_Up)
-#define __RC_ISPRESSED_R2(x) !(x[__RC_LR]&__RC_Down)
+#define __RC_ISPRESSED_L1(x) !(x[__RC_LR]&__RC_L1)
+#define __RC_ISPRESSED_R1(x) !(x[__RC_LR]&__RC_R1)
+#define __RC_ISPRESSED_L2(x) !(x[__RC_LR]&__RC_L2)
+#define __RC_ISPRESSED_R2(x) !(x[__RC_LR]&__RC_R2)
 
 #define __RC_GET_LX_VAL(x) (x[__RC_LX])
 #define __RC_GET_RX_VAL(x) (x[__RC_RX])
