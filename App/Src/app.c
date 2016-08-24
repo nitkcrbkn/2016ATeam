@@ -4,6 +4,7 @@
 #include "SystemTaskManager.h"
 #include <stdlib.h>
 #include "message.h"
+#include "trapezoid_ctl.h"
 
 #define min2(x, y) (( x ) < ( y ) ? ( x ) : ( y ))
 
@@ -45,15 +46,16 @@ int suspensionSystem(void){
   const int rising_val = 200; /* 立ち上がり値 */
   const int falling_val = 200; /* 立ち下がり値 */
   int rc_analogdata; /*アナログデータ*/
-  int ctrl_val; /* 制御値 */
+  int reverse_flg; /* 反転するか */
   unsigned int idx; /*インデックス*/
   unsigned int md_gain; /*アナログデータの補正値 */
   int ctl_motor_kind; /* 現在制御しているモータ */
   int target_duty; /* 目標値 */
-  int prev_duty; /* 現在の値 */
 
   /*for each motor*/
   for( ctl_motor_kind = ROB1_DRIL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
+    reverse_flg = 0;
+
     /*それぞれの差分*/
     switch( ctl_motor_kind ){
     case ROB1_DRIL:
@@ -61,7 +63,7 @@ int suspensionSystem(void){
       md_gain = MD_GAIN_DRIL;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIL
-      rc_analogdata = -rc_analogdata;
+      reverse_flg = 1;
 #endif
       idx = ROB1_DRIL;
       break;
@@ -70,7 +72,7 @@ int suspensionSystem(void){
       md_gain = MD_GAIN_DRIR;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIL
-      rc_analogdata = -rc_analogdata;
+      reverse_flg = 1;
 #endif
       idx = ROB1_DRIR;
       break;
@@ -83,39 +85,12 @@ int suspensionSystem(void){
     }else{
       target_duty = rc_analogdata * md_gain;
     }
-    prev_duty = g_md_h[idx].duty;
 
-    /* 台形制御 */
-    switch( g_md_h[idx].mode ){
-    case D_MMOD_FREE:
-    case D_MMOD_BRAKE:
-    case D_MMOD_FORWARD:
-      if( prev_duty < target_duty ){
-        ctrl_val = prev_duty + min2(rising_val, target_duty - prev_duty);
-      }else if( prev_duty > target_duty ){
-        ctrl_val = prev_duty - min2(falling_val, prev_duty - target_duty);
-      }else{ ctrl_val = target_duty; }
-      break;
-    case D_MMOD_BACKWARD:
-      prev_duty *= -1;
-      if( prev_duty > target_duty ){
-        ctrl_val = prev_duty - min2(rising_val, prev_duty - target_duty);
-      }else if( prev_duty < target_duty ){
-        ctrl_val = prev_duty + min2(falling_val, target_duty - prev_duty);
-      }else{ ctrl_val = target_duty; }
-      break;
-    default: return EXIT_FAILURE;
-    }
+    if(reverse_flg) target_duty = -target_duty;
 
-    /*前後の向き判定*/
-    if( ctrl_val > 0 ){
-      g_md_h[idx].mode = D_MMOD_FORWARD;
-    }else if( ctrl_val < 0 ){
-      g_md_h[idx].mode = D_MMOD_BACKWARD;
-    }else{
-      g_md_h[idx].mode = D_MMOD_BRAKE;
-    }
-    g_md_h[idx].duty = abs(ctrl_val);
+    /*台数制御*/
+    control_trapezoid(rising_val, falling_val ,&g_md_h[idx] ,target_duty);
+
   }
   return EXIT_SUCCESS;
 } /* suspensionSystem */
