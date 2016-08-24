@@ -14,6 +14,6 @@ int DD_RCGetLY(volatile uint8_t data[RC_DATA_NUM]);
 int DD_RCGetRX(volatile uint8_t data[RC_DATA_NUM]);
 int DD_RCGetRY(volatile uint8_t data[RC_DATA_NUM]);
 
-#define DD_RC_ANALOG_MAX 16
+#define DD_RC_ANALOG_MAX 15
   
 #endif
