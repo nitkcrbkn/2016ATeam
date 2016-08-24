@@ -21,7 +21,7 @@ void MW_SetIWDGReload(uint32_t Reload){
 }
 
 /* IWDG init function */
-int32_t MW_IWDGInit(void){
+int MW_IWDGInit(void){
   if( HAL_IWDG_Init(&hiwdg) != HAL_OK ){
     return EXIT_FAILURE;
   }

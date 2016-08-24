@@ -13,7 +13,7 @@
 
 void MW_SetIWDGPrescaler(uint32_t Prescaler);
 void MW_SetIWDGReload(uint32_t Reload);
-int32_t MW_IWDGInit(void);
+int MW_IWDGInit(void);
 
 void MW_IWDGClr(void);
 uint32_t MW_IWDGStatus(void);
