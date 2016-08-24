@@ -5,7 +5,7 @@
 #include "DD_MD.h"
 
 /*NO Device mode*/
-#define _NO_DEVICE 1
+#define _NO_DEVICE 0
 
 /* モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
@@ -14,14 +14,17 @@
 #define _IS_REVERSE_DRIB 1
 #define _IS_REVERSE_ARMT 0
 
+/* モータ、電磁弁の個数 */
 #define DD_NUM_OF_MD 4
 #define DD_NUM_OF_AB 0
 
+/* 各モータのインデックス */
 #define ROB0_DRIL 0
 #define ROB0_DRIR 1
 #define ROB0_DRIB 2
 #define ROB0_ARMT 3
 
+/* コントローラのスティックの補正値 */
 #define CENTRAL_THRESHOLD 5
 
 #define MD_MAX_DUTY 9999

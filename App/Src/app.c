@@ -8,8 +8,6 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
-#define _MIN2(x, y) (( x ) < ( y ) ? ( x ) : ( y ))
-
 /*suspensionSystem*/
 static
 int suspensionSystem(void);
@@ -67,7 +65,7 @@ int suspensionSystem(void){
   const int rising_val = 200; /* 立ち上がり値 */
   const int falling_val = 200; /* 立ち下 がり値 */
   int rc_analogdata; /*アナログデータ*/
-  int reverse_flg; /* 反転するか */
+  int is_reverse; /* 反転するか */
   unsigned int idx; /*インデックス*/
   unsigned int md_gain; /*アナログデータの補正値 */
   int ctl_motor_kind; /* 現在制御しているモータ */
@@ -75,7 +73,7 @@ int suspensionSystem(void){
 
   /*for each motor*/
   for( ctl_motor_kind = ROB0_DRIL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
-    reverse_flg = 0;
+    is_reverse = 0;
 
     /*それぞれの差分*/
     switch( ctl_motor_kind ){
@@ -84,7 +82,7 @@ int suspensionSystem(void){
       md_gain = MD_GAIN_DRIL;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIL
-      reverse_flg = 1;
+      is_reverse = 1;
 #endif
       idx = ROB0_DRIL;
       break;
@@ -93,7 +91,7 @@ int suspensionSystem(void){
       md_gain = MD_GAIN_DRIR;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIR
-      reverse_flg = 1;
+      is_reverse = 1;
 #endif
       idx = ROB0_DRIR;
       break;
@@ -102,7 +100,7 @@ int suspensionSystem(void){
       md_gain = MD_GAIN_DRIB;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIB
-      reverse_flg = 1;
+      is_reverse = 1;
 #endif
       idx = ROB0_DRIB;
       break;
@@ -118,7 +116,7 @@ int suspensionSystem(void){
     }
 
     /*モータの回転を反転 */
-    if( reverse_flg ){
+    if( is_reverse ){
       target_duty = -target_duty;
     }
 
