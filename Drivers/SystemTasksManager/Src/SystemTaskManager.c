@@ -15,7 +15,6 @@
 #include "MW_USART.h"
 #include "MW_I2C.h"
 #include "MW_GPIO.h"
-#include "DD_SV.h"
 #include "DD_Gene.h"
 #include "message.h"
 #include "app.h"
