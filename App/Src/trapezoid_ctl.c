@@ -6,7 +6,7 @@
 int control_trapezoid(const int rising_val,const int falling_val,DD_MDHand_t *g_md_h,int target_duty){
 
   int current_duty = g_md_h->duty;//現在のデューティ値
-    int ctrl_val;//制御値
+  int ctrl_val;//制御値
 
     /* 台形制御 */
     switch( g_md_h->mode ){
@@ -25,7 +25,7 @@ int control_trapezoid(const int rising_val,const int falling_val,DD_MDHand_t *g_
         ctrl_val = current_duty - _MIN2(rising_val, current_duty - target_duty);
       }else if( current_duty < target_duty ){
         ctrl_val = current_duty + _MIN2(falling_val, target_duty - current_duty);
-      }
+      }else{ ctrl_val = target_duty; }
       break;
     default: return EXIT_FAILURE;
     }
