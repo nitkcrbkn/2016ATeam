@@ -24,17 +24,18 @@
 int DD_send2MD(DD_MDHand_t *dmd){
   uint8_t data[2];
   const uint8_t sizeof_data = 2;
+  uint16_t val;
 
   /*upto 999*/
-  dmd->duty /= 10;
-  if(dmd->duty >= 1000){
+  val = dmd->duty / 10;
+  if(val >= 1000){
     message("err","[%x]duty over flow(%d)",dmd->add,dmd->duty);
   }
   
   /* Merge Data merge */
-  data[0] = dmd->duty >> 8 |
+  data[0] = val >> 8 |
             (uint8_t)dmd->mode << 2;
-  data[1] = dmd->duty;
+  data[1] = val;
 
   /* Send data */
   return DD_I2CSend(dmd->add, data, sizeof_data);
@@ -62,6 +63,6 @@ void DD_MDHandPrint(DD_MDHand_t *dmd){
     MW_printf("Br");
     break;
   }
-  MW_printf("],[%d]\n", dmd->duty);
+  MW_printf("],[%4d]\n", dmd->duty);
 }
 

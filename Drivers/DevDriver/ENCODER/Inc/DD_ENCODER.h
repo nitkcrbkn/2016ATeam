@@ -14,28 +14,8 @@
 #define DD_ENCODER_H
 
 #include <stdint.h>
-
-/*
- * ２バイト送信。
- * [0(7:4)|dir(3:2)|duty[9:8](1:0)][duty[7:0](7:0)]
- *
- * dirは0...free,1...forward,2...back,3...brake
- */
-/* ===Kisarazu RBKN Library===
- *
- * autor          : Wakabayashi
- * version        : v0.10
- * last update    : 20160811
- *
- * **overview***
- * エンコーダーの値を取得する。
- *
- * TIM3及びTIM4を使用
- */
 #include "message.h"
 #include "MW_ENCODER.h"
-
-#include<stdint.h>
 
 /*
  *エンコーダーモジュールの初期化

@@ -16,6 +16,7 @@
 #include "DD_Gene.h"
 #include "DD_MD.h"
 #include "DD_AB.h"
+#include "DD_ENCODER.h"
 #include "message.h"
 
 /*I2Cのサポート用関数*/
@@ -64,7 +65,6 @@ void DD_print(void){
 /*初期化関数*/
 int DD_initialize(void){
   int ret;
-  message("msg","device initialize\n");
   
   /* Initialize all configured peripherals */
   MW_SetI2CClockSpeed(I2C1ID, _I2C_SPEED_BPS);
@@ -72,6 +72,12 @@ int DD_initialize(void){
   if( ret ){
     return EXIT_FAILURE;
   }
-
+  
+ if(DD_InitEncoder1()||DD_InitEncoder2())
+    {
+      message("error","Fialed initialize encoder!\n");
+      return EXIT_FAILURE;
+    }
+  
   return EXIT_SUCCESS;
 }
