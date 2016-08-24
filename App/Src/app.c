@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include "message.h"
 #include "trapezoid_ctl.h"
+#include "MW_flash.h"
+#include "constManager.h"
 
 /*suspensionSystem*/
 static
@@ -26,6 +28,11 @@ int ABSystem(void);
  */
 
 int appInit(void){
+
+  ad_init();
+
+  message("msg","plz confirm\n%d\n",g_adjust.rightadjust.value);
+
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
@@ -34,6 +41,13 @@ int appInit(void){
 int appTask(void){
   int ret = 0;
 
+  if(__RC_ISPRESSED_R1(g_rc_data)&&__RC_ISPRESSED_R2(g_rc_data)&&
+     __RC_ISPRESSED_L1(g_rc_data)&&__RC_ISPRESSED_L2(g_rc_data)){
+    while(__RC_ISPRESSED_R1(g_rc_data)||__RC_ISPRESSED_R2(g_rc_data)||
+	  __RC_ISPRESSED_L1(g_rc_data)||__RC_ISPRESSED_L2(g_rc_data));
+    ad_main();
+  }
+  
   /*それぞれの機構ごとに処理をする*/
   /*途中必ず定数回で終了すること。*/
   ret = suspensionSystem();
@@ -173,7 +187,7 @@ int ABSystem(void){
   }else{
     has_pressed_L1 = 0;
   }
-  
+
   return EXIT_SUCCESS;
 }
 

@@ -1,7 +1,6 @@
 #ifndef __APP_H
 #define __APP_H
 
-
 #include "DD_RC.h"
 #include "DD_MD.h"
 
