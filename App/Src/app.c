@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include "message.h"
 #include "trapezoid_ctl.h"
-
-#define min2(x, y) (( x ) < ( y ) ? ( x ) : ( y ))
+#include "MW_flash.h"
+#include "constManager.h"
 
 /*suspensionSystem*/
 static
@@ -20,7 +20,11 @@ int suspensionSystem(void);
  */
 
 int appInit(void){
-  message("msg", "hell");
+
+  ad_init();
+
+  message("msg","plz confirm\n%d\n",g_adjust.rightadjust.value);
+
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
@@ -29,6 +33,13 @@ int appInit(void){
 int appTask(void){
   int ret = 0;
 
+  if(__RC_ISPRESSED_R1(g_rc_data)&&__RC_ISPRESSED_R2(g_rc_data)&&
+     __RC_ISPRESSED_L1(g_rc_data)&&__RC_ISPRESSED_L2(g_rc_data)){
+    while(__RC_ISPRESSED_R1(g_rc_data)||__RC_ISPRESSED_R2(g_rc_data)||
+	  __RC_ISPRESSED_L1(g_rc_data)||__RC_ISPRESSED_L2(g_rc_data));
+    ad_main();
+  }
+  
   /*それぞれの機構ごとに処理をする*/
   /*途中必ず定数回で終了すること。*/
   ret = suspensionSystem();
@@ -92,6 +103,7 @@ int suspensionSystem(void){
     control_trapezoid(rising_val, falling_val ,&g_md_h[idx] ,target_duty);
 
   }
+
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 

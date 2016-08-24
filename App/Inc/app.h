@@ -1,12 +1,11 @@
 #ifndef __APP_H
 #define __APP_H
 
-
 #include "DD_RC.h"
 #include "DD_MD.h"
 
 /*NO Device mode*/
-#define _NO_DEVICE 0
+#define _NO_DEVICE 1
 
 /*モータを反転させるか(１で反転) */
 #define _IS_REVERSE_DRIL 1
