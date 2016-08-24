@@ -20,7 +20,7 @@ int armSystem(void);
  * *g_ab_h...ABのハンドラ
  * *g_md_h...MDのハンドラ
  *
- **g_rc_data...RCのデータ
+ ***g_rc_data...RCのデータ
  */
 
 int appInit(void){
@@ -54,7 +54,7 @@ int suspensionSystem(void){
   const int rising_val = 200; /* 立ち上がり値 */
   const int falling_val = 200; /* 立ち下 がり値 */
   int rc_analogdata; /*アナログデータ*/
-  int reverse_flg; /* 反転するか */ 
+  int reverse_flg; /* 反転するか */
   unsigned int idx; /*インデックス*/
   unsigned int md_gain; /*アナログデータの補正値 */
   int ctl_motor_kind; /* 現在制御しているモータ */
@@ -62,7 +62,7 @@ int suspensionSystem(void){
 
   /*for each motor*/
   for( ctl_motor_kind = ROB0_DRIL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
-    reverse_flg=0;
+    reverse_flg = 0;
 
     /*それぞれの差分*/
     switch( ctl_motor_kind ){
@@ -103,36 +103,38 @@ int suspensionSystem(void){
     }else{
       target_duty = rc_analogdata * md_gain;
     }
-    
-    /*モータの回転を反転 */
-    if(reverse_flg) target_duty = -target_duty;
-    
-    /* 台形制御 */
-    control_trapezoid(rising_val ,falling_val ,&g_md_h[idx] ,target_duty);
 
+    /*モータの回転を反転 */
+    if( reverse_flg ){
+      target_duty = -target_duty;
+    }
+
+    /* 台形制御 */
+    control_trapezoid(rising_val, falling_val, &g_md_h[idx], target_duty);
   }
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
 int armSystem(void){
-  if(__RC_ISPRESSED_L1(g_rc_data)){
+  if( __RC_ISPRESSED_L1(g_rc_data)){
 #if _IS_REVERSE_ARMT
     g_md_h[ROB0_ARMT].mode = D_MMOD_BACKWARD;
 #else
     g_md_h[ROB0_ARMT].mode = D_MMOD_FORWARD;
 #endif
-    g_md_h[ROB0_ARMT].duty = MD_MAX_DUTY_ARMT;  
-  }else if(__RC_ISPRESSED_R1(g_rc_data)){
+    g_md_h[ROB0_ARMT].duty = MD_MAX_DUTY_ARMT;
+  }else if( __RC_ISPRESSED_R1(g_rc_data)){
 #if _IS_REVERSE_ARMT
     g_md_h[ROB0_ARMT].mode = D_MMOD_FORWARD;
 #else
     g_md_h[ROB0_ARMT].mode = D_MMOD_BACKWARD;
 #endif
-    g_md_h[ROB0_ARMT].duty = MD_MAX_DUTY_ARMT;  
+    g_md_h[ROB0_ARMT].duty = MD_MAX_DUTY_ARMT;
   }else{
-    g_md_h[ROB0_ARMT].duty = 0;  
+    g_md_h[ROB0_ARMT].duty = 0;
     g_md_h[ROB0_ARMT].mode = D_MMOD_BRAKE;
   }
 
   return EXIT_SUCCESS;
 }
+
