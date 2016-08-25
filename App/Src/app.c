@@ -123,9 +123,10 @@ int suspensionSystem(void){
   }
 
   return EXIT_SUCCESS;
-} /* suspensionSystem */
+ /* suspensionSystem */
 
 int armSystem(void){
+/* アーム基部の回転動作の制御 */
   if( __RC_ISPRESSED_L1(g_rc_data)){
 #if _IS_REVERSE_ARMT
     g_md_h[ROB0_ARMT].mode = D_MMOD_BACKWARD;
@@ -143,6 +144,46 @@ int armSystem(void){
   }else{
     g_md_h[ROB0_ARMT].duty = 0;
     g_md_h[ROB0_ARMT].mode = D_MMOD_BRAKE;
+  }
+
+/* アームの上下動作の制御 */
+  if( __RC_ISPRESSED_UP(g_rc_data)){
+#if _IS_REVERSE_ARME
+    g_md_h[ROB0_ARME].mode = D_MMOD_BACKWARD;
+#else
+    g_md_h[ROB0_ARME].mode = D_MMOD_FORWARD;
+#endif
+    g_md_h[ROB0_ARME].duty = MD_MAX_DUTY_ARME;
+  }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
+#if _IS_REVERSE_ARME
+    g_md_h[ROB0_ARME].mode = D_MMOD_FORWARD;
+#else
+    g_md_h[ROB0_ARME].mode = D_MMOD_BACKWARD;
+#endif
+    g_md_h[ROB0_ARME].duty = MD_MAX_DUTY_ARME;
+  }else{
+    g_md_h[ROB0_ARME].duty = 0;
+    g_md_h[ROB0_ARME].mode = D_MMOD_BRAKE;
+  }
+
+/* アームの伸縮動作の制御 */
+if( __RC_ISPRESSED_LEFT(g_rc_data)){
+#if _IS_REVERSE_ARMS
+    g_md_h[ROB0_ARMS].mode = D_MMOD_BACKWARD;
+#else
+    g_md_h[ROB0_ARMS].mode = D_MMOD_FORWARD;
+#endif
+    g_md_h[ROB0_ARMS].duty = MD_MAX_DUTY_ARMS;
+  }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
+#if _IS_REVERSE_ARMS
+    g_md_h[ROB0_ARMS].mode = D_MMOD_FORWARD;
+#else
+    g_md_h[ROB0_ARMS].mode = D_MMOD_BACKWARD;
+#endif
+    g_md_h[ROB0_ARMS].duty = MD_MAX_DUTY_ARMS;
+  }else{
+    g_md_h[ROB0_ARMS].duty = 0;
+    g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
   }
 
   return EXIT_SUCCESS;

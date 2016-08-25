@@ -22,6 +22,14 @@ DD_MDHand_t g_md_h[DD_NUM_OF_MD] = {
     0, /* default duty */
     D_MMOD_FREE, /* mode */
   },
+  { 0x14, /* address */
+    0, /* default duty */
+    D_MMOD_FREE, /* mode */
+  },
+  { 0x15, /* address */
+    0, /* default duty */
+    D_MMOD_FREE, /* mode */
+  },
 };
 #endif
 #if DD_NUM_OF_AB
