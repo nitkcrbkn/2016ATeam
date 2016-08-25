@@ -23,8 +23,6 @@ int appInit(void){
 
   ad_init();
 
-  message("msg","plz confirm\n%d\n",g_adjust.rightadjust.value);
-
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
@@ -57,7 +55,7 @@ int suspensionSystem(void){
   const int rising_val = 200; /* 立ち上がり値 */
   const int falling_val = 200; /* 立ち下がり値 */
   int rc_analogdata; /*アナログデータ*/
-  int reverse_flg; /* 反転するか */
+  int is_reverse; /* 反転するか */
   unsigned int idx; /*インデックス*/
   unsigned int md_gain; /*アナログデータの補正値 */
   int ctl_motor_kind; /* 現在制御しているモータ */
@@ -65,7 +63,7 @@ int suspensionSystem(void){
 
   /*for each motor*/
   for( ctl_motor_kind = ROB1_DRIL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
-    reverse_flg = 0;
+    is_reverse = 0;
 
     /*それぞれの差分*/
     switch( ctl_motor_kind ){
@@ -74,7 +72,7 @@ int suspensionSystem(void){
       md_gain = MD_GAIN_DRIL;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIL
-      reverse_flg = 1;
+      is_reverse = 1;
 #endif
       idx = ROB1_DRIL;
       break;
@@ -83,7 +81,7 @@ int suspensionSystem(void){
       md_gain = MD_GAIN_DRIR;
       /* 前後の向きを反転 */
 #if _IS_REVERSE_DRIR
-      reverse_flg = 1;
+      is_reverse = 1;
 #endif
       idx = ROB1_DRIR;
       break;
@@ -92,15 +90,15 @@ int suspensionSystem(void){
 
     /*これは中央か?±3程度余裕を持つ必要がある。*/
     if( abs(rc_analogdata) < CENTRAL_THRESHOLD ){
-      target_duty = 0;
+      target_val = 0;
     }else{
-      target_duty = rc_analogdata * md_gain;
+      target_val = rc_analogdata * md_gain;
     }
 
-    if(reverse_flg) target_duty = -target_duty;
+    if(is_reverse) target_val = -target_val;
 
     /*台数制御*/
-    control_trapezoid(rising_val, falling_val ,&g_md_h[idx] ,target_duty);
+    control_trapezoid(rising_val, falling_val ,&g_md_h[idx] ,target_val);
 
   }
 
