@@ -26,8 +26,6 @@ int armSystem(void);
 int appInit(void){
   ad_init();
 
-  message("msg","plz confirm\n%d\n",g_adjust.rightadjust.value);
-
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
