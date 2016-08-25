@@ -1,7 +1,6 @@
 #include "DD_MD.h"
+#include "SystemTaskManager.h"
 #include <stdlib.h>
-
-#define _MIN2(x, y) (( x ) < ( y ) ? ( x ) : ( y ))
 
 int control_trapezoid(int rising_val, int falling_val,DD_MDHand_t *md_h,int target_val){
 
@@ -14,17 +13,17 @@ int control_trapezoid(int rising_val, int falling_val,DD_MDHand_t *md_h,int targ
   case D_MMOD_BRAKE:
   case D_MMOD_FORWARD:
     if( current_val < target_val ){
-      ctrl_val = current_val + _MIN2(rising_val, target_val - current_val);
+      ctrl_val = current_val + _MIN(rising_val, target_val - current_val);
     }else if( current_val > target_val ){
-      ctrl_val = current_val - _MIN2(falling_val, current_val - target_val);
+      ctrl_val = current_val - _MIN(falling_val, current_val - target_val);
     }else{ ctrl_val = target_val; }
     break;
   case D_MMOD_BACKWARD:
     current_val = -current_val;
     if( current_val > target_val ){
-      ctrl_val = current_val - _MIN2(rising_val, current_val - target_val);
+      ctrl_val = current_val - _MIN(rising_val, current_val - target_val);
     }else if( current_val < target_val ){
-      ctrl_val = current_val + _MIN2(falling_val, target_val - current_val);
+      ctrl_val = current_val + _MIN(falling_val, target_val - current_val);
     }else{ ctrl_val = target_val; }
     break;
   default: return EXIT_FAILURE;
