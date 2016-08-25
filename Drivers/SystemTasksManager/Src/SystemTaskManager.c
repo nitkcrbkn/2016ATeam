@@ -1,3 +1,14 @@
+ /* ===Kisarazu RBKN Library===
+ *
+ * autor          : Oishi
+ * version        : v0.10
+ * last update    : 20160703
+ *
+ * **overview***
+ * システムのタスクを記述
+ *
+ */
+
 #include <stdlib.h>
 #include "stm32f1xx_hal.h"
 #include "SystemTaskManager.h"
@@ -10,7 +21,7 @@
 #include "DD_RC.h"
 
 volatile uint32_t g_SY_system_counter;
-volatile uint8_t g_rc_data[RC_DATA_NUM];
+volatile uint8_t g_rc_data[RC_DATA_NUM]={0x0,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,};
 static uint8_t rc_rcv[RC_DATA_NUM];
 
 static
@@ -23,8 +34,12 @@ static
 int SY_clockInit(void);
 static
 void SY_GPIOInit(void);
+
+
+#if !_NO_DEVICE
 static
 int SY_doDevDriverTasks(void);
+#endif
 
 int main(void){
   int ret;
@@ -32,22 +47,27 @@ int main(void){
   ret = SY_init();
   if( ret ){
     message("err", "initialize Faild%d", ret);
+    MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
   }
   ret = SY_I2CConnTest(10);
   if( ret ){
     message("err", "I2CConnectionTest Faild%d", ret);
+    MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
   }
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
+  MW_printf("\033[2J\033[1;1H");
+  
   while( 1 ){
     SY_doAppTasks();
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
       DD_RCPrint((uint8_t*)g_rc_data);
       DD_print();
       flush(); /* out message. */
+      MW_printf("\033[1;1H");
     }
     while( g_SY_system_counter % _INTERVAL_MS != _INTERVAL_MS / 2 - 1 ){
     }
@@ -67,10 +87,12 @@ int SY_doAppTasks(void){
   return appTask();
 }
 
+#if !_NO_DEVICE
 static
 int SY_doDevDriverTasks(void){
   return DD_doTasks();
 }
+#endif
 
 static
 int SY_I2CConnTest(int timeout){
@@ -104,8 +126,6 @@ int SY_init(void){
     return ret;
   }
 
-  appInit();
-
   /*Initialize GPIO*/
   SY_GPIOInit();
 
@@ -115,6 +135,8 @@ int SY_init(void){
     return EXIT_FAILURE;
   }
   message("msg", "RC connected sucess");
+
+  appInit();
 
   return EXIT_SUCCESS;
 } /* SY_init */
@@ -201,5 +223,5 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle){
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle){
   UNUSED(UartHandle);
-  MW_hadCompleted();
+  MW_messageTransitionCompletedCallBack();
 }

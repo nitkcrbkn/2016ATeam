@@ -23,7 +23,7 @@ int main(void){
 void foo(int arg){
   if( arg < 0 ){
     message("warning", "%d is under 0", arg);
-  }else  {
+  }else {
     message("warning", "%d is over(equal) 0", arg);
   }
 }
