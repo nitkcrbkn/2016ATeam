@@ -32,8 +32,8 @@ static TIM_HandleTypeDef *encoderid[2] = {
 };
 
 
-/* TIM3 init function */
-int32_t MW_EncoderInit(encoderid_t id)
+/* TIM3,4 init function */
+int MW_EncoderInit(encoderid_t id)
 {
   assert_param(IS_ENCODER_ID(id));
   
