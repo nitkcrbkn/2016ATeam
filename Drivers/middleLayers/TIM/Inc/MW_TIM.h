@@ -5,8 +5,8 @@
  *      Author: evaota
  */
 
-#ifndef MIDLEWARE_INC_MW_TIM_H_
-#define MIDLEWARE_INC_MW_TIM_H_
+#ifndef __MW_TIM_H_
+#define __MW_TIM_H_
 
 #include "stm32f1xx_hal.h"
 #include <stdlib.h>
