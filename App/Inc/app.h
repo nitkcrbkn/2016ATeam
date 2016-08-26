@@ -25,7 +25,7 @@
 #define ROB1_PSH 3
 
 /* 電磁弁のインデックス */
-#define AB 0
+#define ROB1_AB 0
 
 /* 電磁弁のチャンネル */
 #define LIFTL (1<<0)
