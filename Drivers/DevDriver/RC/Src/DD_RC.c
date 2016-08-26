@@ -73,56 +73,123 @@ int DD_RCGetRY(volatile uint8_t data[RC_DATA_NUM]){
 }
 
 int DD_RCPrint(volatile uint8_t data[RC_DATA_NUM]){
-  if( is_not_avaiable ){
-    return EXIT_FAILURE;
+  int bp;
+
+  bp=__RC_ISPRESSED_UP(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
   }
-  MW_printf("RC btn:[");
-  if( __RC_ISPRESSED_UP(data)){
-    MW_printf("Up,");
+  MW_printf("↑  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
   }
-  if( __RC_ISPRESSED_LEFT(data)){
-    MW_printf("Lf,");
+  
+  bp=__RC_ISPRESSED_DOWN(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
   }
-  if( __RC_ISPRESSED_DOWN(data)){
-    MW_printf("Dw,");
-  }
-  if( __RC_ISPRESSED_RIGHT(data)){
-    MW_printf("Ri,");
+  MW_printf("↓  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
   }
 
-  if( __RC_ISPRESSED_CIRCLE(data)){
-    MW_printf("Cr,");
+  bp=__RC_ISPRESSED_RIGHT(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
   }
-  if( __RC_ISPRESSED_TRIANGLE(data)){
-    MW_printf("Tr,");
+  MW_printf("→  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
   }
-  if( __RC_ISPRESSED_SQARE(data)){
-    MW_printf("Sq,");
+  
+  bp=__RC_ISPRESSED_LEFT(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
   }
-  if( __RC_ISPRESSED_CROSS(data)){
-    MW_printf("Cs,");
-  }
-
-  if( __RC_ISPRESSED_L1(data)){
-    MW_printf("L1,");
-  }
-  if( __RC_ISPRESSED_L2(data)){
-    MW_printf("L2,");
-  }
-  if( __RC_ISPRESSED_R1(data)){
-    MW_printf("R1,");
-  }
-  if( __RC_ISPRESSED_R2(data)){
-    MW_printf("R2,");
+  MW_printf("←  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
   }
 
-  MW_printf("]\n");
-  MW_printf("RC analog[%d,%d][%d,%d]\n",
-            DD_RCGetLX(data),
-            DD_RCGetLY(data),
-            DD_RCGetRX(data),
-            DD_RCGetRY(data)
-            );
+  bp=__RC_ISPRESSED_SQARE(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
+  }
+  MW_printf("□  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
+  }
+  
+  bp=__RC_ISPRESSED_CROSS(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
+  }
+  MW_printf("X  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
+  }  
 
+  bp=__RC_ISPRESSED_CIRCLE(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
+  }
+  MW_printf("○  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
+  }  
+
+  bp=__RC_ISPRESSED_TRIANGLE(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
+  }
+  MW_printf("△  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
+  }  
+
+  bp=__RC_ISPRESSED_L1(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
+  }
+  MW_printf("L1  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
+  }  
+
+  bp=__RC_ISPRESSED_L2(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
+  }
+  MW_printf("L2  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
+  }  
+
+  bp=__RC_ISPRESSED_R1(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
+  }
+  MW_printf("R1  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
+  }
+  
+  bp=__RC_ISPRESSED_R2(data);
+  if(bp){
+    MW_printf("\033[1;33m\033[40m");
+  }
+  MW_printf("R2  ");
+  if(bp){
+    MW_printf("\033[0;39m\033[49m");
+  }  
+  MW_printf("\n");
+  
+  MW_printf("(%3d,%3d),(%3d,%3d)\n",
+	    DD_RCGetLX(data),
+	    DD_RCGetLY(data),
+	    DD_RCGetRX(data),
+	    DD_RCGetRY(data)
+	    );
+  
   return EXIT_SUCCESS;
-} /* DD_RCPrint */
+}
