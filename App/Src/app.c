@@ -16,11 +16,10 @@ int suspensionSystem(void);
  * *g_ab_h...ABのハンドラ
  * *g_md_h...MDのハンドラ
  *
- **g_rc_data...RCのデータ
+ * _rc_data...RCのデータ
  */
 
 int appInit(void){
-
   ad_init();
 
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
@@ -31,13 +30,14 @@ int appInit(void){
 int appTask(void){
   int ret = 0;
 
-  if(__RC_ISPRESSED_R1(g_rc_data)&&__RC_ISPRESSED_R2(g_rc_data)&&
-     __RC_ISPRESSED_L1(g_rc_data)&&__RC_ISPRESSED_L2(g_rc_data)){
-    while(__RC_ISPRESSED_R1(g_rc_data)||__RC_ISPRESSED_R2(g_rc_data)||
-	  __RC_ISPRESSED_L1(g_rc_data)||__RC_ISPRESSED_L2(g_rc_data));
+  if( __RC_ISPRESSED_R1(g_rc_data) && __RC_ISPRESSED_R2(g_rc_data) &&
+      __RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_L2(g_rc_data)){
+    while( __RC_ISPRESSED_R1(g_rc_data) || __RC_ISPRESSED_R2(g_rc_data) ||
+           __RC_ISPRESSED_L1(g_rc_data) || __RC_ISPRESSED_L2(g_rc_data)){
+    }
     ad_main();
   }
-  
+
   /*それぞれの機構ごとに処理をする*/
   /*途中必ず定数回で終了すること。*/
   ret = suspensionSystem();
@@ -59,7 +59,7 @@ int suspensionSystem(void){
   unsigned int idx; /*インデックス*/
   unsigned int md_gain; /*アナログデータの補正値 */
   int ctl_motor_kind; /* 現在制御しているモータ */
-  int target_duty; /* 目標値 */
+  int target_val; /* 目標値 */
 
   /*for each motor*/
   for( ctl_motor_kind = ROB1_DRIL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
@@ -95,11 +95,12 @@ int suspensionSystem(void){
       target_val = rc_analogdata * md_gain;
     }
 
-    if(is_reverse) target_val = -target_val;
+    if( is_reverse ){
+      target_val = -target_val;
+    }
 
     /*台数制御*/
-    control_trapezoid(rising_val, falling_val ,&g_md_h[idx] ,target_val);
-
+    control_trapezoid(rising_val, falling_val, &g_md_h[idx], target_val);
   }
 
   return EXIT_SUCCESS;
