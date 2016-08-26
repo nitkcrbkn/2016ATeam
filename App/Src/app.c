@@ -123,7 +123,7 @@ int suspensionSystem(void){
   }
 
   return EXIT_SUCCESS;
- /* suspensionSystem */
+} /* suspensionSystem */
 
 int armSystem(void){
 /* アーム基部の回転動作の制御 */
