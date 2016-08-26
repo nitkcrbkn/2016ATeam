@@ -10,7 +10,19 @@ DD_MDHand_t g_md_h[DD_NUM_OF_MD] = {
     0, /* default duty */
     D_MMOD_FREE, /* mode */
   },
-  { 0x10, /* address */
+  { 0x11, /* address */
+    0, /* default duty */
+    D_MMOD_FREE, /* mode */
+  },
+  { 0x12, /* address */
+    0, /* default duty */
+    D_MMOD_FREE, /* mode */
+  },
+  { 0x12, /* address */
+    0, /* default duty */
+    D_MMOD_FREE, /* mode */
+  },
+  { 0x13, /* address */
     0, /* default duty */
     D_MMOD_FREE, /* mode */
   },
@@ -19,7 +31,7 @@ DD_MDHand_t g_md_h[DD_NUM_OF_MD] = {
 #if DD_NUM_OF_AB
 /*AB Definition*/
 DD_ABHand_t g_ab_h[DD_NUM_OF_AB] = {
-  { 0x11, /* address */
+  { 0x30, /* address */
     0x00, /* data */
   },
 };
