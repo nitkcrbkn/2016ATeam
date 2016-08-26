@@ -146,8 +146,8 @@ int SY_init(void){
 
   /*initialize IWDG*/
   message("msg", "IWDG initialize");
-  MW_SetIWDGPrescaler(IWDG_PRESCALER_4);//clock 40kHz --> 1/4 -->10kHz
-  MW_SetIWDGReload(10);//Reload volue is 10. reset time(1ms)
+  MW_SetIWDGPrescaler(IWDG_PRESCALER_16);//clock 40kHz --> 1/16 -->2500Hz
+  MW_SetIWDGReload(250);//Reload volue is 250. reset time(100ms)
   ret = MW_IWDGInit(); 
   if(ret){
     message("err", "IWDG initialize failed!\n");
