@@ -8,6 +8,11 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
+const inc_val_t inc_val_dri = {
+  .rising_val = 200,
+  .falling_val = 200,
+};
+
 /*suspensionSystem*/
 static
 int suspensionSystem(void);
@@ -57,7 +62,7 @@ int appTask(void){
   if( ret ){
     return ret;
   }
-
+  
   ret = ABSystem();
   if( ret ){
     return ret;
@@ -70,8 +75,6 @@ int appTask(void){
 static
 int suspensionSystem(void){
   const int num_of_motor = 3;       /*モータの個数*/
-  const int rising_val = 200;       /* 立ち上がり値 */
-  const int falling_val = 200;       /* 立ち下がり値 */
   int rc_analogdata;       /*アナログデータ*/
   int is_reverse;       /* 反転するか */
   unsigned int idx;       /*インデックス*/
@@ -128,7 +131,7 @@ int suspensionSystem(void){
       target_val = -target_val;
     }
 
-    control_trapezoid(rising_val, falling_val, &g_md_h[idx], target_val);
+    control_trapezoid(&inc_val_dri , &g_md_h[idx], target_val);
   }
   return EXIT_SUCCESS;
 } /* suspensionSystem */
@@ -163,12 +166,12 @@ int ABSystem(void){
   if( __RC_ISPRESSED_R1(g_rc_data)){
     if( !has_pressed_R1 ){            /* R1が押され続けている間は処理を行わない */
       has_pressed_R1 = 1;
-      if(( g_ab_h[AB].dat & ( LIFTL | LIFTR )) != ( LIFTL | LIFTR )){           /*
+      if(( g_ab_h[ROB1_AB].dat & ( LIFTL | LIFTR )) != ( LIFTL | LIFTR )){           /*
                                                                                  *R1がすでに押されているか
                                                                                  **/
-        g_ab_h[AB].dat |= ( LIFTL | LIFTR );
+        g_ab_h[ROB1_AB].dat |= ( LIFTL | LIFTR );
       }else{
-        g_ab_h[AB].dat &= ~( LIFTL | LIFTR );
+        g_ab_h[ROB1_AB].dat &= ~( LIFTL | LIFTR );
       }
     }
   }else{
@@ -178,12 +181,12 @@ int ABSystem(void){
   if( __RC_ISPRESSED_L1(g_rc_data)){
     if( !has_pressed_L1 ){            /* L1が押され続けている間は処理を行わない */
       has_pressed_L1 = 1;
-      if(( g_ab_h[AB].dat & ( PNCHL | PNCHR )) != ( PNCHL | PNCHR )){           /*
+      if(( g_ab_h[ROB1_AB].dat & ( PNCHL | PNCHR )) != ( PNCHL | PNCHR )){           /*
                                                                                  *L1がすでに押されているか
                                                                                  **/
-        g_ab_h[AB].dat |= ( PNCHL | PNCHR );
+        g_ab_h[ROB1_AB].dat |= ( PNCHL | PNCHR );
       }else{
-        g_ab_h[AB].dat &= ~( PNCHL | PNCHR );
+        g_ab_h[ROB1_AB].dat &= ~( PNCHL | PNCHR );
       }
     }
   }else{
