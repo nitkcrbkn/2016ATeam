@@ -87,6 +87,13 @@ int main(void){
   }
 } /* main */
 
+void SY_wait(int ms){
+  volatile uint32_t time;
+  time = g_SY_system_counter;
+  while(time + ms > g_SY_system_counter)
+    MW_IWDGClr();//reset counter of watch dog
+}
+
 static
 int SY_doAppTasks(void){
   return appTask();
@@ -135,7 +142,7 @@ int SY_init(void){
   SY_GPIOInit();
 
   appInit();
-
+  
   message("msg", "wait for RC connection...");
   if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
     message("err", "RC initialize faild!\n");
@@ -143,7 +150,7 @@ int SY_init(void){
   }
   
   message("msg", "RC connected sucess");
-
+  
   /*initialize IWDG*/
   message("msg", "IWDG initialize");
   MW_SetIWDGPrescaler(IWDG_PRESCALER_16);//clock 40kHz --> 1/16 -->2500Hz
