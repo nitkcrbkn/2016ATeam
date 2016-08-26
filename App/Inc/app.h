@@ -44,6 +44,11 @@
 #define MD_GAIN_DRIR ( MD_MAX_DUTY_DRIR / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIB ( MD_MAX_DUTY_DRIB / DD_RC_ANALOG_MAX )
 
+typedef struct {
+  int rising_val; /* 立ち上がり値 */
+  int falling_val; /* 立ち下がり値 */
+} inc_val_t;
+
 int appTask(void);
 int appInit(void);
 
