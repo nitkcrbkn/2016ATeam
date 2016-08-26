@@ -22,7 +22,6 @@ typedef enum
 		       ((ID) == ENCODER2ID))
 
 int MW_EncoderInit(encoderid_t id);
-
-uint16_t MW_GetEncoderVal(encoderid_t id);
+int16_t MW_GetEncoderVal(encoderid_t id);
 
 #endif /* MIDLEWARE_INC_MW_ENCODER_H_ */
