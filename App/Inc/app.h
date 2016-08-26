@@ -9,7 +9,7 @@ int appInit(void);
 
 #define DD_NUM_OF_MD 2
 #define DD_NUM_OF_AB 1
-#define DD_NUM_OF_SV 4
+#define DD_NUM_OF_SV 0
 
 #include "DD_RC.h"
 #include "DD_MD.h"
