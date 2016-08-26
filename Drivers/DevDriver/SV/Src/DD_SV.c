@@ -67,7 +67,7 @@ int SV_SetRad(DD_SV_t *dsv) {
       dsv->val[ch] = 4095;
     }
   
-  data[0] = LED0_ON_L+4*ch;
+  data[0] = LED0_ON_L+ch<<2;
   data[1] = 0x00;
   data[2] = 0x00;
   data[3] = dsv->val[ch];//off time is always 0.
