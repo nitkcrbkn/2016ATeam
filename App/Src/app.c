@@ -8,6 +8,11 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
+const inc_val_t inc_val_dri = {
+  .rising_val = 200,
+  .falling_val = 200,
+};
+
 /*suspensionSystem*/
 static
 int suspensionSystem(void);
@@ -100,7 +105,7 @@ int suspensionSystem(void){
     }
 
     /*台数制御*/
-    control_trapezoid(rising_val, falling_val, &g_md_h[idx], target_val);
+    control_trapezoid(&inc_val_dri , &g_md_h[idx], target_val);
   }
 
   return EXIT_SUCCESS;

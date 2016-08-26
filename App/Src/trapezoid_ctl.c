@@ -1,29 +1,30 @@
 #include "DD_MD.h"
+#include "app.h"
 #include "SystemTaskManager.h"
 #include <stdlib.h>
 
-int control_trapezoid(int rising_val, int falling_val,DD_MDHand_t *md_h,int target_val){
-
+int control_trapezoid(const inc_val_t *inc_val ,DD_MDHand_t *md_h,int target_val){
+  
   int current_val = md_h->duty; /* 現在のデューティ値 */
   int ctrl_val; /* 制御値 */
-
+  
   /* 台形制御 */
   switch( md_h->mode ){
   case D_MMOD_FREE:
   case D_MMOD_BRAKE:
   case D_MMOD_FORWARD:
     if( current_val < target_val ){
-      ctrl_val = current_val + _MIN(rising_val, target_val - current_val);
+      ctrl_val = current_val + _MIN(inc_val->rising_val, target_val - current_val);
     }else if( current_val > target_val ){
-      ctrl_val = current_val - _MIN(falling_val, current_val - target_val);
+      ctrl_val = current_val - _MIN(inc_val->falling_val, current_val - target_val);
     }else{ ctrl_val = target_val; }
     break;
   case D_MMOD_BACKWARD:
     current_val = -current_val;
     if( current_val > target_val ){
-      ctrl_val = current_val - _MIN(rising_val, current_val - target_val);
+      ctrl_val = current_val - _MIN(inc_val->rising_val, current_val - target_val);
     }else if( current_val < target_val ){
-      ctrl_val = current_val + _MIN(falling_val, target_val - current_val);
+      ctrl_val = current_val + _MIN(inc_val->falling_val, target_val - current_val);
     }else{ ctrl_val = target_val; }
     break;
   default: return EXIT_FAILURE;
