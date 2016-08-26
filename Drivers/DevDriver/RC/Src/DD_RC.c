@@ -9,7 +9,7 @@
 static volatile int is_not_avaiable = 8+1;
 static volatile uint8_t correct[RC_DATA_NUM];
 
-#define _RELANGE(x) (x<15?(x>-15?x:-15):15)
+#define _RELANGE(x) (x<DD_RC_ANALOG_MAX?(x>-DD_RC_ANALOG_MAX?x:-DD_RC_ANALOG_MAX):DD_RC_ANALOG_MAX)
 
 int DD_RCInit(uint8_t rc_data[RC_DATA_NUM], uint32_t timeout){
   uint32_t remaining;
