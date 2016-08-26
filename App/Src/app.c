@@ -73,6 +73,7 @@ int appTask(void){
 }
 
 /*プライベート 足回りシステム*/
+
 static
 int suspensionSystem_modeB(void){
   const int num_of_motor = 3; /*モータの個数*/
@@ -82,43 +83,37 @@ int suspensionSystem_modeB(void){
   unsigned int md_gain; /*アナログデータの補正値 */
   int ctl_motor_kind; /* 現在制御しているモータ */
   int target_duty; /* 目標値 */
-
+  
   /*for each motor*/
   for( ctl_motor_kind = ROB0_DRIL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
     is_reverse = 0;
-
+    
     /*それぞれの差分*/
     switch( ctl_motor_kind ){
     case ROB0_DRIL:
       rc_analogdata = DD_RCGetLY(g_rc_data);
       md_gain = MD_GAIN_DRIL;
       /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIL
-      is_reverse = 1;
-#endif
+      is_reverse = _IS_REVERSE_DRIL;
       idx = ROB0_DRIL;
       break;
     case ROB0_DRIR:
       rc_analogdata = DD_RCGetRY(g_rc_data);
       md_gain = MD_GAIN_DRIR;
       /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIR
-      is_reverse = 1;
-#endif
+      is_reverse = _IS_REVERSE_DRIR;
       idx = ROB0_DRIR;
       break;
     case ROB0_DRIB:
       rc_analogdata = DD_RCGetLY(g_rc_data);
       md_gain = MD_GAIN_DRIB;
       /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIB
-      is_reverse = 1;
-#endif
+      is_reverse = _IS_REVERSE_DRIB;
       idx = ROB0_DRIB;
       break;
     default: return EXIT_FAILURE;
     }
-
+      
     /* 目標値を計算 */
     /*これは中央か?±3程度余裕を持つ必要がある。*/
     if( abs(rc_analogdata) < CENTRAL_THRESHOLD ){
@@ -126,69 +121,41 @@ int suspensionSystem_modeB(void){
     }else{
       target_duty = rc_analogdata * md_gain;
     }
-
-    /*モータの回転を反転 */
-    if( is_reverse ){
-      target_duty = -target_duty;
-    }
-
+    
     /* 台形制御 */
-    control_trapezoid(&inc_val_dri, &g_md_h[idx], target_duty);
+    control_trapezoid(&inc_val_dri, &g_md_h[idx], target_duty, is_reverse);
   }
-
+  
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
+static
 int armSystem_modeB(void){
   /* アーム基部の回転動作の制御 */
   if( __RC_ISPRESSED_L1(g_rc_data)){
-#if _IS_REVERSE_ARMT
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], -MD_MAX_DUTY_ARMT);
-#else
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], MD_MAX_DUTY_ARMT);
-#endif
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
   }else if( __RC_ISPRESSED_R1(g_rc_data)){
-#if _IS_REVERSE_ARMT
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], MD_MAX_DUTY_ARMT);
-#else
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], -MD_MAX_DUTY_ARMT);
-#endif
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], -MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
   }else{
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], 0);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], 0, _IS_REVERSE_ARMT);
   }
 
   /* アームの上下動作の制御 */
   if( __RC_ISPRESSED_UP(g_rc_data)){
-#if _IS_REVERSE_ARME
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], -MD_MAX_DUTY_ARME);
-#else
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], MD_MAX_DUTY_ARME);
-#endif
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], MD_MAX_DUTY_ARME, _IS_REVERSE_ARME);
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
-#if _IS_REVERSE_ARME
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], MD_MAX_DUTY_ARME);
-#else
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], -MD_MAX_DUTY_ARME);
-#endif
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], -MD_MAX_DUTY_ARME, _IS_REVERSE_ARME);
   }else{
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], 0);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], 0, _IS_REVERSE_ARME);
   }
 
   /* アームの伸縮動作の制御 */
   if( __RC_ISPRESSED_LEFT(g_rc_data)){
-#if _IS_REVERSE_ARMS
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS);
-#else
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS);
-#endif
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-#if _IS_REVERSE_ARMS
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS);
-#else
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS);
-#endif
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
   }else{
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], 0);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], 0, _IS_REVERSE_ARMS);
   }
 
   return EXIT_SUCCESS;
