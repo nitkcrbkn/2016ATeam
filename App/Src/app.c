@@ -23,6 +23,33 @@ int ABSystem(void);
 
 int appInit(void){
   message("msg","hell");
+  /* switch(checkFlashWrite()){ */
+  /* case MW_FLASH_OK: */
+  /*   message("msg","FLASH WRITE TEST SUCCESS\n%s",(const char*)WRITE_ADDR); */
+  /*   break; */
+  /* case MW_FLASH_LOCK_FAILURE: */
+  /*   message("err","FLASH WRITE TEST LOCK FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_UNLOCK_FAILURE: */
+  /*   message("err","FLASH WRITE TEST UNLOCK FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_ERASE_VERIFY_FAILURE: */
+  /*   message("err","FLASH ERASE VERIFY FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_ERASE_FAILURE: */
+  /*   message("err","FLASH ERASE FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_WRITE_VERIFY_FAILURE: */
+  /*   message("err","FLASH WRITE TEST VERIFY FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_WRITE_FAILURE: */
+  /*   message("err","FLASH WRITE TEST FAILURE\n"); */
+  /*   break;         */
+  /* default: */
+  /*   message("err","FLASH WRITE TEST UNKNOWN FAILURE\n"); */
+  /*   break; */
+  /* } */
+  /* flush(); */
 
   ad_init();
 
@@ -45,16 +72,16 @@ int appTask(void){
   
   /*それぞれの機構ごとに処理をする*/
   /*途中必ず定数回で終了すること。*/
-  ret = suspensionSystem();
-  if(ret){
-    return ret;
-  }
+   ret = suspensionSystem(); 
+   if(ret){ 
+     return ret; 
+   } 
 
-  ret = ABSystem();
-  if(ret){
-    return ret;
-  }
-  
+   ret = ABSystem();
+     if(ret){ 
+     return ret; 
+   }
+     
   return EXIT_SUCCESS;
 }
 
@@ -71,6 +98,7 @@ int ABSystem(void){
 
   return EXIT_SUCCESS;
 }
+
 
 /*プライベート 足回りシステム*/
 static
