@@ -134,14 +134,3 @@ void TIM1_UP_IRQHandler(void){
 void TIM2_IRQHandler(void){
   HAL_TIM_IRQHandler(timid[TIM1ID]);
 }
-
-/* void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){ */
-/*   if( htim == &htim1 ){ */
-/*     MW_TIM1Hadler(); */
-/*   } else if( htim == &htim2 ){ */
-/*     MW_TIM2Hadler(); */
-/*   } else{ */
-/*     assert_param(0); */
-/*   } */
-/* } */
-
