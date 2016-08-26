@@ -134,3 +134,4 @@ void TIM1_UP_IRQHandler(void){
 void TIM2_IRQHandler(void){
   HAL_TIM_IRQHandler(timid[TIM1ID]);
 }
+
