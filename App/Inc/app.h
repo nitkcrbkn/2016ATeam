@@ -5,7 +5,7 @@
 #include "DD_MD.h"
 
 /*NO Device mode*/
-#define _NO_DEVICE 0
+#define _NO_DEVICE 1
 
 /* モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
@@ -43,6 +43,14 @@
 #define MD_GAIN_DRIL ( MD_MAX_DUTY_DRIL / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIR ( MD_MAX_DUTY_DRIR / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIB ( MD_MAX_DUTY_DRIB / DD_RC_ANALOG_MAX )
+#define MD_GAIN_ARMT ( MD_MAX_DUTY_ARMT / DD_RC_ANALOG_MAX )
+#define MD_GAIN_ARME ( MD_MAX_DUTY_ARME / DD_RC_ANALOG_MAX )
+#define MD_GAIN_ARMS ( MD_MAX_DUTY_ARMS / DD_RC_ANALOG_MAX )
+
+typedef enum{
+  OPE_MODE_A,
+  OPE_MODE_B,
+} ope_mode_t;;
 
 typedef struct {
   int rising_val; /* 立ち上がり値 */

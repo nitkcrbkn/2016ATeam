@@ -18,16 +18,20 @@ const inc_val_t inc_val_arm = {
   .falling_val = 200,
 };
 
+/* 操作モード変更 */
+static
+int changeOpeMode(ope_mode_t *ope_mode);
+
 /*suspensionSystem*/
-/* static */
-/* int suspensionSystem_modeA(void); */
+static
+int suspensionSystem_modeA(void);
 
 static
 int suspensionSystem_modeB(void);
 
 /*armSystem*/
-/* static */
-/* int armSystem_modeA(void); */
+static
+int armSystem_modeA(void);
 
 static
 int armSystem_modeB(void);
@@ -49,7 +53,9 @@ int appInit(void){
 /*application tasks*/
 int appTask(void){
   int ret = 0;
-
+  /* 操作モード */
+  static ope_mode_t ope_mode = OPE_MODE_A;
+  
   if(__RC_ISPRESSED_R1(g_rc_data)&&__RC_ISPRESSED_R2(g_rc_data)&&
      __RC_ISPRESSED_L1(g_rc_data)&&__RC_ISPRESSED_L2(g_rc_data)){
     while(__RC_ISPRESSED_R1(g_rc_data)||__RC_ISPRESSED_R2(g_rc_data)||
@@ -59,20 +65,84 @@ int appTask(void){
   
   /*それぞれの機構ごとに処理をする*/
   /*途中必ず定数回で終了すること。*/
-  ret = suspensionSystem_modeB();
+
+  ret = changeOpeMode(&ope_mode);
   if( ret ){
     return ret;
   }
+    
+  switch(ope_mode){
+  case OPE_MODE_A:
+    ret = suspensionSystem_modeA();
+    if( ret ){
+      return ret;
+    }
+    
+    ret = armSystem_modeA();
+    if( ret ){
+      return ret;
+    }
+    break;
+    
+  case OPE_MODE_B:
+    ret = suspensionSystem_modeB();
+    if( ret ){
+      return ret;
+    }
+  
+    ret = armSystem_modeB();
+    if( ret ){
+      return ret;
+    }
+    break;
 
-  ret = armSystem_modeB();
-  if( ret ){
-    return ret;
+  default:return EXIT_FAILURE;
   }
+  
+  return EXIT_SUCCESS;
+}
 
+static
+int changeOpeMode(ope_mode_t *ope_mode){
+  if( __RC_ISPRESSED_L2(g_rc_data)){
+    *ope_mode = OPE_MODE_B;
+    //message("msg","modeB");
+  }else if( __RC_ISPRESSED_R2(g_rc_data)){
+    *ope_mode = OPE_MODE_A;
+    //message("msg","modeA");
+  }
+  
   return EXIT_SUCCESS;
 }
 
 /*プライベート 足回りシステム*/
+static
+int suspensionSystem_modeA(void){
+  
+  if( __RC_ISPRESSED_UP(g_rc_data)){ 
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIB], MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
+  }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIB], -MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
+  }else if( __RC_ISPRESSED_LEFT(g_rc_data)){
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
+  }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
+  }else{
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIL], 0, _IS_REVERSE_DRIL);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIR], 0, _IS_REVERSE_DRIR);
+    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
+  }
+
+  return EXIT_SUCCESS;
+}
 
 static
 int suspensionSystem_modeB(void){
@@ -128,6 +198,61 @@ int suspensionSystem_modeB(void){
   
   return EXIT_SUCCESS;
 } /* suspensionSystem */
+
+static
+int armSystem_modeA(void){
+  const int num_of_motor = ROB0_ARMT + 3; /*モータの個数*/
+  int rc_analogdata; /*アナログデータ*/
+  int is_reverse; /* 反転するか */
+  unsigned int idx; /*インデックス*/
+  unsigned int md_gain; /*アナログデータの補正値 */
+  int ctl_motor_kind; /* 現在制御しているモータ */
+  int target_duty; /* 目標値 */
+  
+  /*for each motor*/
+  for( ctl_motor_kind = ROB0_ARMT; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
+    is_reverse = 0;
+    
+    /*それぞれの差分*/
+    switch( ctl_motor_kind ){
+    case ROB0_ARMT:
+      rc_analogdata = DD_RCGetLX(g_rc_data);
+      md_gain = MD_GAIN_ARMT;
+      /* 前後の向きを反転 */
+      is_reverse = _IS_REVERSE_ARMT;
+      idx = ROB0_ARMT;
+      break;
+    case ROB0_ARME:
+      rc_analogdata = DD_RCGetLY(g_rc_data);
+      md_gain = MD_GAIN_ARME;
+      /* 前後の向きを反転 */
+      is_reverse = _IS_REVERSE_ARME;
+      idx = ROB0_ARME;
+      break;
+    case ROB0_ARMS:
+      rc_analogdata = DD_RCGetRY(g_rc_data);
+      md_gain = MD_GAIN_ARMS;
+      /* 前後の向きを反転 */
+      is_reverse = _IS_REVERSE_ARMS;
+      idx = ROB0_ARMS;
+      break;
+    default: return EXIT_FAILURE;
+    }
+    
+    /* 目標値を計算 */
+    /*これは中央か?±3程度余裕を持つ必要がある。*/
+    if( abs(rc_analogdata) < CENTRAL_THRESHOLD ){
+      target_duty = 0;
+    }else{
+      target_duty = rc_analogdata * md_gain;
+    }
+    
+    /* 台形制御 */
+    control_trapezoid(&inc_val_dri, &g_md_h[idx], target_duty, is_reverse);
+  }  
+  
+  return EXIT_SUCCESS;
+}
 
 static
 int armSystem_modeB(void){
