@@ -1,11 +1,17 @@
 #ifndef __APP_H
 #define __APP_H
 
+/* モータ、電磁弁の個数 */
+#define DD_NUM_OF_MD 4
+#define DD_NUM_OF_AB 1
+#define DD_NUM_OF_SV 0
+
 #include "DD_RC.h"
 #include "DD_MD.h"
+#include "DD_SV.h"
 
 /*NO Device mode*/
-#define _NO_DEVICE 0
+#define _NO_DEVICE 1
 
 /*モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
@@ -13,10 +19,6 @@
 #define _IS_REVERSE_DRIR 1
 #define _IS_REVERSE_DRIB 0
 #define _IS_REVERSE_PSH 0
-
-/* モータ、電磁弁の個数 */
-#define DD_NUM_OF_MD 4
-#define DD_NUM_OF_AB 1
 
 /* 各モータのインデックス */
 #define ROB1_DRIL 0
