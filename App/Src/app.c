@@ -18,9 +18,12 @@ const inc_val_t inc_val_arm = {
   .falling_val = 200,
 };
 
+/* 操作モード */
+static ope_mode_t g_ope_mode = OPE_MODE_A;
+
 /* 操作モード変更 */
 static
-int changeOpeMode(ope_mode_t *ope_mode);
+int changeOpeMode(void);
 
 /*suspensionSystem*/
 static
@@ -59,8 +62,6 @@ int appInit(void){
 /*application tasks*/
 int appTask(void){
   int ret = 0;
-  /* 操作モード */
-  static ope_mode_t ope_mode = OPE_MODE_A;
 
   if( __RC_ISPRESSED_R1(g_rc_data) && __RC_ISPRESSED_R2(g_rc_data) &&
       __RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_L2(g_rc_data)){
@@ -73,12 +74,12 @@ int appTask(void){
   /*それぞれの機構ごとに処理をする*/
   /*途中必ず定数回で終了すること。*/
 
-  ret = changeOpeMode(&ope_mode);
+  ret = changeOpeMode();
   if( ret ){
     return ret;
   }
 
-  switch( ope_mode ){
+  switch( g_ope_mode ){
   case OPE_MODE_A:
     ret = suspensionSystem_modeA();
     if( ret ){
@@ -120,13 +121,11 @@ int appTask(void){
 } /* appTask */
 
 static
-int changeOpeMode(ope_mode_t *ope_mode){
+int changeOpeMode(void){
   if( __RC_ISPRESSED_L2(g_rc_data)){
-    *ope_mode = OPE_MODE_B;
-    /* message("msg","modeB"); */
+    g_ope_mode = OPE_MODE_B;
   }else if( __RC_ISPRESSED_R2(g_rc_data)){
-    *ope_mode = OPE_MODE_A;
-    /* message("msg","modeA"); */
+    g_ope_mode = OPE_MODE_A;
   }
 
   return EXIT_SUCCESS;
