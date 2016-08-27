@@ -36,6 +36,9 @@ int armSystem_modeA(void);
 static
 int armSystem_modeB(void);
 
+static
+int LEDSystem(void);
+
 /*メモ
  * *g_ab_h...ABのハンドラ
  * *g_md_h...MDのハンドラ
@@ -98,7 +101,12 @@ int appTask(void){
 
   default:return EXIT_FAILURE;
   }
-  
+
+  ret = LEDSystem();
+  if(ret){
+    return ret;
+  }
+     
   return EXIT_SUCCESS;
 }
 
@@ -114,6 +122,7 @@ int changeOpeMode(ope_mode_t *ope_mode){
   
   return EXIT_SUCCESS;
 }
+
 
 /*プライベート 足回りシステム*/
 static
@@ -286,3 +295,16 @@ int armSystem_modeB(void){
   return EXIT_SUCCESS;
 }
 
+static int LEDSystem(void){
+  if(__RC_ISPRESSED_UP(g_rc_data)){
+    g_led_mode = lmode_1;
+  }
+  if(__RC_ISPRESSED_DOWN(g_rc_data)){
+    g_led_mode = lmode_2;
+  }
+  if(__RC_ISPRESSED_RIGHT(g_rc_data)){
+    g_led_mode = lmode_3;
+  }
+
+  return EXIT_SUCCESS;
+}

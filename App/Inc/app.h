@@ -3,9 +3,10 @@
 
 #include "DD_RC.h"
 #include "DD_MD.h"
+#include "DD_SV.h"
 
 /*NO Device mode*/
-#define _NO_DEVICE 1
+#define _NO_DEVICE 0
 
 /* モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
@@ -19,6 +20,7 @@
 /* モータ、電磁弁の個数 */
 #define DD_NUM_OF_MD 6
 #define DD_NUM_OF_AB 0
+#define DD_NUM_OF_SV 0
 
 /* 各モータのインデックス */
 #define ROB0_DRIL 0
@@ -61,9 +63,6 @@ int appTask(void);
 int appInit(void);
 
 #endif
-
-
-
 
 
 
