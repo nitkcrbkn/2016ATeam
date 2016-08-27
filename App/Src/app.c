@@ -323,16 +323,19 @@ int vacSystem(void){
 }
 
 static int LEDSystem(void){
-  if( __RC_ISPRESSED_UP(g_rc_data)){
+  
+  switch(g_ope_mode){
+  case OPE_MODE_A:
     g_led_mode = lmode_1;
-  }
-  if( __RC_ISPRESSED_DOWN(g_rc_data)){
-    g_led_mode = lmode_2;
-  }
-  if( __RC_ISPRESSED_RIGHT(g_rc_data)){
+    break;
+  case OPE_MODE_B:
     g_led_mode = lmode_3;
+    break;
+  default:
+    return EXIT_FAILURE;
   }
 
   return EXIT_SUCCESS;
+
 }
 
