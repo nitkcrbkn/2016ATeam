@@ -8,12 +8,12 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
-const inc_val_t inc_val_dri = {
+const tc_slope_lim_t tc_slope_lim_dri = {
   .rising_val = 200,
   .falling_val = 200,
 };
 
-const inc_val_t inc_val_arm = {
+const tc_slope_lim_t tc_slope_lim_arm = {
   .rising_val = 200,
   .falling_val = 200,
 };
@@ -135,25 +135,25 @@ int changeOpeMode(void){
 static
 int suspensionSystem_modeA(void){
   if( __RC_ISPRESSED_UP(g_rc_data)){
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIB], MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIB], MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIB], -MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIB], -MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
   }else if( __RC_ISPRESSED_LEFT(g_rc_data)){
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
   }else{
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIL], 0, _IS_REVERSE_DRIL);
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIR], 0, _IS_REVERSE_DRIR);
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], 0, _IS_REVERSE_DRIL);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], 0, _IS_REVERSE_DRIR);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
   }
 
   return EXIT_SUCCESS;
@@ -208,7 +208,7 @@ int suspensionSystem_modeB(void){
     }
 
     /* 台形制御 */
-    control_trapezoid(&inc_val_dri, &g_md_h[idx], target_duty, is_reverse);
+    control_trapezoid(&tc_slope_lim_dri, &g_md_h[idx], target_duty, is_reverse);
   }
 
   return EXIT_SUCCESS;
@@ -263,7 +263,7 @@ int armSystem_modeA(void){
     }
 
     /* 台形制御 */
-    control_trapezoid(&inc_val_dri, &g_md_h[idx], target_duty, is_reverse);
+    control_trapezoid(&tc_slope_lim_dri, &g_md_h[idx], target_duty, is_reverse);
   }
 
   return EXIT_SUCCESS;
@@ -273,29 +273,29 @@ static
 int armSystem_modeB(void){
   /* アーム基部の回転動作の制御 */
   if( __RC_ISPRESSED_L1(g_rc_data)){
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMT], MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
   }else if( __RC_ISPRESSED_R1(g_rc_data)){
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMT], -MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], -MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
   }else{
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMT], 0, _IS_REVERSE_ARMT);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], 0, _IS_REVERSE_ARMT);
   }
 
   /* アームの上下動作の制御 */
   if( __RC_ISPRESSED_UP(g_rc_data)){
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARME], MD_MAX_DUTY_ARME, _IS_REVERSE_ARME);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARME], MD_MAX_DUTY_ARME, _IS_REVERSE_ARME);
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARME], -MD_MAX_DUTY_ARME, _IS_REVERSE_ARME);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARME], -MD_MAX_DUTY_ARME, _IS_REVERSE_ARME);
   }else{
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARME], 0, _IS_REVERSE_ARME);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARME], 0, _IS_REVERSE_ARME);
   }
 
   /* アームの伸縮動作の制御 */
   if( __RC_ISPRESSED_LEFT(g_rc_data)){
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
   }else{
-    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMS], 0, _IS_REVERSE_ARMS);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], 0, _IS_REVERSE_ARMS);
   }
 
   return EXIT_SUCCESS;
@@ -319,7 +319,8 @@ int vacSystem(void){
   }else{
     has_pressed_tri = 0;
   }
-
+ 
+  return EXIT_SUCCESS;
 }
 
 static int LEDSystem(void){
