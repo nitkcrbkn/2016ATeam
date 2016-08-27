@@ -8,12 +8,12 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
-const inc_val_t inc_val_dri = {
+const tc_slope_lim_t tc_slope_lim_dri = {
   .rising_val = 200,
   .falling_val = 200,
 };
 
-const inc_val_t inc_val_psh = {
+const tc_slope_lim_t tc_slope_lim_psh = {
   .rising_val = MD_MAX_DUTY_PSH,
   .falling_val = MD_MAX_DUTY_PSH,
 };
@@ -131,18 +131,18 @@ int suspensionSystem(void){
     }else{
       target_val = rc_analogdata * md_gain;
     }
-    control_trapezoid(&inc_val_dri , &g_md_h[idx], target_val, is_reverse);
+    control_trapezoid(&tc_slope_lim_dri , &g_md_h[idx], target_val, is_reverse);
   }
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
 int pushSystem(void){
   if( __RC_ISPRESSED_UP(g_rc_data)){
-    control_trapezoid(&inc_val_psh , &g_md_h[ROB1_PSH], MD_MAX_DUTY_PSH, _IS_REVERSE_PSH);
+    control_trapezoid(&tc_slope_lim_psh , &g_md_h[ROB1_PSH], MD_MAX_DUTY_PSH, _IS_REVERSE_PSH);
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
-    control_trapezoid(&inc_val_psh , &g_md_h[ROB1_PSH], -MD_MAX_DUTY_PSH, _IS_REVERSE_PSH);
+    control_trapezoid(&tc_slope_lim_psh , &g_md_h[ROB1_PSH], -MD_MAX_DUTY_PSH, _IS_REVERSE_PSH);
   }else{
-    control_trapezoid(&inc_val_psh , &g_md_h[ROB1_PSH], 0, _IS_REVERSE_PSH);
+    control_trapezoid(&tc_slope_lim_psh , &g_md_h[ROB1_PSH], 0, _IS_REVERSE_PSH);
   }
 
   return EXIT_SUCCESS;
