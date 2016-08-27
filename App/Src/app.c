@@ -29,6 +29,7 @@ int pushSystem(void);
 /*ABSystem*/
 static
 int ABSystem(void);
+
 static
 int LEDSystem(void);
 /*メモ
@@ -65,6 +66,11 @@ int appTask(void){
   }
 
   ret = pushSystem();
+  if( ret ){
+    return ret;
+  }
+
+  ret = ABSystem();
   if( ret ){
     return ret;
   }
