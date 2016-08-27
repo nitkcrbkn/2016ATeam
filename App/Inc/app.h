@@ -3,7 +3,7 @@
 
 /* モータ、電磁弁の個数 */
 #define DD_NUM_OF_MD 6
-#define DD_NUM_OF_AB 0
+#define DD_NUM_OF_AB 1
 #define DD_NUM_OF_SV 0
 
 #include "DD_RC.h"
@@ -11,7 +11,7 @@
 #include "DD_SV.h"
 
 /*NO Device mode*/
-#define _NO_DEVICE 0
+#define _NO_DEVICE 1
 
 /* モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
@@ -29,6 +29,15 @@
 #define ROB0_ARMT 3
 #define ROB0_ARME 4
 #define ROB0_ARMS 5
+
+/* 電磁弁のインデックス */
+#define ROB0_VAC 0
+
+/* 電磁弁のチャンネル */
+#define VAC0  (1<<0)
+#define VAC1  (1<<1)
+#define VAC2  (1<<2)
+#define VAC3  (1<<3)
 
 /* コントローラのスティックの補正値 */
 #define CENTRAL_THRESHOLD 5
