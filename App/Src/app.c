@@ -76,18 +76,14 @@ int suspensionSystem(void){
       rc_analogdata = DD_RCGetLY(g_rc_data);
       md_gain = MD_GAIN_DRIL;
       /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIL
-      is_reverse = 1;
-#endif
+      is_reverse = _IS_REVERSE_DRIL;
       idx = ROB1_DRIL;
       break;
     case ROB1_DRIR:
       rc_analogdata = DD_RCGetRY(g_rc_data);
       md_gain = MD_GAIN_DRIR;
       /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIR
-      is_reverse = 1;
-#endif
+      is_reverse = _IS_REVERSE_DRIR;
       idx = ROB1_DRIR;
       break;
     default: return EXIT_FAILURE;
@@ -105,7 +101,7 @@ int suspensionSystem(void){
     }
 
     /*台数制御*/
-    control_trapezoid(&inc_val_dri , &g_md_h[idx], target_val);
+    control_trapezoid(&inc_val_dri , &g_md_h[idx], target_val, is_reverse);
   }
 
   return EXIT_SUCCESS;
