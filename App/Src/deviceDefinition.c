@@ -1,5 +1,5 @@
-#include "DD_Gene.h"
 #include "app.h"
+#include "DD_Gene.h"
 #include "SystemTaskManager.h"
 
 /*Address Definition*/
@@ -24,12 +24,3 @@ DD_ABHand_t g_ab_h[DD_NUM_OF_AB] = {
   },
 };
 #endif
-
-
-
-
-
-
-
-
-

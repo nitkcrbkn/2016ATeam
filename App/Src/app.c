@@ -17,6 +17,9 @@ const inc_val_t inc_val_dri = {
 static
 int suspensionSystem(void);
 
+static
+int LEDSystem(void);
+
 /*メモ
  * *g_ab_h...ABのハンドラ
  * *g_md_h...MDのハンドラ
@@ -50,6 +53,11 @@ int appTask(void){
     return ret;
   }
 
+  ret = LEDSystem();
+  if(ret){
+    return ret;
+  }
+     
   return EXIT_SUCCESS;
 }
 
@@ -57,8 +65,6 @@ int appTask(void){
 static
 int suspensionSystem(void){
   const int num_of_motor = 2; /*モータの個数*/
-  const int rising_val = 200; /* 立ち上がり値 */
-  const int falling_val = 200; /* 立ち下がり値 */
   int rc_analogdata; /*アナログデータ*/
   int is_reverse; /* 反転するか */
   unsigned int idx; /*インデックス*/
@@ -96,10 +102,6 @@ int suspensionSystem(void){
       target_val = rc_analogdata * md_gain;
     }
 
-    if( is_reverse ){
-      target_val = -target_val;
-    }
-
     /*台数制御*/
     control_trapezoid(&inc_val_dri , &g_md_h[idx], target_val, is_reverse);
   }
@@ -107,3 +109,16 @@ int suspensionSystem(void){
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
+static int LEDSystem(void){
+  if(__RC_ISPRESSED_UP(g_rc_data)){
+    g_led_mode = lmode_1;
+  }
+  if(__RC_ISPRESSED_DOWN(g_rc_data)){
+    g_led_mode = lmode_2;
+  }
+  if(__RC_ISPRESSED_RIGHT(g_rc_data)){
+    g_led_mode = lmode_3;
+  }
+
+  return EXIT_SUCCESS;
+}
