@@ -58,14 +58,15 @@ int appTask(void){
   int ret = 0;
   /* 操作モード */
   static ope_mode_t ope_mode = OPE_MODE_A;
-  
-  if(__RC_ISPRESSED_R1(g_rc_data)&&__RC_ISPRESSED_R2(g_rc_data)&&
-     __RC_ISPRESSED_L1(g_rc_data)&&__RC_ISPRESSED_L2(g_rc_data)){
-    while(__RC_ISPRESSED_R1(g_rc_data)||__RC_ISPRESSED_R2(g_rc_data)||
-	  __RC_ISPRESSED_L1(g_rc_data)||__RC_ISPRESSED_L2(g_rc_data));
+
+  if( __RC_ISPRESSED_R1(g_rc_data) && __RC_ISPRESSED_R2(g_rc_data) &&
+      __RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_L2(g_rc_data)){
+    while( __RC_ISPRESSED_R1(g_rc_data) || __RC_ISPRESSED_R2(g_rc_data) ||
+           __RC_ISPRESSED_L1(g_rc_data) || __RC_ISPRESSED_L2(g_rc_data)){
+    }
     ad_main();
   }
-  
+
   /*それぞれの機構ごとに処理をする*/
   /*途中必ず定数回で終了すること。*/
 
@@ -73,81 +74,79 @@ int appTask(void){
   if( ret ){
     return ret;
   }
-    
-  switch(ope_mode){
+
+  switch( ope_mode ){
   case OPE_MODE_A:
     ret = suspensionSystem_modeA();
     if( ret ){
       return ret;
     }
-    
+
     ret = armSystem_modeA();
     if( ret ){
       return ret;
     }
     break;
-    
+
   case OPE_MODE_B:
     ret = suspensionSystem_modeB();
     if( ret ){
       return ret;
     }
-  
+
     ret = armSystem_modeB();
     if( ret ){
       return ret;
     }
     break;
 
-  default:return EXIT_FAILURE;
+  default: return EXIT_FAILURE;
   }
 
   ret = LEDSystem();
-  if(ret){
+  if( ret ){
     return ret;
   }
-     
+
   return EXIT_SUCCESS;
-}
+} /* appTask */
 
 static
 int changeOpeMode(ope_mode_t *ope_mode){
   if( __RC_ISPRESSED_L2(g_rc_data)){
     *ope_mode = OPE_MODE_B;
-    //message("msg","modeB");
+    /* message("msg","modeB"); */
   }else if( __RC_ISPRESSED_R2(g_rc_data)){
     *ope_mode = OPE_MODE_A;
-    //message("msg","modeA");
+    /* message("msg","modeA"); */
   }
-  
+
   return EXIT_SUCCESS;
 }
-
 
 /*プライベート 足回りシステム*/
 static
 int suspensionSystem_modeA(void){
-  
-  if( __RC_ISPRESSED_UP(g_rc_data)){ 
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIB], MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
+  if( __RC_ISPRESSED_UP(g_rc_data)){
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIB], MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIB], -MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIB], -MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
   }else if( __RC_ISPRESSED_LEFT(g_rc_data)){
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
   }else{
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIL], 0, _IS_REVERSE_DRIL);
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIR], 0, _IS_REVERSE_DRIR);
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIL], 0, _IS_REVERSE_DRIL);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIR], 0, _IS_REVERSE_DRIR);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_DRIB], 0, _IS_REVERSE_DRIB);
   }
 
   return EXIT_SUCCESS;
@@ -162,11 +161,11 @@ int suspensionSystem_modeB(void){
   unsigned int md_gain; /*アナログデータの補正値 */
   int ctl_motor_kind; /* 現在制御しているモータ */
   int target_duty; /* 目標値 */
-  
+
   /*for each motor*/
   for( ctl_motor_kind = ROB0_DRIL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
     is_reverse = 0;
-    
+
     /*それぞれの差分*/
     switch( ctl_motor_kind ){
     case ROB0_DRIL:
@@ -192,7 +191,7 @@ int suspensionSystem_modeB(void){
       break;
     default: return EXIT_FAILURE;
     }
-      
+
     /* 目標値を計算 */
     /*これは中央か?±3程度余裕を持つ必要がある。*/
     if( abs(rc_analogdata) < CENTRAL_THRESHOLD ){
@@ -200,11 +199,11 @@ int suspensionSystem_modeB(void){
     }else{
       target_duty = rc_analogdata * md_gain;
     }
-    
+
     /* 台形制御 */
     control_trapezoid(&inc_val_dri, &g_md_h[idx], target_duty, is_reverse);
   }
-  
+
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
@@ -217,11 +216,11 @@ int armSystem_modeA(void){
   unsigned int md_gain; /*アナログデータの補正値 */
   int ctl_motor_kind; /* 現在制御しているモータ */
   int target_duty; /* 目標値 */
-  
+
   /*for each motor*/
   for( ctl_motor_kind = ROB0_ARMT; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
     is_reverse = 0;
-    
+
     /*それぞれの差分*/
     switch( ctl_motor_kind ){
     case ROB0_ARMT:
@@ -247,7 +246,7 @@ int armSystem_modeA(void){
       break;
     default: return EXIT_FAILURE;
     }
-    
+
     /* 目標値を計算 */
     /*これは中央か?±3程度余裕を持つ必要がある。*/
     if( abs(rc_analogdata) < CENTRAL_THRESHOLD ){
@@ -255,56 +254,57 @@ int armSystem_modeA(void){
     }else{
       target_duty = rc_analogdata * md_gain;
     }
-    
+
     /* 台形制御 */
     control_trapezoid(&inc_val_dri, &g_md_h[idx], target_duty, is_reverse);
-  }  
-  
+  }
+
   return EXIT_SUCCESS;
-}
+} /* armSystem_modeA */
 
 static
 int armSystem_modeB(void){
   /* アーム基部の回転動作の制御 */
   if( __RC_ISPRESSED_L1(g_rc_data)){
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMT], MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
   }else if( __RC_ISPRESSED_R1(g_rc_data)){
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], -MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMT], -MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
   }else{
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMT], 0, _IS_REVERSE_ARMT);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMT], 0, _IS_REVERSE_ARMT);
   }
 
   /* アームの上下動作の制御 */
   if( __RC_ISPRESSED_UP(g_rc_data)){
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], MD_MAX_DUTY_ARME, _IS_REVERSE_ARME);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARME], MD_MAX_DUTY_ARME, _IS_REVERSE_ARME);
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], -MD_MAX_DUTY_ARME, _IS_REVERSE_ARME);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARME], -MD_MAX_DUTY_ARME, _IS_REVERSE_ARME);
   }else{
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARME], 0, _IS_REVERSE_ARME);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARME], 0, _IS_REVERSE_ARME);
   }
 
   /* アームの伸縮動作の制御 */
   if( __RC_ISPRESSED_LEFT(g_rc_data)){
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
   }else{
-    control_trapezoid(&inc_val_arm , &g_md_h[ROB0_ARMS], 0, _IS_REVERSE_ARMS);
+    control_trapezoid(&inc_val_arm, &g_md_h[ROB0_ARMS], 0, _IS_REVERSE_ARMS);
   }
 
   return EXIT_SUCCESS;
 }
 
 static int LEDSystem(void){
-  if(__RC_ISPRESSED_UP(g_rc_data)){
+  if( __RC_ISPRESSED_UP(g_rc_data)){
     g_led_mode = lmode_1;
   }
-  if(__RC_ISPRESSED_DOWN(g_rc_data)){
+  if( __RC_ISPRESSED_DOWN(g_rc_data)){
     g_led_mode = lmode_2;
   }
-  if(__RC_ISPRESSED_RIGHT(g_rc_data)){
+  if( __RC_ISPRESSED_RIGHT(g_rc_data)){
     g_led_mode = lmode_3;
   }
 
   return EXIT_SUCCESS;
 }
+

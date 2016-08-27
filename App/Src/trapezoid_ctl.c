@@ -3,11 +3,10 @@
 #include "SystemTaskManager.h"
 #include <stdlib.h>
 
-int control_trapezoid(const inc_val_t *inc_val ,DD_MDHand_t *md_h,int target_val,int is_reverse){
-  
+int control_trapezoid(const inc_val_t *inc_val, DD_MDHand_t *md_h, int target_val, int is_reverse){
   int current_val = md_h->duty; /* 現在のデューティ値 */
   int ctrl_val; /* 制御値 */
-  
+
   /*モータの回転を反転 */
   if( is_reverse ){
     target_val = -target_val;
