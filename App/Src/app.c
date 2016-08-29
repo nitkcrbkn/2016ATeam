@@ -8,7 +8,7 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
-const inc_val_t inc_val_dri = {
+const tc_slope_lim_t tc_slope_lim_dri = {
   .rising_val = 200,
   .falling_val = 200,
 };
@@ -103,7 +103,7 @@ int suspensionSystem(void){
     }
 
     /*台数制御*/
-    control_trapezoid(&inc_val_dri , &g_md_h[idx], target_val, is_reverse);
+    control_trapezoid(&tc_slope_lim_dri , &g_md_h[idx], target_val, is_reverse);
   }
 
   return EXIT_SUCCESS;
