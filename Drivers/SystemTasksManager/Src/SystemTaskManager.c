@@ -1,4 +1,4 @@
- /* ===Kisarazu RBKN Library===
+/* ===Kisarazu RBKN Library===
  *
  * autor          : Oishi
  * version        : v0.10
@@ -24,6 +24,7 @@
 volatile uint32_t g_SY_system_counter;
 volatile uint8_t g_rc_data[RC_DATA_NUM]={0x0,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,};
 static uint8_t rc_rcv[RC_DATA_NUM];
+volatile led_mode_t g_led_mode = lmode_1;
 
 static
 int SY_init(void);
@@ -57,6 +58,7 @@ int main(void){
     MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
     }
+  
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
@@ -67,6 +69,7 @@ int main(void){
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
       DD_RCPrint((uint8_t*)g_rc_data);
       DD_print();
+      MW_printf("$%d",(int)g_led_mode);
       flush(); /* out message. */
       MW_printf("\033[1;1H");
     }
@@ -105,7 +108,7 @@ static
 int SY_init(void){
   int ret;
   /* Reset of all peripherals, Initializes the Flash interface and the Systick.
-   **/
+  **/
   if( HAL_Init()){
     return EXIT_FAILURE;
   }
@@ -136,7 +139,7 @@ int SY_init(void){
     return EXIT_FAILURE;
   }
   message("msg", "RC connected sucess");
-
+  
   appInit();
 
   return EXIT_SUCCESS;
@@ -161,7 +164,7 @@ int SY_clockInit(void){
   }
 
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-                                | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+    | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;

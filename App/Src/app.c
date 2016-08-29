@@ -13,7 +13,8 @@ int suspensionSystem(void);
 /*ABSystem*/
 static 
 int ABSystem(void);
-
+static
+int LEDSystem(void);
 /*メモ
  *g_ab_h...ABのハンドラ
  *g_md_h...MDのハンドラ
@@ -22,11 +23,7 @@ int ABSystem(void);
  */
 
 int appInit(void){
-  message("msg","hell");
-
   ad_init();
-
-  message("msg","plz confirm\n%d\n",g_adjust.rightadjust.value);
 
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
@@ -54,7 +51,26 @@ int appTask(void){
   if(ret){
     return ret;
   }
-  
+
+  ret = LEDSystem();
+  if(ret){
+    return ret;
+  }
+     
+  return EXIT_SUCCESS;
+}
+
+static int LEDSystem(void){
+  if(__RC_ISPRESSED_UP(g_rc_data)){
+    g_led_mode = lmode_1;
+  }
+  if(__RC_ISPRESSED_DOWN(g_rc_data)){
+    g_led_mode = lmode_2;
+  }
+  if(__RC_ISPRESSED_RIGHT(g_rc_data)){
+    g_led_mode = lmode_3;
+  }
+
   return EXIT_SUCCESS;
 }
 
@@ -71,6 +87,7 @@ int ABSystem(void){
 
   return EXIT_SUCCESS;
 }
+
 
 /*プライベート 足回りシステム*/
 static

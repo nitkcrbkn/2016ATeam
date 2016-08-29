@@ -1,4 +1,4 @@
- /* ===Kisarazu RBKN Library===
+/* ===Kisarazu RBKN Library===
  *
  * autor          : Oishi
  * version        : v0.10
@@ -24,6 +24,9 @@
 int DD_I2CSend(uint8_t add, const uint8_t *data, uint8_t size){
   return MW_I2C1Transmit(add, data, size);
 }
+int DD_I2CReceive(uint8_t add, uint8_t *data, uint8_t size){
+  return MW_I2C1Receive(add, data, size);
+}
 
 /*DeviceDriverのタスク*/
 int DD_doTasks(void){
@@ -45,6 +48,12 @@ int DD_doTasks(void){
     }
   }
 #endif
+#if DD_NUM_OF_SV
+  ret = SV_SetRad(&g_sv_h);
+  if( ret ){
+      return ret;
+    }
+#endif
   return EXIT_SUCCESS;
 }
 
@@ -60,6 +69,9 @@ void DD_print(void){
   for( i = 0; i < DD_NUM_OF_AB; i++ ){
     DD_ABHandPrint(&g_ab_h[i]);
   }
+#endif
+#if DD_NUM_OF_SV
+  SV_print(&g_sv_h);
 #endif
 }
 
@@ -89,5 +101,12 @@ int DD_initialize(void){
     }
 #endif
 
+#if DD_NUM_OF_SV
+  ret = SV_Init(&g_sv_h);
+  if( ret ){
+    return EXIT_FAILURE;
+  }
+#endif
+  
   return EXIT_SUCCESS;
 }
