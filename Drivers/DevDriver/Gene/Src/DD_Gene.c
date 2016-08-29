@@ -17,6 +17,7 @@
 #include "DD_MD.h"
 #include "DD_AB.h"
 #include "DD_ENCODER.h"
+#include "DD_ENCODER.h"
 #include "message.h"
 
 /*I2Cのサポート用関数*/
@@ -73,11 +74,20 @@ int DD_initialize(void){
     return EXIT_FAILURE;
   }
   
- if(DD_InitEncoder1()||DD_InitEncoder2())
-    {
-      message("error","Fialed initialize encoder!\n");
+#if DD_USE_ENCODER1
+  ret = DD_InitEncoder1();
+    if(ret)  {
+      message("error","Fialed initialize encoder1!");
       return EXIT_FAILURE;
     }
-  
+#endif
+#if DD_USE_ENCODER2
+  ret = DD_InitEncoder2()
+    if(ret)  {
+      message("error","Fialed initialize encoder2!");
+      return EXIT_FAILURE;
+    }
+#endif
+
   return EXIT_SUCCESS;
 }
