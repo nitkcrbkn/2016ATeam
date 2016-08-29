@@ -12,6 +12,8 @@ int appInit(void);
 
 #define DD_NUM_OF_MD 2
 #define DD_NUM_OF_AB 1
+#define DD_USE_ENCODER1 1
+#define DD_USE_ENCODER1 1
 
 #define MECHA1_MD1 0
 #define MECHA1_MD2 1
