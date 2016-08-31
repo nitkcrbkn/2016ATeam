@@ -35,7 +35,7 @@ int32_t DD_encoder2update(void);
  *返り値・・・エンコーダーの現在値
  */
 int32_t DD_encoder1Get_int32(void);
-int32_t DD_encoder2adGet_int32(void);
+int32_t DD_encoder2Get_int32(void);
 
 int DD_encoderprint(void);
 
