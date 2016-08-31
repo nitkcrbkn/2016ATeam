@@ -2,16 +2,21 @@
 #define __APP_H
 
 /*NO Device mode*/
-#define _NO_DEVICE 1
-
-#include "DD_RC.h"
-#include "DD_MD.h"
+#define _NO_DEVICE 0
 
 int appTask(void);
 int appInit(void);
 
 #define DD_NUM_OF_MD 2
 #define DD_NUM_OF_AB 1
+
+#define DD_USE_ENCODER1 0
+#define DD_USE_ENCODER2 0
+#define DD_NUM_OF_SV 0
+
+#include "DD_RC.h"
+#include "DD_MD.h"
+#include "DD_SV.h"
 
 #define MECHA1_MD1 0
 #define MECHA1_MD2 1

@@ -5,11 +5,12 @@
 #include "message.h"
 #include "SystemTaskManager.h"
 #include "MW_USART.h"
+#include "constManager.h"
 
 static volatile int is_not_avaiable = 8+1;
 static volatile uint8_t correct[RC_DATA_NUM];
 
-#define _RELANGE(x) (x<15?(x>-15?x:-15):15)
+#define _RELANGE(x) (x<DD_RC_ANALOG_MAX?(x>-DD_RC_ANALOG_MAX?x:-DD_RC_ANALOG_MAX):DD_RC_ANALOG_MAX)
 
 int DD_RCInit(uint8_t rc_data[RC_DATA_NUM], uint32_t timeout){
   uint32_t remaining;
@@ -25,6 +26,8 @@ int DD_RCInit(uint8_t rc_data[RC_DATA_NUM], uint32_t timeout){
 
   MW_USART3ReceiveMult(RC_DATA_NUM, rc_data);
   while( remaining > g_SY_system_counter && is_not_avaiable ){
+    MW_printf("$0");
+    flush();
   }
 
   if( is_not_avaiable ){
@@ -57,19 +60,19 @@ void DD_RCTask(uint8_t rc_data[RC_DATA_NUM], uint8_t out_data[RC_DATA_NUM]){
 }
 
 int DD_RCGetLX(volatile uint8_t data[RC_DATA_NUM]){
-  return _RELANGE((int)data[__RC_LX] - (int)correct[__RC_LX]);
+  return _RELANGE((int)data[__RC_LX] - g_c_data[_EDITLIST_NUM+0]);
 }
 
 int DD_RCGetLY(volatile uint8_t data[RC_DATA_NUM]){
-  return _RELANGE((int)data[__RC_LY] - (int)correct[__RC_LY]);
+  return _RELANGE((int)data[__RC_LY] - g_c_data[_EDITLIST_NUM+1]);
 }
 
 int DD_RCGetRX(volatile uint8_t data[RC_DATA_NUM]){
-  return _RELANGE((int)data[__RC_RX] - (int)correct[__RC_RX]);
+  return _RELANGE((int)data[__RC_RX] - g_c_data[_EDITLIST_NUM+2]);
 }
 
 int DD_RCGetRY(volatile uint8_t data[RC_DATA_NUM]){
-  return _RELANGE((int)data[__RC_RY] - (int)correct[__RC_RY]);
+  return _RELANGE((int)data[__RC_RY] - g_c_data[_EDITLIST_NUM+3]);
 }
 
 int DD_RCPrint(volatile uint8_t data[RC_DATA_NUM]){

@@ -24,6 +24,7 @@
 volatile uint32_t g_SY_system_counter;
 volatile uint8_t g_rc_data[RC_DATA_NUM]={0x0,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,};
 static uint8_t rc_rcv[RC_DATA_NUM];
+volatile led_mode_t g_led_mode = lmode_1;
 
 static
 int SY_init(void);
@@ -56,14 +57,14 @@ int main(void){
     message("err", "I2CConnectionTest Faild%d", ret);
     MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
-  }
+    }
+  
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
   MW_printf("\033[2J\033[1;1H");
   
   while( 1 ){
-    message("msg","hell");
    
     MW_IWDGClr();//reset counter of watch dog  
 
@@ -71,6 +72,7 @@ int main(void){
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
       DD_RCPrint((uint8_t*)g_rc_data);
       DD_print();
+      MW_printf("$%d",(int)g_led_mode);
       flush(); /* out message. */
       MW_printf("\033[1;1H");
     }
@@ -162,6 +164,8 @@ int SY_init(void){
     return ret;
   }
   
+  appInit();
+
   return EXIT_SUCCESS;
 } /* SY_init */
 
