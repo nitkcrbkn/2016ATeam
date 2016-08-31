@@ -62,10 +62,7 @@ int main(void){
 
   message("msg", "start!!\n");
   MW_printf("\033[2J\033[1;1H");
-  /*   while(1)
-    {
-      message("msg", "oencoder value is %ld",DD_encoder2Get_int32());  
-      }*/
+
   while( 1 ){  
     SY_doAppTasks();
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
