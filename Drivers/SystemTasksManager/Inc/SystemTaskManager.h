@@ -14,5 +14,6 @@ extern volatile uint8_t g_rc_data[RC_DATA_NUM];
 #define _MAX(x,y) ((x)>(y)?(x):(y))
 #define _MIN(x,y) ((x)<(y)?(x):(y))
 
+void SY_wait(int ms);
 
 #endif
