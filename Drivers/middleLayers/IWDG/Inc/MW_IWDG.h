@@ -14,6 +14,7 @@
 void MW_SetIWDGPrescaler(uint32_t Prescaler);
 void MW_SetIWDGReload(uint32_t Reload);
 
+
 int MW_IWDGInit(void);
 
 void MW_IWDGClr(void);
