@@ -17,9 +17,6 @@ const tc_slope_lim_t tc_slope_lim_dri = {
 static
 int suspensionSystem(void);
 
-static
-int LEDSystem(void);
-
 /*メモ
  * *g_ab_h...ABのハンドラ
  * *g_md_h...MDのハンドラ
@@ -108,17 +105,3 @@ int suspensionSystem(void){
 
   return EXIT_SUCCESS;
 } /* suspensionSystem */
-
-static int LEDSystem(void){
-  if(__RC_ISPRESSED_UP(g_rc_data)){
-    g_led_mode = lmode_1;
-  }
-  if(__RC_ISPRESSED_DOWN(g_rc_data)){
-    g_led_mode = lmode_2;
-  }
-  if(__RC_ISPRESSED_RIGHT(g_rc_data)){
-    g_led_mode = lmode_3;
-  }
-
-  return EXIT_SUCCESS;
-}
