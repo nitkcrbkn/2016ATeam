@@ -175,8 +175,7 @@ void adjustPrint(int point){
 
 static
 void interval_10ms(void){
-    while(g_SY_system_counter%10==0);
-    while(g_SY_system_counter%10!=0);
+  SY_wait(10);
 }
 
 static
