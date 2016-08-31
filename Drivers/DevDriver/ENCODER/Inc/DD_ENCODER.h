@@ -14,9 +14,9 @@
 #define DD_ENCODER_H
 
 #include <stdint.h>
-#include "message.h"
 #include "MW_ENCODER.h"
-
+#include "DD_Gene.h"
+#include "message.h"
 /*
  *エンコーダーモジュールの初期化
  *引数・・・無し
@@ -26,19 +26,17 @@
 int32_t DD_InitEncoder1(void);
 int32_t DD_InitEncoder2(void);
 
+int32_t DD_encoder1update(void);
+int32_t DD_encoder2update(void);
+
 /*
  *エンコーダーの現在値を取得します。
  *引数・・・無し
- *返り値・・・エンコーダーの現在値(最大65535)
+ *返り値・・・エンコーダーの現在値
  */
-uint16_t DD_GetEncoder1(void);
-uint16_t DD_GetEncoder2(void);
+int32_t DD_encoder1Get_int32(void);
+int32_t DD_encoder2adGet_int32(void);
 
-/*前回実行した時の値との差を取得します。
- *引数・・・無し
- *返り値・・・前回実行した時の値との差
- */
-uint16_t DD_DiffEncoder1(void);
-uint16_t DD_DiffEncoder2(void);
+int DD_encoderprint(void);
 
 #endif

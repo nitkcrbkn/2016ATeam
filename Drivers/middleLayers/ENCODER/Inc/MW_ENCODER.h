@@ -23,5 +23,6 @@ typedef enum
 
 int MW_EncoderInit(encoderid_t id);
 int16_t MW_GetEncoderVal(encoderid_t id);
+void  MW_WriteEncoderVal(encoderid_t id,int16_t val);
 
 #endif /* MIDLEWARE_INC_MW_ENCODER_H_ */
