@@ -23,11 +23,11 @@
  *返り値・・・EXIT_SUCCESS:初期化成功
  *　　　　　　EXIT_FAILURE:初期化失敗
  */
-int32_t DD_InitEncoder1(void);
-int32_t DD_InitEncoder2(void);
+int DD_InitEncoder1(void);
+int DD_InitEncoder2(void);
 
-int32_t DD_encoder1update(void);
-int32_t DD_encoder2update(void);
+int DD_encoder1update(void);
+int DD_encoder2update(void);
 
 /*
  *エンコーダーの現在値を取得します。

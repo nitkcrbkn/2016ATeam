@@ -14,22 +14,22 @@
 static int32_t encval1 = 0;
 static int32_t encval2 = 0;
 
-int32_t DD_InitEncoder1(void){
+int DD_InitEncoder1(void){
   return MW_EncoderInit(ENCODER1ID);
 }
 
-int32_t DD_InitEncoder2(void){
+int DD_InitEncoder2(void){
   return MW_EncoderInit(ENCODER2ID);
 }
 
-int32_t DD_encoder1update(void){  
+int DD_encoder1update(void){  
   encval1 += (int32_t)MW_GetEncoderVal(ENCODER1ID);
   MW_WriteEncoderVal(ENCODER1ID,0);
     
   return EXIT_SUCCESS;
 }
 
-int32_t DD_encoder2update(void){  
+int DD_encoder2update(void){  
   encval2 += (int32_t)MW_GetEncoderVal(ENCODER2ID);
   MW_WriteEncoderVal(ENCODER2ID,0);
     
