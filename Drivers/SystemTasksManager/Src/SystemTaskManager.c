@@ -92,6 +92,7 @@ void SY_wait(int ms){
   time = g_SY_system_counter;
   while(time + ms > g_SY_system_counter)
     MW_IWDGClr();//reset counter of watch dog
+  MW_IWDGClr();//reset counter of watch dog
 }
 
 static
