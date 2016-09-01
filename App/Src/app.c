@@ -72,7 +72,7 @@ int appTask(void){
   if( ret ){
     return ret;
   }
-     
+
   return EXIT_SUCCESS;
 }
 
@@ -116,7 +116,7 @@ int suspensionSystem(void){
       break;
     default: return EXIT_FAILURE;
     }
-    
+
     /* 目標値計算 */
     /*これは中央か?±3程度余裕を持つ必要がある。*/
     if( abs(rc_analogdata) < CENTRAL_THRESHOLD ){
@@ -124,18 +124,18 @@ int suspensionSystem(void){
     }else{
       target_val = rc_analogdata * md_gain;
     }
-    control_trapezoid(&tc_slope_lim_dri , &g_md_h[idx], target_val, is_reverse);
+    control_trapezoid(&tc_slope_lim_dri, &g_md_h[idx], target_val, is_reverse);
   }
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
 int pushSystem(void){
   if( __RC_ISPRESSED_UP(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_psh , &g_md_h[ROB1_PSH], MD_MAX_DUTY_PSH, _IS_REVERSE_PSH);
+    control_trapezoid(&tc_slope_lim_psh, &g_md_h[ROB1_PSH], MD_MAX_DUTY_PSH, _IS_REVERSE_PSH);
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_psh , &g_md_h[ROB1_PSH], -MD_MAX_DUTY_PSH, _IS_REVERSE_PSH);
+    control_trapezoid(&tc_slope_lim_psh, &g_md_h[ROB1_PSH], -MD_MAX_DUTY_PSH, _IS_REVERSE_PSH);
   }else{
-    control_trapezoid(&tc_slope_lim_psh , &g_md_h[ROB1_PSH], 0, _IS_REVERSE_PSH);
+    control_trapezoid(&tc_slope_lim_psh, &g_md_h[ROB1_PSH], 0, _IS_REVERSE_PSH);
   }
 
   return EXIT_SUCCESS;
@@ -147,7 +147,7 @@ int ABSystem(void){
 
   if( __RC_ISPRESSED_R1(g_rc_data)){
     /* R1が押され続けている間は処理を行わない */
-    if( !has_pressed_R1 ){            
+    if( !has_pressed_R1 ){
       has_pressed_R1 = 1;
       /* R1がすでに押されているか */
       if(( g_ab_h[ROB1_AB].dat & ( LIFTL | LIFTR )) != ( LIFTL | LIFTR )){
@@ -162,7 +162,7 @@ int ABSystem(void){
 
   if( __RC_ISPRESSED_L1(g_rc_data)){
     /* L1が押され続けている間は処理を行わない */
-    if( !has_pressed_L1 ){            
+    if( !has_pressed_L1 ){
       has_pressed_L1 = 1;
       /* L1がすでに押されているか */
       if(( g_ab_h[ROB1_AB].dat & ( PNCHL | PNCHR )) != ( PNCHL | PNCHR )){
@@ -177,3 +177,4 @@ int ABSystem(void){
 
   return EXIT_SUCCESS;
 } /* ABSystem */
+
