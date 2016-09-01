@@ -39,9 +39,11 @@ int armSystem_modeA(void);
 static
 int armSystem_modeB(void);
 
+/*vacuumSystem*/
 static
 int vacSystem(void);
 
+/*LEDSystem*/
 static
 int LEDSystem(void);
 
@@ -79,6 +81,7 @@ int appTask(void){
     return ret;
   }
 
+  /* モードA,Bで関数を分けるb */
   switch( g_ope_mode ){
   case OPE_MODE_A:
     ret = suspensionSystem_modeA();
@@ -134,6 +137,7 @@ int changeOpeMode(void){
 /*プライベート 足回りシステム*/
 static
 int suspensionSystem_modeA(void){
+  /* ボタンを１つ押すと、４つのモータが動作する */
   if( __RC_ISPRESSED_UP(g_rc_data)){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
@@ -162,7 +166,7 @@ int suspensionSystem_modeA(void){
   }
 
   return EXIT_SUCCESS;
-}
+} /* suspensionSystem_modeA */
 
 static
 int suspensionSystem_modeB(void){
@@ -224,7 +228,7 @@ int suspensionSystem_modeB(void){
   }
 
   return EXIT_SUCCESS;
-} /* suspensionSystem */
+} /* suspensionSystem_modeB */
 
 static
 int armSystem_modeA(void){
@@ -290,7 +294,7 @@ int armSystem_modeB(void){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], -MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
   }else{
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], 0, _IS_REVERSE_ARMT);
-  }
+  } 
 
   /* アームの上下動作の制御 */
   if( __RC_ISPRESSED_UP(g_rc_data)){
@@ -311,7 +315,7 @@ int armSystem_modeB(void){
   }
 
   return EXIT_SUCCESS;
-}
+} /* armSystem_modeB */
 
 static
 int vacSystem(void){
