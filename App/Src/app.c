@@ -49,11 +49,6 @@ int appTask(void){
   if( ret ){
     return ret;
   }
-
-  ret = LEDSystem();
-  if(ret){
-    return ret;
-  }
      
   return EXIT_SUCCESS;
 }
