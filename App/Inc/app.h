@@ -1,9 +1,13 @@
 #ifndef __APP_H
 #define __APP_H
 
+
 /* モータ、電磁弁の個数 */
 #define DD_NUM_OF_MD 2
 #define DD_NUM_OF_AB 0
+
+#define DD_USE_ENCODER1 0
+#define DD_USE_ENCODER2 0
 #define DD_NUM_OF_SV 0
 
 #include "DD_RC.h"
