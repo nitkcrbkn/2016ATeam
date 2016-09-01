@@ -2,7 +2,7 @@
 #define __APP_H
 
 /* モータ、電磁弁の個数 */
-#define DD_NUM_OF_MD 6
+#define DD_NUM_OF_MD 7
 #define DD_NUM_OF_AB 1
 #define DD_NUM_OF_SV 0
 
@@ -25,10 +25,11 @@
 /* 各モータのインデックス */
 #define ROB0_DRIL 0
 #define ROB0_DRIR 1
-#define ROB0_DRIB 2
-#define ROB0_ARMT 3
-#define ROB0_ARME 4
-#define ROB0_ARMS 5
+#define ROB0_DRIBF 2
+#define ROB0_DRIBB 3
+#define ROB0_ARMT 4
+#define ROB0_ARME 5
+#define ROB0_ARMS 6
 
 /* 電磁弁のインデックス */
 #define ROB0_VAC 0
