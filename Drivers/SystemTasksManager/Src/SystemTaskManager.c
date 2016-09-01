@@ -56,14 +56,14 @@ int main(void){
     message("err", "I2CConnectionTest Faild%d", ret);
     MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
-  }
+    }
   
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
   MW_printf("\033[2J\033[1;1H");
-  
-  while( 1 ){
+
+  while( 1 ){  
     SY_doAppTasks();
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
       DD_RCPrint((uint8_t*)g_rc_data);
