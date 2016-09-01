@@ -4,6 +4,9 @@
 /* モータ、電磁弁の個数 */
 #define DD_NUM_OF_MD 7
 #define DD_NUM_OF_AB 1
+
+#define DD_USE_ENCODER1 0
+#define DD_USE_ENCODER2 0
 #define DD_NUM_OF_SV 0
 
 #include "DD_RC.h"

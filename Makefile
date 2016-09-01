@@ -170,6 +170,26 @@ $(OBJDIR)/%.o: $(word 5,$(DEV_SRCDIRS))/%.c
 	-mkdir -p $(OBJDIR)
 	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
 
+$(OBJDIR)/%.o: $(word 6,$(DEV_SRCDIRS))/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
+
+$(OBJDIR)/%.o: $(word 7,$(DEV_SRCDIRS))/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
+
+$(OBJDIR)/%.o: $(word 8,$(DEV_SRCDIRS))/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
+
+$(OBJDIR)/%.o: $(word 9,$(DEV_SRCDIRS))/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
+
+$(OBJDIR)/%.o: $(word 10,$(DEV_SRCDIRS))/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDEDIRS) -o $@ $<
+
 $(BINDIR)/$(PROJECT).elf: $(OBJECTS) $(SYS_OBJECTS)
 	-mkdir -p $(BINDIR)
 	$(LD) $(LD_FLAGS) -T $(LINKER_SCRIPT) $(LIBRARY_PATHS) -o $@ $^ -Wl,--start-group $(LIBRARIES) $(LD_SYS_LIBS) -Wl,--end-group
