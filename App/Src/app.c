@@ -49,7 +49,7 @@ int appTask(void){
   if( ret ){
     return ret;
   }
-     
+
   return EXIT_SUCCESS;
 }
 
@@ -95,8 +95,9 @@ int suspensionSystem(void){
     }
 
     /*台数制御*/
-    control_trapezoid(&tc_slope_lim_dri , &g_md_h[idx], target_val, is_reverse);
+    control_trapezoid(&tc_slope_lim_dri, &g_md_h[idx], target_val, is_reverse);
   }
 
   return EXIT_SUCCESS;
 } /* suspensionSystem */
+
