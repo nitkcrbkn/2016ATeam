@@ -22,4 +22,6 @@ extern volatile led_mode_t g_led_mode;
 #define _MAX(x,y) ((x)>(y)?(x):(y))
 #define _MIN(x,y) ((x)<(y)?(x):(y))
 
+void SY_wait(int ms);
+
 #endif
