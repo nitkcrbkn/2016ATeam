@@ -149,13 +149,13 @@ int suspensionSystem_modeA(void){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
   }else if( __RC_ISPRESSED_LEFT(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], 0, _IS_REVERSE_DRIB);
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], 0, _IS_REVERSE_DRIB);
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], 0, _IS_REVERSE_DRIB);
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], 0, _IS_REVERSE_DRIB);
   }else{
@@ -289,9 +289,9 @@ static
 int armSystem_modeB(void){
   /* アーム基部の回転動作の制御 */
   if( __RC_ISPRESSED_L1(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
-  }else if( __RC_ISPRESSED_R1(g_rc_data)){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], -MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
+  }else if( __RC_ISPRESSED_R1(g_rc_data)){
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
   }else{
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], 0, _IS_REVERSE_ARMT);
   } 
