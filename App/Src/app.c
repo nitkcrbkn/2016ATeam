@@ -8,6 +8,16 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
+const tc_slope_lim_t tc_slope_lim_dri = {
+  .rising_val = 200,
+  .falling_val = 200,
+};
+
+const tc_slope_lim_t tc_slope_lim_psh = {
+  .rising_val = MD_MAX_DUTY_PSH,
+  .falling_val = MD_MAX_DUTY_PSH,
+};
+
 /*suspensionSystem*/
 static
 int suspensionSystem(void);
@@ -70,8 +80,6 @@ int appTask(void){
 static
 int suspensionSystem(void){
   const int num_of_motor = 3;       /*モータの個数*/
-  const int rising_val = 200;       /* 立ち上がり値 */
-  const int falling_val = 200;       /* 立ち下がり値 */
   int rc_analogdata;       /*アナログデータ*/
   int is_reverse;       /* 反転するか */
   unsigned int idx;       /*インデックス*/
@@ -89,27 +97,21 @@ int suspensionSystem(void){
       rc_analogdata = DD_RCGetLY(g_rc_data);
       md_gain = MD_GAIN_DRIL;
       /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIL
-      is_reverse = 1;
-#endif
+      is_reverse = _IS_REVERSE_DRIL;
       idx = ROB1_DRIL;
       break;
     case ROB1_DRIR:
       rc_analogdata = DD_RCGetRY(g_rc_data);
       md_gain = MD_GAIN_DRIR;
       /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIR
-      is_reverse = 1;
-#endif
+      is_reverse = _IS_REVERSE_DRIR;
       idx = ROB1_DRIR;
       break;
     case ROB1_DRIB:
       rc_analogdata = DD_RCGetLY(g_rc_data);
       md_gain = MD_GAIN_DRIB;
       /* 前後の向きを反転 */
-#if _IS_REVERSE_DRIB
-      is_reverse = 1;
-#endif
+      is_reverse = _IS_REVERSE_DRIB;
       idx = ROB1_DRIB;
       break;
     default: return EXIT_FAILURE;
@@ -122,35 +124,18 @@ int suspensionSystem(void){
     }else{
       target_val = rc_analogdata * md_gain;
     }
-
-    /* モータの回転を反転 */
-    if( is_reverse ){
-      target_val = -target_val;
-    }
-
-    control_trapezoid(rising_val, falling_val, &g_md_h[idx], target_val);
+    control_trapezoid(&tc_slope_lim_dri, &g_md_h[idx], target_val, is_reverse);
   }
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
 int pushSystem(void){
   if( __RC_ISPRESSED_UP(g_rc_data)){
-#if _REVERSE_PSH
-    g_md_h[ROB1_PSH].mode = D_MMOD_FORWARD;
-#else
-    g_md_h[ROB1_PSH].mode = D_MMOD_BACKWARD;
-#endif
-    g_md_h[ROB1_PSH].duty = MD_MAX_DUTY_PSH;
+    control_trapezoid(&tc_slope_lim_psh, &g_md_h[ROB1_PSH], MD_MAX_DUTY_PSH, _IS_REVERSE_PSH);
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
-#if _REVERSE_PSH
-    g_md_h[ROB1_PSH].mode = D_MMOD_BACKWARD;
-#else
-    g_md_h[ROB1_PSH].mode = D_MMOD_FORWARD;
-#endif
-    g_md_h[ROB1_PSH].duty = MD_MAX_DUTY_PSH;
+    control_trapezoid(&tc_slope_lim_psh, &g_md_h[ROB1_PSH], -MD_MAX_DUTY_PSH, _IS_REVERSE_PSH);
   }else{
-    g_md_h[ROB1_PSH].mode = D_MMOD_BRAKE;
-    g_md_h[ROB1_PSH].duty = 0;
+    control_trapezoid(&tc_slope_lim_psh, &g_md_h[ROB1_PSH], 0, _IS_REVERSE_PSH);
   }
 
   return EXIT_SUCCESS;
@@ -161,14 +146,14 @@ int ABSystem(void){
   static int has_pressed_L1;
 
   if( __RC_ISPRESSED_R1(g_rc_data)){
-    if( !has_pressed_R1 ){            /* R1が押され続けている間は処理を行わない */
+    /* R1が押され続けている間は処理を行わない */
+    if( !has_pressed_R1 ){
       has_pressed_R1 = 1;
-      if(( g_ab_h[AB].dat & ( LIFTL | LIFTR )) != ( LIFTL | LIFTR )){           /*
-                                                                                 *R1がすでに押されているか
-                                                                                 **/
-        g_ab_h[AB].dat |= ( LIFTL | LIFTR );
+      /* R1がすでに押されているか */
+      if(( g_ab_h[ROB1_AB].dat & ( LIFTL | LIFTR )) != ( LIFTL | LIFTR )){
+        g_ab_h[ROB1_AB].dat |= ( LIFTL | LIFTR );
       }else{
-        g_ab_h[AB].dat &= ~( LIFTL | LIFTR );
+        g_ab_h[ROB1_AB].dat &= ~( LIFTL | LIFTR );
       }
     }
   }else{
@@ -176,14 +161,14 @@ int ABSystem(void){
   }
 
   if( __RC_ISPRESSED_L1(g_rc_data)){
-    if( !has_pressed_L1 ){            /* L1が押され続けている間は処理を行わない */
+    /* L1が押され続けている間は処理を行わない */
+    if( !has_pressed_L1 ){
       has_pressed_L1 = 1;
-      if(( g_ab_h[AB].dat & ( PNCHL | PNCHR )) != ( PNCHL | PNCHR )){           /*
-                                                                                 *L1がすでに押されているか
-                                                                                 **/
-        g_ab_h[AB].dat |= ( PNCHL | PNCHR );
+      /* L1がすでに押されているか */
+      if(( g_ab_h[ROB1_AB].dat & ( PNCHL | PNCHR )) != ( PNCHL | PNCHR )){
+        g_ab_h[ROB1_AB].dat |= ( PNCHL | PNCHR );
       }else{
-        g_ab_h[AB].dat &= ~( PNCHL | PNCHR );
+        g_ab_h[ROB1_AB].dat &= ~( PNCHL | PNCHR );
       }
     }
   }else{
