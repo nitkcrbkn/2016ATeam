@@ -2,6 +2,7 @@
 #include "app.h"
 #include "SystemTaskManager.h"
 #include <stdlib.h>
+#include "trapezoid_ctl.h"
 
 int control_trapezoid(const tc_slope_lim_t *tc_slope_lim, DD_MDHand_t *md_h, int target_val, int is_reverse){
   int current_val = md_h->duty; /* 現在のデューティ値 */
