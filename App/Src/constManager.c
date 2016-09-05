@@ -8,14 +8,10 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
-#define _SCR_CURSOR_SET(x,y) MW_printf("\033[%d;%dH",(int)(y)+1,(int)(x)+1)
-#define _SCR_CLEAR() MW_printf("\033[2J")
-
-#define _MAX(x,y) ((x)>(y)?(x):(y))
-#define _MIN(x,y) ((x)<(y)?(x):(y))
-
-/*exclude dumy*/
-#define _EDITLIST_NUM  ((sizeof(editlist)/sizeof(editlist[0])))
+typedef enum{
+  DM_HELP,
+  DM_RC_VAL
+} ad_disp_mode_t;
 
 /*second, write const description.*/
 static const adjust_t defaultad={
@@ -54,7 +50,35 @@ static const adjust_t defaultad={
     .display_name = "rc cntr theres",
     .display_unit = "/16",
   },
-
+  .rc_centre_thereshold2 = {
+    .value = 4,
+    .maxvalue = 6,
+    .minvalue = 2,
+    .display_name = "rc cntr theres",
+    .display_unit = "/16",
+  },
+  .rc_centre_thereshold3 = {
+    .value = 4,
+    .maxvalue = 6,
+    .minvalue = 2,
+    .display_name = "rc cntr theres",
+    .display_unit = "/16",
+  },
+  .rc_centre_thereshold4 = {
+    .value = 4,
+    .maxvalue = 6,
+    .minvalue = 2,
+    .display_name = "rc cntr theres",
+    .display_unit = "/16",
+  },
+  .rc_centre_thereshold5 = {
+    .value = 4,
+    .maxvalue = 6,
+    .minvalue = 2,
+    .display_name = "rc cntr theres",
+    .display_unit = "/16",
+  },
+  
   /*template
   . = {
     .value = ,
@@ -69,18 +93,27 @@ static const adjust_t defaultad={
 adjust_t g_adjust;
 
 /*finary, add edit list.*/
-static const_element_t *editlist[]={
+const_element_t *editlist[_EDITLIST_NUM]={
   &(g_adjust.rightadjust),
   &(g_adjust.leftadjust),
   &(g_adjust.steeringtime),
   &(g_adjust.rctimeout),
   &(g_adjust.rc_centre_thereshold),
+  &(g_adjust.rc_centre_thereshold2),
+  &(g_adjust.rc_centre_thereshold3),
+  &(g_adjust.rc_centre_thereshold4),
+  &(g_adjust.rc_centre_thereshold5),
 };
 
-int data[_EDITLIST_NUM+1];
+static
+ad_disp_mode_t mode = DM_HELP;
+
+int g_c_data[_RC_ADJUST_NUM+_EDITLIST_NUM+4+1];
 
 static
 int saveData(void);
+static
+int RC_adjust(void);
 
 /* reload default value */
 static
@@ -91,8 +124,11 @@ void reloadDefault(void){
 static
 void load(void){
   int i;
+  for(i=0;i<(int)_EDITLIST_NUM+4;i++){
+    g_c_data[i] = ((int*)WRITE_ADDR)[i];
+  }
   for(i=0;i<(int)_EDITLIST_NUM;i++){
-    editlist[i]->value = ((int*)WRITE_ADDR)[i];
+    editlist[i]->value = g_c_data[i];
   }
 }
 
@@ -100,7 +136,7 @@ static
 int save(void){
   int i;
   for(i=0;i<(int)_EDITLIST_NUM;i++){
-    data[i] = editlist[i]->value;
+    g_c_data[i] = editlist[i]->value;
   }
 
   return saveData();  
@@ -122,7 +158,7 @@ void ad_const_elementPrint(int i,const_element_t *list){
 static
 int saveData(void){
   /*the boundary of size cause write failure, so this is arrenged the size.*/
-  if(MW_flashWrite(data, WRITE_ADDR, sizeof(data)&0xFFFFFFFE)==MW_FLASH_OK){
+  if(MW_flashWrite(g_c_data, WRITE_ADDR, sizeof(g_c_data)&0xFFFFFFFE)==MW_FLASH_OK){
     return EXIT_SUCCESS;
   }
   else{
@@ -137,7 +173,7 @@ void adjustPrint(int point){
   _SCR_CURSOR_SET(0, 0);
   MW_printf("  [NO] <%-"_NAME_LEN_STR"s> [MIN - MAX][Val][%"_UNIT_LEN_STR"s]\n","Name","Unit");
   MW_printf("-------------------------------------------------\n");
-  for(i=0;i<(int)_EDITLIST_NUM+1;i++){
+  for(i=0;i<(int)_EDITLIST_NUM;i++){
     if(i==point){
       MW_printf("> ");
     }else{
@@ -147,19 +183,41 @@ void adjustPrint(int point){
       ad_const_elementPrint(i,editlist[i]);
       MW_printf("\n");
     }
-    if(i==_EDITLIST_NUM+0){
-      MW_printf("exit\n");
-    }
   }
   flush();
-  MW_printf("+---------------------+--------------------+\n");
-  MW_printf("| %s...%15s|%s...%15s|\n","↑ ","CURSOR UP","↓ ","CURSOR DOWN");
-  MW_printf("| %s...%15s|%s...%15s|\n","L1","VALUE DEC@1","R1","VALUE INC@1");
-  MW_printf("| %s...%15s|%s...%15s|\n","L2","VALUE DEC@10","R2","VALUE INC@10");
-  MW_printf("| %s...%15s|%s...%15s|\n","△ ","LOAD ","□ ","SAVE ");
-  MW_printf("+---------------------+--------------------+\n");
-  flush();
+
+  _SCR_CURSOR_SET(0, _EDITLIST_NUM+3);
+  switch(mode){
+  case DM_HELP:
+    MW_printf("+-----\033[1;33mHELP\033[0;39m---------------+------------------------+\n");
+    MW_printf("| %s...%-18s| %s...%-18s|\n","↑ ","CURSOR UP","↓ ","CURSOR DOWN");
+    MW_printf("| %s...%-18s| %s...%-18s|\n","L1","VALUE DEC@1","R1","VALUE INC@1");
+    MW_printf("| %s...%-18s| %s...%-18s|\n","L2","VALUE DEC@10","R2","VALUE INC@10");
+    MW_printf("| %s...%-18s| %s...%-18s|\n","× ","OK","○ ","sw HELP/RC data");
+    MW_printf("| %s...%-18s| %s...%-18s|\n","△ ","LOAD DEF","□ ","SAVE 2 FLASH");
+    MW_printf("+------------------------+------------------------+\n");
+    flush();
+    break;
+  case DM_RC_VAL:
+    MW_printf("------\033[1;33mRC VAL\033[0;39m--------------------------------------\n");
+    DD_RCPrint(g_rc_data);
+    flush();
+    break;
+  }
 }
+
+static
+void interval_10ms(void){
+    while(g_SY_system_counter%10==0);
+    while(g_SY_system_counter%10!=0);
+}
+
+static
+void wait(unsigned int ms){
+  unsigned int old = g_SY_system_counter;
+  while(old + ms > g_SY_system_counter);
+}
+
 
 /*do key task*/
 static
@@ -180,7 +238,7 @@ int ad_keyTask(void){
       if( is_pressed_up ){
 	select = _MAX(0, select-1);
       } else if( is_pressed_down ){
-	select = _MIN((int)_EDITLIST_NUM, select+1);
+	select = _MIN((int)_EDITLIST_NUM-1, select+1);
       }
       _SCR_CURSOR_SET(0, select+2);
       MW_printf(">");
@@ -221,11 +279,11 @@ int ad_keyTask(void){
     }
   }
 
-  _SCR_CURSOR_SET(0, _EDITLIST_NUM+8);
+  _SCR_CURSOR_SET(0, _EDITLIST_NUM+10);
   
   /*reload value*/
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
-    MW_printf("load default value");
+    message("msg","load default value");
     reloadDefault();
     adjustPrint(select);
   }
@@ -246,14 +304,127 @@ int ad_keyTask(void){
     }
   }
 
+  else if(__RC_ISPRESSED_LEFT(g_rc_data)){
+    message("msg","RC_ADJUST");
+    wait(1000);      
+    RC_adjust();
+    adjustPrint(select);
+    return 1;
+  }
+  
   /*screen update*/
   flush();
 
-  if(select==_EDITLIST_NUM){
+  if(__RC_ISPRESSED_CROSS(g_rc_data)){
     select = 0;
+    message("msg","canceled");
+    wait(1000);
+    _SCR_CLEAR();
+    _SCR_CURSOR_SET(0,0);
     return 0;
   }
   return 1;
+}
+
+static
+int RC_adjust_Zero(void){
+  _SCR_CLEAR();
+  _SCR_CURSOR_SET(0, 10);
+  MW_printf("adjust zero\n");
+  MW_printf("○ ... adjust\n× ... cancel\n");
+  flush();
+
+  int p1x,p1y;
+  int p2x,p2y;
+  while(1){
+    _SCR_CURSOR_SET(0, 0);
+    MW_printf("(%d,%d),(%d,%d)\n",
+	      __RC_GET_LX_VAL(g_rc_data),
+	      __RC_GET_LY_VAL(g_rc_data),
+	      __RC_GET_RX_VAL(g_rc_data),
+	      __RC_GET_RY_VAL(g_rc_data)
+	      );
+    
+    p1x = __RC_GET_LX_VAL(g_rc_data);
+    p1y = __RC_GET_LY_VAL(g_rc_data);
+    p2x = __RC_GET_RX_VAL(g_rc_data);
+    p2y = __RC_GET_RY_VAL(g_rc_data);
+
+    _SCR_CURSOR_SET(0,1);
+    MW_printf("+---------------+  "" +---------------+  \n");
+    MW_printf("|       |       |  "" |       |       |  \n");
+    MW_printf("|       |       |  "" |       |       |  \n");
+    MW_printf("|       |       |  "" |       |       |  \n");
+    MW_printf("|-------+-------|  "" |-------+-------|  \n");
+    MW_printf("|       |       |  "" |       |       |  \n");
+    MW_printf("|       |       |  "" |       |       |  \n");
+    MW_printf("|       |       |  "" |       |       |  \n");
+    MW_printf("+---------------+  "" +---------------+  \n");
+    
+    _SCR_CURSOR_SET(((g_c_data[_EDITLIST_NUM + 0] - 16 + 3)*2)+2,g_c_data[_EDITLIST_NUM + 1] - 16+3+2);
+    MW_printf("\033[41m  \033[49m");
+    _SCR_CURSOR_SET(((g_c_data[_EDITLIST_NUM + 2] - 16 + 3)*2)+2+20,g_c_data[_EDITLIST_NUM + 3] - 16+3+2);
+    MW_printf("\033[41m  \033[49m");
+    {
+      if(
+	 p1x <= 16 + 3&&
+	 p1x >= 16 - 3&&
+	 p1y <= 16 + 3&&
+	 p1y >= 16 - 3
+	 ){
+
+	_SCR_CURSOR_SET(((p1x - 16 + 3)*2)+2,p1y - 16+3+2);
+	MW_printf("\033[42m  \033[49m");
+      }
+      if(
+	 p2x <= 16 + 3&&
+	 p2x >= 16 - 3&&
+	 p2y <= 16 + 3&&
+	 p2y >= 16 - 3
+	 ){
+
+	_SCR_CURSOR_SET(((p2x - 16 + 3)*2)+2+20,p2y - 16+3+2);
+	MW_printf("\033[42m  \033[49m");
+	flush();
+	interval_10ms();
+	interval_10ms();
+	interval_10ms();
+	interval_10ms();
+	interval_10ms();
+	interval_10ms();
+	interval_10ms();
+	interval_10ms();
+	interval_10ms();
+	interval_10ms();
+      }
+    }
+    interval_10ms();
+
+    if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
+      g_c_data[_EDITLIST_NUM+0] = __RC_GET_LX_VAL(g_rc_data);
+      g_c_data[_EDITLIST_NUM+1] = __RC_GET_LY_VAL(g_rc_data);
+      g_c_data[_EDITLIST_NUM+2] = __RC_GET_RX_VAL(g_rc_data);
+      g_c_data[_EDITLIST_NUM+3] = __RC_GET_RY_VAL(g_rc_data);
+      message("msg","adjusted");
+      wait(1000);
+      return EXIT_SUCCESS;
+    }
+    else if(__RC_ISPRESSED_CROSS(g_rc_data)){
+      message("msg","canceled");
+      wait(1000);
+      _SCR_CLEAR();
+      return EXIT_SUCCESS;
+    }
+  }
+  
+  return EXIT_SUCCESS;
+}
+
+static
+int RC_adjust(void){
+  if(RC_adjust_Zero()!=EXIT_SUCCESS)return EXIT_FAILURE;
+  
+  return EXIT_SUCCESS;
 }
 
 static
@@ -261,6 +432,8 @@ int adjust(void){
   int count = 0;
   bool ret = true;
   bool had_key_pressed;
+  bool has_circle_pressed = false;
+  
   _SCR_CLEAR();
   adjustPrint(0);
 
@@ -273,8 +446,10 @@ int adjust(void){
       __RC_ISPRESSED_R1(g_rc_data)||
       __RC_ISPRESSED_R2(g_rc_data)||
       __RC_ISPRESSED_TRIANGLE(g_rc_data)||
-      __RC_ISPRESSED_SQARE(g_rc_data);
-    
+      __RC_ISPRESSED_SQARE(g_rc_data)||
+      __RC_ISPRESSED_LEFT(g_rc_data)||
+      __RC_ISPRESSED_CROSS(g_rc_data);
+
     if(had_key_pressed){
       if(count == 0||(count > 30&&count % 5==0)){
 	ret = ad_keyTask();
@@ -285,8 +460,25 @@ int adjust(void){
       count = 0;
     }
 
-    while(g_SY_system_counter%10==0);
-    while(g_SY_system_counter%10!=0);
+    if(!has_circle_pressed&&__RC_ISPRESSED_CIRCLE(g_rc_data)){
+      if(mode==DM_HELP)mode = DM_RC_VAL;
+      else mode = DM_HELP;
+      _SCR_CLEAR();
+      adjustPrint(0);
+      has_circle_pressed = true;
+    }
+    if(!__RC_ISPRESSED_CIRCLE(g_rc_data)){
+      has_circle_pressed = false;
+    }
+
+    if(mode == DM_RC_VAL){
+      _SCR_CURSOR_SET(0, _EDITLIST_NUM + 3);
+      MW_printf("------\033[1;33mRC VAL\033[0;39m--------------------------------------\n");
+      DD_RCPrint(g_rc_data);
+      flush();
+    }
+    
+    interval_10ms();
   }
   
   return ret == 1?EXIT_SUCCESS:EXIT_FAILURE;
