@@ -67,11 +67,6 @@ typedef enum{
   OPE_MODE_B,
 } ope_mode_t;
 
-typedef struct {
-  int rising_val; /* 立ち上がり値 */
-  int falling_val; /* 立ち下がり値 */
-} tc_slope_lim_t;
-
 int appTask(void);
 int appInit(void);
 
