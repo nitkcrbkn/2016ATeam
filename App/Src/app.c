@@ -13,9 +13,18 @@ const tc_slope_lim_t tc_slope_lim_dri = {
   .falling_val = 200,
 };
 
+const tc_slope_lim_t tc_slope_lim_xpn = {
+  .rising_val = 400,
+  .falling_val = 400,
+};
+
 /*suspensionSystem*/
 static
 int suspensionSystem(void);
+
+/*bridgeSystem*/
+static
+int bridgeSystem(void);
 
 /*メモ
  * *g_ab_h...ABのハンドラ
@@ -65,24 +74,24 @@ int suspensionSystem(void){
   int target_val; /* 目標値 */
 
   /*for each motor*/
-  for( ctl_motor_kind = ROB1_DRIL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
+  for( ctl_motor_kind = ROB1_MTRL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
     is_reverse = 0;
 
     /*それぞれの差分*/
     switch( ctl_motor_kind ){
-    case ROB1_DRIL:
+    case ROB1_MTRL:
       rc_analogdata = DD_RCGetLY(g_rc_data);
-      md_gain = MD_GAIN_DRIL;
+      md_gain = MD_GAIN_MTRL;
       /* 前後の向きを反転 */
-      is_reverse = _IS_REVERSE_DRIL;
-      idx = ROB1_DRIL;
+      is_reverse = _IS_REVERSE_MTRL;
+      idx = ROB1_MTRL;
       break;
-    case ROB1_DRIR:
+    case ROB1_DRIS:
       rc_analogdata = DD_RCGetRY(g_rc_data);
-      md_gain = MD_GAIN_DRIR;
+      md_gain = MD_GAIN_DRIS;
       /* 前後の向きを反転 */
-      is_reverse = _IS_REVERSE_DRIR;
-      idx = ROB1_DRIR;
+      is_reverse = _IS_REVERSE_DRIS;
+      idx = ROB1_DRIS;
       break;
     default: return EXIT_FAILURE;
     }
@@ -101,3 +110,13 @@ int suspensionSystem(void){
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
+static
+int bridgeSystem(void){
+  if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
+    control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], MD_MAX_DUTY_XPNS, _IS_REVERSE_XPNS);
+  }else{
+    control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], 0, _IS_REVERSE_XPNS);
+  }
+ 
+  return EXIT_SUCCESS;
+}
