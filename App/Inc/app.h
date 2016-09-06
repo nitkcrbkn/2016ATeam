@@ -3,7 +3,7 @@
 
 
 /* モータ、電磁弁の個数 */
-#define DD_NUM_OF_MD 4
+#define DD_NUM_OF_MD 5
 #define DD_NUM_OF_AB 1
 
 #define DD_USE_ENCODER1 0
@@ -27,8 +27,9 @@
 /* 各モータのインデックス */
 #define ROB1_DRIL 0
 #define ROB1_DRIR 1
-#define ROB1_DRIB 2
-#define ROB1_PSH 3
+#define ROB1_DRIB1 2
+#define ROB1_DRIB2 3
+#define ROB1_PSH 4
 
 /* 電磁弁のインデックス */
 #define ROB1_AB 0
