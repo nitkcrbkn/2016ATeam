@@ -15,7 +15,7 @@ const tc_slope_lim_t tc_slope_lim_dri = {
 
 const tc_slope_lim_t tc_slope_lim_arm = {
   .rising_val = 200,
-  .falling_val = 200,
+  .falling_val = 400,
 };
 
 /* 操作モード */
