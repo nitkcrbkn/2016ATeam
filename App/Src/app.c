@@ -3,6 +3,8 @@
 #include "DD_RCDefinition.h"
 #include "SystemTaskManager.h"
 #include <stdlib.h>
+#include "MW_GPIO.h"
+#include "MW_IWDG.h"
 #include "message.h"
 #include "trapezoid_ctl.h"
 #include "MW_flash.h"
@@ -55,6 +57,35 @@ int LEDSystem(void);
  */
 
 int appInit(void){
+  /* switch(checkFlashWrite()){ */
+  /* case MW_FLASH_OK: */
+  /*   message("msg","FLASH WRITE TEST SUCCESS\n%s",(const char*)WRITE_ADDR); */
+  /*   break; */
+  /* case MW_FLASH_LOCK_FAILURE: */
+  /*   message("err","FLASH WRITE TEST LOCK FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_UNLOCK_FAILURE: */
+  /*   message("err","FLASH WRITE TEST UNLOCK FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_ERASE_VERIFY_FAILURE: */
+  /*   message("err","FLASH ERASE VERIFY FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_ERASE_FAILURE: */
+  /*   message("err","FLASH ERASE FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_WRITE_VERIFY_FAILURE: */
+  /*   message("err","FLASH WRITE TEST VERIFY FAILURE\n"); */
+  /*   break; */
+  /* case MW_FLASH_WRITE_FAILURE: */
+  /*   message("err","FLASH WRITE TEST FAILURE\n"); */
+  /*   break;         */
+  /* default: */
+  /*   message("err","FLASH WRITE TEST UNKNOWN FAILURE\n"); */
+  /*   break; */
+  /* } */
+  /* flush(); */
+  message("msg","hell");
+
   ad_init();
 
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
@@ -65,11 +96,12 @@ int appInit(void){
 int appTask(void){
   int ret = 0;
 
-  if( __RC_ISPRESSED_R1(g_rc_data) && __RC_ISPRESSED_R2(g_rc_data) &&
-      __RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_L2(g_rc_data)){
-    while( __RC_ISPRESSED_R1(g_rc_data) || __RC_ISPRESSED_R2(g_rc_data) ||
-           __RC_ISPRESSED_L1(g_rc_data) || __RC_ISPRESSED_L2(g_rc_data)){
-    }
+  if(__RC_ISPRESSED_R1(g_rc_data)&&__RC_ISPRESSED_R2(g_rc_data)&&
+     __RC_ISPRESSED_L1(g_rc_data)&&__RC_ISPRESSED_L2(g_rc_data)){
+    while(__RC_ISPRESSED_R1(g_rc_data)||__RC_ISPRESSED_R2(g_rc_data)||
+	  __RC_ISPRESSED_L1(g_rc_data)||__RC_ISPRESSED_L2(g_rc_data))
+      SY_wait(10);
+    
     ad_main();
   }
 
