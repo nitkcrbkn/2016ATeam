@@ -57,34 +57,6 @@ int LEDSystem(void);
  */
 
 int appInit(void){
-  /* switch(checkFlashWrite()){ */
-  /* case MW_FLASH_OK: */
-  /*   message("msg","FLASH WRITE TEST SUCCESS\n%s",(const char*)WRITE_ADDR); */
-  /*   break; */
-  /* case MW_FLASH_LOCK_FAILURE: */
-  /*   message("err","FLASH WRITE TEST LOCK FAILURE\n"); */
-  /*   break; */
-  /* case MW_FLASH_UNLOCK_FAILURE: */
-  /*   message("err","FLASH WRITE TEST UNLOCK FAILURE\n"); */
-  /*   break; */
-  /* case MW_FLASH_ERASE_VERIFY_FAILURE: */
-  /*   message("err","FLASH ERASE VERIFY FAILURE\n"); */
-  /*   break; */
-  /* case MW_FLASH_ERASE_FAILURE: */
-  /*   message("err","FLASH ERASE FAILURE\n"); */
-  /*   break; */
-  /* case MW_FLASH_WRITE_VERIFY_FAILURE: */
-  /*   message("err","FLASH WRITE TEST VERIFY FAILURE\n"); */
-  /*   break; */
-  /* case MW_FLASH_WRITE_FAILURE: */
-  /*   message("err","FLASH WRITE TEST FAILURE\n"); */
-  /*   break;         */
-  /* default: */
-  /*   message("err","FLASH WRITE TEST UNKNOWN FAILURE\n"); */
-  /*   break; */
-  /* } */
-  /* flush(); */
-  message("msg","hell");
 
   ad_init();
 
