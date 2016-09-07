@@ -14,8 +14,8 @@ const tc_slope_lim_t tc_slope_lim_dri = {
 };
 
 const tc_slope_lim_t tc_slope_lim_psh = {
-  .rising_val = MD_MAX_DUTY_PSH,
-  .falling_val = MD_MAX_DUTY_PSH,
+  .rising_val = 400,
+  .falling_val = 400,
 };
 
 /*suspensionSystem*/
