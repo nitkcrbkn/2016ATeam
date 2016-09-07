@@ -213,8 +213,7 @@ void interval_10ms(void){
 
 static
 void wait(unsigned int ms){
-  unsigned int old = g_SY_system_counter;
-  while(old + ms > g_SY_system_counter);
+  SY_wait(ms);
 }
 
 
