@@ -21,14 +21,15 @@
 /* 駆動のモータの回転の向きを揃えるために使用 */
 #define _IS_REVERSE_DRIL 0
 #define _IS_REVERSE_DRIR 1
-#define _IS_REVERSE_DRIB 0
+#define _IS_REVERSE_DRIBL 0
+#define _IS_REVERSE_DRIBR 1
 #define _IS_REVERSE_PSH 0
 
 /* 各モータのインデックス */
 #define ROB1_DRIL 0
 #define ROB1_DRIR 1
-#define ROB1_DRIB1 2
-#define ROB1_DRIB2 3
+#define ROB1_DRIBL 2
+#define ROB1_DRIBR 3
 #define ROB1_PSH 4
 
 /* 電磁弁のインデックス */
@@ -47,12 +48,14 @@
 
 #define MD_MAX_DUTY_DRIL MD_MAX_DUTY
 #define MD_MAX_DUTY_DRIR MD_MAX_DUTY
-#define MD_MAX_DUTY_DRIB MD_MAX_DUTY
+#define MD_MAX_DUTY_DRIBL MD_MAX_DUTY
+#define MD_MAX_DUTY_DRIBR MD_MAX_DUTY
 #define MD_MAX_DUTY_PSH MD_MAX_DUTY
 
 #define MD_GAIN_DRIL ( MD_MAX_DUTY_DRIL / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIR ( MD_MAX_DUTY_DRIR / DD_RC_ANALOG_MAX )
-#define MD_GAIN_DRIB ( MD_MAX_DUTY_DRIB / DD_RC_ANALOG_MAX )
+#define MD_GAIN_DRIBL ( MD_MAX_DUTY_DRIBL / DD_RC_ANALOG_MAX )
+#define MD_GAIN_DRIBR ( MD_MAX_DUTY_DRIBR / DD_RC_ANALOG_MAX )
 
 int appTask(void);
 int appInit(void);

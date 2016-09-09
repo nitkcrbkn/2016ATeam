@@ -55,7 +55,7 @@ int appTask(void){
      __RC_ISPRESSED_L1(g_rc_data)&&__RC_ISPRESSED_L2(g_rc_data)){
     while(__RC_ISPRESSED_R1(g_rc_data)||__RC_ISPRESSED_R2(g_rc_data)||
 	  __RC_ISPRESSED_L1(g_rc_data)||__RC_ISPRESSED_L2(g_rc_data))
-        SY_wait(10);
+      SY_wait(10);
 
     ad_main();
   }
@@ -111,19 +111,19 @@ int suspensionSystem(void){
       is_reverse = _IS_REVERSE_DRIR;
       idx = ROB1_DRIR;
       break;
-    case ROB1_DRIB1:
+    case ROB1_DRIBL:
       rc_analogdata = DD_RCGetLY(g_rc_data);
-      md_gain = MD_GAIN_DRIB;
+      md_gain = MD_GAIN_DRIBL;
       /* 前後の向きを反転 */
-      is_reverse = _IS_REVERSE_DRIB;
-      idx = ROB1_DRIB1;
+      is_reverse = _IS_REVERSE_DRIBL;
+      idx = ROB1_DRIBL;
       break;
-    case ROB1_DRIB2:
-      rc_analogdata = DD_RCGetLY(g_rc_data);
-      md_gain = MD_GAIN_DRIB;
+    case ROB1_DRIBR:
+      rc_analogdata = DD_RCGetRY(g_rc_data);
+      md_gain = MD_GAIN_DRIBR;
       /* 前後の向きを反転 */
-      is_reverse = _IS_REVERSE_DRIB;
-      idx = ROB1_DRIB2;
+      is_reverse = _IS_REVERSE_DRIBR;
+      idx = ROB1_DRIBR;
       break;
     default: return EXIT_FAILURE;
     }
