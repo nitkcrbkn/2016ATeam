@@ -44,7 +44,7 @@ int control_trapezoid(const tc_slope_lim_t *tc_slope_lim, DD_MDHand_t *md_h, int
     md_h->mode = D_MMOD_BRAKE;
   }
   md_h->duty = abs(ctrl_val);
-
+  
   return EXIT_SUCCESS;
 } /* control_trapezoid */
 

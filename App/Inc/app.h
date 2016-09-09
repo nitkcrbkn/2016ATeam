@@ -68,6 +68,16 @@ typedef enum{
   OPE_MODE_B,
 } ope_mode_t;
 
+/*アームの先端リミットスイッチは押されているか*/
+#define _LIMITSW_ARM_HEAD_GPIOxID GPIOBID
+#define _LIMITSW_ARM_HEAD_GPIOPIN GPIO_PIN_15
+#define _IS_PRESSED_LIMITSW_ARM_HEAD() (!(MW_GPIORead(_LIMITSW_ARM_HEAD_GPIOxID, _LIMITSW_ARM_HEAD_GPIOPIN)))
+
+/*アームの後端リミットスイッチは押されているか*/
+#define _LIMITSW_ARM_BACK_GPIOxID GPIOCID
+#define _LIMITSW_ARM_BACK_GPIOPIN GPIO_PIN_0
+#define _IS_PRESSED_LIMITSW_ARM_BACK() (!(MW_GPIORead(_LIMITSW_ARM_BACK_GPIOxID, _LIMITSW_ARM_BACK_GPIOPIN)))
+
 int appTask(void);
 int appInit(void);
 
