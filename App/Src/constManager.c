@@ -208,14 +208,12 @@ void adjustPrint(int point){
 
 static
 void interval_10ms(void){
-    while(g_SY_system_counter%10==0);
-    while(g_SY_system_counter%10!=0);
+  SY_wait(10);
 }
 
 static
 void wait(unsigned int ms){
-  unsigned int old = g_SY_system_counter;
-  while(old + ms > g_SY_system_counter);
+  SY_wait(ms);
 }
 
 
