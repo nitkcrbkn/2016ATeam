@@ -57,7 +57,6 @@ int LEDSystem(void);
  */
 
 int appInit(void){
-
   ad_init();
 
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
@@ -68,12 +67,13 @@ int appInit(void){
 int appTask(void){
   int ret = 0;
 
-  if(__RC_ISPRESSED_R1(g_rc_data)&&__RC_ISPRESSED_R2(g_rc_data)&&
-     __RC_ISPRESSED_L1(g_rc_data)&&__RC_ISPRESSED_L2(g_rc_data)){
-    while(__RC_ISPRESSED_R1(g_rc_data)||__RC_ISPRESSED_R2(g_rc_data)||
-	  __RC_ISPRESSED_L1(g_rc_data)||__RC_ISPRESSED_L2(g_rc_data))
+  if( __RC_ISPRESSED_R1(g_rc_data) && __RC_ISPRESSED_R2(g_rc_data) &&
+      __RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_L2(g_rc_data)){
+    while( __RC_ISPRESSED_R1(g_rc_data) || __RC_ISPRESSED_R2(g_rc_data) ||
+           __RC_ISPRESSED_L1(g_rc_data) || __RC_ISPRESSED_L2(g_rc_data)){
       SY_wait(10);
-    
+    }
+
     ad_main();
   }
 
@@ -217,7 +217,7 @@ int suspensionSystem_modeB(void){
       idx = ROB0_DRIBB;
       break;
     default: return EXIT_FAILURE;
-    }
+    } /* switch */
 
     /* 目標値を計算 */
     /*これは中央か?±3程度余裕を持つ必要がある。*/
@@ -281,11 +281,11 @@ int armSystem_modeA(void){
     }else{
       target_duty = rc_analogdata * md_gain;
     }
-    
+
     /* アーム伸縮のリミットスイッチ */
-    if(idx == ROB0_ARMS && //ロボット伸縮の制御か 
-       ((_IS_PRESSED_LIMITSW_ARM_HEAD() && target_duty < 0) || //アーム先端のリミットスイッチが押されているか
-	(_IS_PRESSED_LIMITSW_ARM_BACK() && target_duty > 0))){ //又は、アーム後端のリミットスイッチが押されているか
+    if( idx == ROB0_ARMS && /* ロボット伸縮の制御か */
+        (( _IS_PRESSED_LIMITSW_ARM_HEAD() && target_duty < 0 ) || /* アーム先端のリミットスイッチが押されているか */
+         ( _IS_PRESSED_LIMITSW_ARM_BACK() && target_duty > 0 ))){ /* 又は、アーム後端のリミットスイッチが押されているか */
       g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
       g_md_h[ROB0_ARMS].duty = 0;
     }else{
@@ -306,7 +306,7 @@ int armSystem_modeB(void){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], MD_MAX_DUTY_ARMT, _IS_REVERSE_ARMT);
   }else{
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMT], 0, _IS_REVERSE_ARMT);
-  } 
+  }
 
   /* アームの上下動作の制御 */
   if( __RC_ISPRESSED_UP(g_rc_data)){
@@ -319,20 +319,20 @@ int armSystem_modeB(void){
 
   /* アームの伸縮動作の制御 */
   if( __RC_ISPRESSED_LEFT(g_rc_data)){
-    if(_IS_PRESSED_LIMITSW_ARM_BACK()){
+    if( _IS_PRESSED_LIMITSW_ARM_BACK()){
       g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
       g_md_h[ROB0_ARMS].duty = 0;
     }else{
       control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
-    }  
+    }
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-    if(_IS_PRESSED_LIMITSW_ARM_HEAD()){
+    if( _IS_PRESSED_LIMITSW_ARM_HEAD()){
       g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
       g_md_h[ROB0_ARMS].duty = 0;
     }else{
       control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
     }
-  }else{         
+  }else{
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], 0, _IS_REVERSE_ARMS);
   }
 
@@ -345,27 +345,26 @@ int vacSystem(void){
 
   if( __RC_ISPRESSED_TRIANGLE(g_rc_data)){
     /* △が押され続けている間は処理を行わない */
-    if( !has_pressed_tri ){            
+    if( !has_pressed_tri ){
       has_pressed_tri = 1;
       /* △がすでに押されているか */
       if(( g_ab_h[ROB0_VAC].dat & ( VAC0 | VAC1 | VAC2 | VAC3 )) != ( VAC0 | VAC1 | VAC2 | VAC3 )){
-	g_ab_h[ROB0_VAC].dat |= REL0; //先に電磁弁をオン
+        g_ab_h[ROB0_VAC].dat |= REL0; /* 先に電磁弁をオン */
         g_ab_h[ROB0_VAC].dat |= ( VAC0 | VAC1 | VAC2 | VAC3 );
       }else{
-        g_ab_h[ROB0_VAC].dat &= ~( VAC0 | VAC1 | VAC2 | VAC3 ); //先に真空モータをオフ
-	g_ab_h[ROB0_VAC].dat &= ~REL0; 
+        g_ab_h[ROB0_VAC].dat &= ~( VAC0 | VAC1 | VAC2 | VAC3 ); /* 先に真空モータをオフ */
+        g_ab_h[ROB0_VAC].dat &= ~REL0;
       }
     }
   }else{
     has_pressed_tri = 0;
   }
- 
+
   return EXIT_SUCCESS;
 }
 
 static int LEDSystem(void){
-  
-  switch(g_ope_mode){
+  switch( g_ope_mode ){
   case OPE_MODE_A:
     g_led_mode = lmode_1;
     break;
@@ -374,8 +373,8 @@ static int LEDSystem(void){
     break;
   default:
     return EXIT_FAILURE;
-}
+  }
 
   return EXIT_SUCCESS;
-
 }
+

@@ -39,11 +39,11 @@
 #define ROB0_VAC 0
 
 /* 電磁弁のチャンネル */
-#define VAC0  (1<<0)
-#define VAC1  (1<<1)
-#define VAC2  (1<<2)
-#define VAC3  (1<<3)
-#define REL0  (1<<4)
+#define VAC0  ( 1 << 0 )
+#define VAC1  ( 1 << 1 )
+#define VAC2  ( 1 << 2 )
+#define VAC3  ( 1 << 3 )
+#define REL0  ( 1 << 4 )
 
 /* コントローラのスティックの補正値 */
 #define CENTRAL_THRESHOLD 5
@@ -67,14 +67,14 @@
 /*アームの先端リミットスイッチは押されているか*/
 #define _LIMITSW_ARM_HEAD_GPIOxID GPIOBID
 #define _LIMITSW_ARM_HEAD_GPIOPIN GPIO_PIN_15
-#define _IS_PRESSED_LIMITSW_ARM_HEAD() (!(MW_GPIORead(_LIMITSW_ARM_HEAD_GPIOxID, _LIMITSW_ARM_HEAD_GPIOPIN)))
+#define _IS_PRESSED_LIMITSW_ARM_HEAD() ( !( MW_GPIORead(_LIMITSW_ARM_HEAD_GPIOxID, _LIMITSW_ARM_HEAD_GPIOPIN)))
 
 /*アームの後端リミットスイッチは押されているか*/
 #define _LIMITSW_ARM_BACK_GPIOxID GPIOCID
 #define _LIMITSW_ARM_BACK_GPIOPIN GPIO_PIN_0
-#define _IS_PRESSED_LIMITSW_ARM_BACK() (!(MW_GPIORead(_LIMITSW_ARM_BACK_GPIOxID, _LIMITSW_ARM_BACK_GPIOPIN)))
+#define _IS_PRESSED_LIMITSW_ARM_BACK() ( !( MW_GPIORead(_LIMITSW_ARM_BACK_GPIOxID, _LIMITSW_ARM_BACK_GPIOPIN)))
 
-typedef enum{
+typedef enum {
   OPE_MODE_A,
   OPE_MODE_B,
 } ope_mode_t;
@@ -83,6 +83,5 @@ int appTask(void);
 int appInit(void);
 
 #endif
-
 
 
