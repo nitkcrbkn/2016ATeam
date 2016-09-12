@@ -116,10 +116,6 @@ int suspensionSystem(void){
        (_IS_PRESSED_LIMITSW_MTRL() && target_val < 0)){
       g_md_h[ROB1_MTRL].mode = D_MMOD_BRAKE;
       g_md_h[ROB1_MTRL].duty = 0;
-    }else if(idx == ROB1_DRIS &&
-       (!_IS_PRESSED_LIMITSW_DRIS() && target_val < 0)){
-      g_md_h[ROB1_DRIS].mode = D_MMOD_BRAKE;
-      g_md_h[ROB1_DRIS].duty = 0;
     }else{
       /*台数制御*/
       control_trapezoid(&tc_slope_lim_dri, &g_md_h[idx], target_val, is_reverse);
