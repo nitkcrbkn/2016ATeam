@@ -28,10 +28,6 @@ int suspensionSystem(void);
 static
 int armSystem(void);
 
-/*ABSystem*/
-static
-int ABSystem(void);
-
 /*メモ
  * *g_ab_h...ABのハンドラ
  * *g_md_h...MDのハンドラ
@@ -68,11 +64,6 @@ int appTask(void){
   }
 
   ret = armSystem();
-  if( ret ){
-    return ret;
-  }
-
-  ret = ABSystem();
   if( ret ){
     return ret;
   }
@@ -156,41 +147,3 @@ int armSystem(void){
 
   return EXIT_SUCCESS;
 }
-
-int ABSystem(void){
-  static int has_pressed_R1;
-  static int has_pressed_L1;
-
-  if( __RC_ISPRESSED_R1(g_rc_data)){
-    /* R1が押され続けている間は処理を行わない */
-    if( !has_pressed_R1 ){
-      has_pressed_R1 = 1;
-      /* R1がすでに押されているか */
-      if(( g_ab_h[ROB1_AB].dat & ( LIFTL | LIFTR )) != ( LIFTL | LIFTR )){
-        g_ab_h[ROB1_AB].dat |= ( LIFTL | LIFTR );
-      }else{
-        g_ab_h[ROB1_AB].dat &= ~( LIFTL | LIFTR );
-      }
-    }
-  }else{
-    has_pressed_R1 = 0;
-  }
-
-  if( __RC_ISPRESSED_L1(g_rc_data)){
-    /* L1が押され続けている間は処理を行わない */
-    if( !has_pressed_L1 ){
-      has_pressed_L1 = 1;
-      /* L1がすでに押されているか */
-      if(( g_ab_h[ROB1_AB].dat & ( PNCHL | PNCHR )) != ( PNCHL | PNCHR )){
-        g_ab_h[ROB1_AB].dat |= ( PNCHL | PNCHR );
-      }else{
-        g_ab_h[ROB1_AB].dat &= ~( PNCHL | PNCHR );
-      }
-    }
-  }else{
-    has_pressed_L1 = 0;
-  }
-
-  return EXIT_SUCCESS;
-} /* ABSystem */
-

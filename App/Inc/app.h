@@ -4,7 +4,7 @@
 
 /* モータ、電磁弁の個数 */
 #define DD_NUM_OF_MD 5
-#define DD_NUM_OF_AB 1
+#define DD_NUM_OF_AB 0
 
 #define DD_USE_ENCODER1 0
 #define DD_USE_ENCODER2 0
@@ -15,7 +15,7 @@
 #include "DD_SV.h"
 
 /*NO Device mode*/
-#define _NO_DEVICE 1
+#define _NO_DEVICE 0
 
 /*モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
@@ -31,15 +31,6 @@
 #define ROB1_DRIBL 2
 #define ROB1_DRIBR 3
 #define ROB1_ARM 4
-
-/* 電磁弁のインデックス */
-#define ROB1_AB 0
-
-/* 電磁弁のチャンネル */
-#define LIFTL (1<<0)
-#define LIFTR (1<<1)
-#define PNCHL (1<<2)
-#define PNCHR (1<<3)
 
 /* コントローラのスティックの補正値 */
 #define CENTRAL_THRESHOLD 5
