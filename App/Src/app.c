@@ -63,6 +63,11 @@ int appTask(void){
     return ret;
   }
 
+  ret = bridgeSystem();
+  if( ret ){
+    return ret;
+  }
+
   return EXIT_SUCCESS;
 }
 
@@ -106,9 +111,19 @@ int suspensionSystem(void){
     }else{
       target_val = rc_analogdata * md_gain;
     }
-
-    /*台数制御*/
-    control_trapezoid(&tc_slope_lim_dri, &g_md_h[idx], target_val, is_reverse);
+    
+    if(idx == ROB1_MTRL &&
+       (_IS_PRESSED_LIMITSW_MTRL() && target_val < 0)){
+      g_md_h[ROB1_MTRL].mode = D_MMOD_BRAKE;
+      g_md_h[ROB1_MTRL].duty = 0;
+    }else if(idx == ROB1_DRIS &&
+       (!_IS_PRESSED_LIMITSW_DRIS() && target_val < 0)){
+      g_md_h[ROB1_DRIS].mode = D_MMOD_BRAKE;
+      g_md_h[ROB1_DRIS].duty = 0;
+    }else{
+      /*台数制御*/
+      control_trapezoid(&tc_slope_lim_dri, &g_md_h[idx], target_val, is_reverse);
+    }
   }
 
   return EXIT_SUCCESS;
@@ -117,7 +132,12 @@ int suspensionSystem(void){
 static
 int bridgeSystem(void){
   if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], MD_MAX_DUTY_XPNS, _IS_REVERSE_XPNS);
+    if(_IS_PRESSED_LIMITSW_BRIS()){
+      g_md_h[ROB1_XPNS].mode = D_MMOD_BRAKE;
+      g_md_h[ROB1_XPNS].duty = 0;      
+    }else{
+      control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], -MD_MAX_DUTY_XPNS, _IS_REVERSE_XPNS);
+    }
   }else{
     control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], 0, _IS_REVERSE_XPNS);
   }
