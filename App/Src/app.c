@@ -349,9 +349,11 @@ int vacSystem(void){
       has_pressed_tri = 1;
       /* △がすでに押されているか */
       if(( g_ab_h[ROB0_VAC].dat & ( VAC0 | VAC1 | VAC2 | VAC3 )) != ( VAC0 | VAC1 | VAC2 | VAC3 )){
+	g_ab_h[ROB0_VAC].dat |= REL0; //先に電磁弁をオン
         g_ab_h[ROB0_VAC].dat |= ( VAC0 | VAC1 | VAC2 | VAC3 );
       }else{
-        g_ab_h[ROB0_VAC].dat &= ~( VAC0 | VAC1 | VAC2 | VAC3 );
+        g_ab_h[ROB0_VAC].dat &= ~( VAC0 | VAC1 | VAC2 | VAC3 ); //先に真空モータをオフ
+	g_ab_h[ROB0_VAC].dat &= ~REL0; 
       }
     }
   }else{
