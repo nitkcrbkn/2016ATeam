@@ -136,11 +136,11 @@ int appTask(void){
 /* スイッチを使うポートの初期化 */
 static
 int swInit(void){
-  MW_SetGPIOPin(GPIO_PIN_0);
+  MW_SetGPIOPin(_LIMITSW_ARM_BACK_GPIOPIN);
   MW_SetGPIOMode(GPIO_MODE_INPUT);
   MW_SetGPIOPull(GPIO_PULLUP);
   MW_SetGPIOSpeed(GPIO_SPEED_FREQ_LOW);
-  MW_GPIOInit(GPIOCID);
+  MW_GPIOInit(_LIMITSW_ARM_BACK_GPIOxID);
 
   return EXIT_SUCCESS;
 }
