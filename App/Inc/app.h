@@ -43,7 +43,6 @@
 #define VAC1  ( 1 << 1 )
 #define VAC2  ( 1 << 2 )
 #define VAC3  ( 1 << 3 )
-#define REL0  ( 1 << 4 )
 
 /* コントローラのスティックの補正値 */
 #define CENTRAL_THRESHOLD 5
