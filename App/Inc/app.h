@@ -19,8 +19,8 @@
 
 /* モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
-#define _IS_REVERSE_DRIL 1
-#define _IS_REVERSE_DRIR 0
+#define _IS_REVERSE_DRIL 0
+#define _IS_REVERSE_DRIR 1
 #define _IS_REVERSE_DRIB 1
 #define _IS_REVERSE_ARMT 1
 #define _IS_REVERSE_ARME 1
