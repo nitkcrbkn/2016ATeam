@@ -284,8 +284,7 @@ int armSystem_modeA(void){
 
     /* アーム伸縮のリミットスイッチ */
     if( idx == ROB0_ARMS && /* ロボット伸縮の制御か */
-        (( _IS_PRESSED_LIMITSW_ARM_HEAD() && target_duty < 0 ) || /* アーム先端のリミットスイッチが押されているか */
-         ( _IS_PRESSED_LIMITSW_ARM_BACK() && target_duty > 0 ))){ /* 又は、アーム後端のリミットスイッチが押されているか */
+         ( _IS_PRESSED_LIMITSW_ARM_BACK() && target_duty > 0 )){ /* 又は、アーム後端のリミットスイッチが押されているか */
       g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
       g_md_h[ROB0_ARMS].duty = 0;
     }else{
@@ -326,12 +325,7 @@ int armSystem_modeB(void){
       control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
     }
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-    if( _IS_PRESSED_LIMITSW_ARM_HEAD()){
-      g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
-      g_md_h[ROB0_ARMS].duty = 0;
-    }else{
-      control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
-    }
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
   }else{
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], 0, _IS_REVERSE_ARMS);
   }
