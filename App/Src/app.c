@@ -25,7 +25,7 @@ static ope_mode_t g_ope_mode = OPE_MODE_A;
 
 /* スイッチを使うポートの初期化 */
 static
-int sw_init(void);
+int swInit(void);
 
 /* 操作モード変更 */
 static
@@ -63,7 +63,7 @@ int LEDSystem(void);
 int appInit(void){
   ad_init();
 
-  sw_init();
+  swInit();
 
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
@@ -135,7 +135,7 @@ int appTask(void){
 
 /* スイッチを使うポートの初期化 */
 static
-int sw_init(void){
+int swInit(void){
   MW_SetGPIOPin(GPIO_PIN_0);
   MW_SetGPIOMode(GPIO_MODE_INPUT);
   MW_SetGPIOPull(GPIO_PULLUP);
