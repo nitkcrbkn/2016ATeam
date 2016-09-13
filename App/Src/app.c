@@ -23,6 +23,10 @@ const tc_slope_lim_t tc_slope_lim_arm = {
 /* 操作モード */
 static ope_mode_t g_ope_mode = OPE_MODE_A;
 
+/* スイッチを使うポートの初期化 */
+static
+int sw_init(void);
+
 /* 操作モード変更 */
 static
 int changeOpeMode(void);
@@ -58,6 +62,8 @@ int LEDSystem(void);
 
 int appInit(void){
   ad_init();
+
+  sw_init();
 
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
@@ -126,6 +132,16 @@ int appTask(void){
 
   return EXIT_SUCCESS;
 } /* appTask */
+
+/* スイッチを使うポートの初期化 */
+static
+int sw_init(void){
+  MW_SetGPIOPin(GPIO_PIN_0);
+  MW_SetGPIOMode(GPIO_MODE_INPUT);
+  MW_SetGPIOPull(GPIO_PULLUP);
+  MW_SetGPIOSpeed(GPIO_SPEED_FREQ_LOW);
+  MW_GPIOInit(GPIOCID);
+}
 
 static
 int changeOpeMode(void){
