@@ -29,6 +29,20 @@ static const adjust_t defaultad={
     .display_name = "DRIR adjust",
     .display_unit = "%",
   },
+  .DRIBFadjust = {
+    .value = 100,
+    .maxvalue = 100,
+    .minvalue = 0,
+    .display_name = "DRIBF adjust",
+    .display_unit = "%",
+  },
+  .DRIBBadjust = {
+    .value = 100,
+    .maxvalue = 100,
+    .minvalue = 0,
+    .display_name = "DRIBB adjust",
+    .display_unit = "%",
+  },
   /*template
   . = {
     .value = ,
@@ -46,6 +60,8 @@ adjust_t g_adjust;
 const_element_t *editlist[_EDITLIST_NUM]={
   &(g_adjust.DRILadjust),
   &(g_adjust.DRIRadjust),
+  &(g_adjust.DRIBFadjust),
+  &(g_adjust.DRIBBadjust),
 };
 
 static

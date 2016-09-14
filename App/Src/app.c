@@ -163,13 +163,13 @@ int suspensionSystem_modeA(void){
   if( __RC_ISPRESSED_UP(g_rc_data)){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], -MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], -MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], -MD_MAX_DUTY_DRIBF, _IS_REVERSE_DRIB);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], -MD_MAX_DUTY_DRIBB, _IS_REVERSE_DRIB);
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], MD_MAX_DUTY_DRIB, _IS_REVERSE_DRIB);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], MD_MAX_DUTY_DRIBF, _IS_REVERSE_DRIB);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], MD_MAX_DUTY_DRIBB, _IS_REVERSE_DRIB);
   }else if( __RC_ISPRESSED_LEFT(g_rc_data)){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
@@ -222,14 +222,14 @@ int suspensionSystem_modeB(void){
       break;
     case ROB0_DRIBF:
       rc_analogdata = DD_RCGetLY(g_rc_data);
-      md_gain = MD_GAIN_DRIB;
+      md_gain = MD_GAIN_DRIBF;
       /* 前後の向きを反転 */
       is_reverse = _IS_REVERSE_DRIB;
       idx = ROB0_DRIBF;
       break;
     case ROB0_DRIBB:
       rc_analogdata = DD_RCGetLY(g_rc_data);
-      md_gain = MD_GAIN_DRIB;
+      md_gain = MD_GAIN_DRIBB;
       /* 前後の向きを反転 */
       is_reverse = _IS_REVERSE_DRIB;
       idx = ROB0_DRIBB;
