@@ -4,7 +4,7 @@
 #define _RC_ADJUST_NUM 4
 
 /*exclude dumy*/
-#define _EDITLIST_NUM  9
+#define _EDITLIST_NUM  2
 
 #define WRITE_ADDR (const void*)(0x8000000+0x400*(128-1))/*128[KiB]*/
 
@@ -24,15 +24,8 @@ typedef struct {
 
 /*first, add menber to this list.*/
 typedef struct {
-  const_element_t leftadjust;
-  const_element_t rightadjust;
-  const_element_t steeringtime;
-  const_element_t rctimeout;
-  const_element_t rc_centre_thereshold;
-  const_element_t rc_centre_thereshold2;
-  const_element_t rc_centre_thereshold3;
-  const_element_t rc_centre_thereshold4;
-  const_element_t rc_centre_thereshold5;
+  const_element_t DRILadjust;
+  const_element_t DRIRadjust;
 } adjust_t;
 
 extern adjust_t g_adjust;
