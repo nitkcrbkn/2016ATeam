@@ -15,7 +15,7 @@
 #include "DD_SV.h"
 
 /*NO Device mode*/
-#define _NO_DEVICE 0
+#define _NO_DEVICE 1
 
 /* モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
@@ -49,8 +49,8 @@
 
 #define MD_MAX_DUTY 9999
 
-#define MD_MAX_DUTY_DRIL MD_MAX_DUTY
-#define MD_MAX_DUTY_DRIR MD_MAX_DUTY
+#define MD_MAX_DUTY_DRIL (int) (MD_MAX_DUTY * g_adjust.DRILadjust.value / 100)
+#define MD_MAX_DUTY_DRIR (int) (MD_MAX_DUTY * g_adjust.DRIRadjust.value / 100)
 #define MD_MAX_DUTY_DRIB MD_MAX_DUTY
 #define MD_MAX_DUTY_ARMT MD_MAX_DUTY
 #define MD_MAX_DUTY_ARME MD_MAX_DUTY
