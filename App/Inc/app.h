@@ -21,7 +21,7 @@
 /* 駆動のモータの回転の向きを揃えるために使用 */
 #define _IS_REVERSE_MTRL 0
 #define _IS_REVERSE_DRIS 0
-#define _IS_REVERSE_XPNS 0
+#define _IS_REVERSE_XPNS 1
 
 /* 各モータのインデックス */
 #define ROB1_MTRL 0
@@ -33,22 +33,12 @@
 
 #define MD_MAX_DUTY 9999
 
-#define MD_MAX_DUTY_MTRL MD_MAX_DUTY
+#define MD_MAX_DUTY_MTRL (int) (MD_MAX_DUTY * 0.6)
 #define MD_MAX_DUTY_DRIS MD_MAX_DUTY
 #define MD_MAX_DUTY_XPNS MD_MAX_DUTY
 
 #define MD_GAIN_MTRL ( MD_MAX_DUTY_MTRL / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIS ( MD_MAX_DUTY_DRIS / DD_RC_ANALOG_MAX )
-
-/*橋(大)のリミットスイッチは押されているか*/
-#define _LIMITSW_MTRL_GPIOxID GPIOBID
-#define _LIMITSW_MTRL_GPIOPIN GPIO_PIN_15
-#define _IS_PRESSED_LIMITSW_MTRL() (!(MW_GPIORead(_LIMITSW_MTRL_GPIOxID, _LIMITSW_MTRL_GPIOPIN)))
-
-/*橋(小)のリミットスイッチは押されているか*/
-#define _LIMITSW_BRIS_GPIOxID GPIOCID
-#define _LIMITSW_BRIS_GPIOPIN GPIO_PIN_0
-#define _IS_PRESSED_LIMITSW_BRIS() (!(MW_GPIORead(_LIMITSW_BRIS_GPIOxID, _LIMITSW_BRIS_GPIOPIN)))
 
 int appTask(void);
 int appInit(void);

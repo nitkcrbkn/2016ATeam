@@ -10,14 +10,19 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
-const tc_slope_lim_t tc_slope_lim_dri = {
+const tc_slope_lim_t tc_slope_lim_dri_small = {
+  .rising_val = 50,
+  .falling_val = 200,
+};
+
+const tc_slope_lim_t tc_slope_lim_dri_lerge = {
   .rising_val = 200,
   .falling_val = 200,
 };
 
 const tc_slope_lim_t tc_slope_lim_xpn = {
-  .rising_val = 400,
-  .falling_val = 400,
+  .rising_val = 200,
+  .falling_val = 200,
 };
 
 /*suspensionSystem*/
@@ -81,6 +86,7 @@ int suspensionSystem(void){
   unsigned int md_gain; /*アナログデータの補正値 */
   int ctl_motor_kind; /* 現在制御しているモータ */
   int target_val; /* 目標値 */
+  const tc_slope_lim_t *tc_slope_lim_ptr; /* 台形制御の変化量のポインタ */
 
   /*for each motor*/
   for( ctl_motor_kind = ROB1_MTRL; ctl_motor_kind < num_of_motor; ctl_motor_kind++ ){
@@ -94,6 +100,7 @@ int suspensionSystem(void){
       /* 前後の向きを反転 */
       is_reverse = _IS_REVERSE_MTRL;
       idx = ROB1_MTRL;
+      tc_slope_lim_ptr = &tc_slope_lim_dri_small;
       break;
     case ROB1_DRIS:
       rc_analogdata = DD_RCGetRY(g_rc_data);
@@ -101,6 +108,7 @@ int suspensionSystem(void){
       /* 前後の向きを反転 */
       is_reverse = _IS_REVERSE_DRIS;
       idx = ROB1_DRIS;
+      tc_slope_lim_ptr = &tc_slope_lim_dri_lerge;
       break;
     default: return EXIT_FAILURE;
     }
@@ -111,15 +119,10 @@ int suspensionSystem(void){
     }else{
       target_val = rc_analogdata * md_gain;
     }
+   
+    /*台数制御*/
+    control_trapezoid(tc_slope_lim_ptr, &g_md_h[idx], target_val, is_reverse);
     
-    if(idx == ROB1_MTRL &&
-       (_IS_PRESSED_LIMITSW_MTRL() && target_val < 0)){
-      g_md_h[ROB1_MTRL].mode = D_MMOD_BRAKE;
-      g_md_h[ROB1_MTRL].duty = 0;
-    }else{
-      /*台数制御*/
-      control_trapezoid(&tc_slope_lim_dri, &g_md_h[idx], target_val, is_reverse);
-    }
   }
 
   return EXIT_SUCCESS;
@@ -128,15 +131,10 @@ int suspensionSystem(void){
 static
 int bridgeSystem(void){
   if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
-    if(_IS_PRESSED_LIMITSW_BRIS()){
-      g_md_h[ROB1_XPNS].mode = D_MMOD_BRAKE;
-      g_md_h[ROB1_XPNS].duty = 0;      
-    }else{
-      control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], -MD_MAX_DUTY_XPNS, _IS_REVERSE_XPNS);
-    }
+    control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], -MD_MAX_DUTY_XPNS, _IS_REVERSE_XPNS);
   }else{
     control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], 0, _IS_REVERSE_XPNS);
   }
- 
+  
   return EXIT_SUCCESS;
 }
