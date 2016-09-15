@@ -20,6 +20,11 @@ const tc_slope_lim_t tc_slope_lim_arm = {
   .falling_val = 400,
 };
 
+const tc_slope_lim_t tc_slope_lim_armS = {
+  .rising_val = 200,
+  .falling_val = 5000,
+};
+
 /* 操作モード */
 static ope_mode_t g_ope_mode = OPE_MODE_A;
 
@@ -301,13 +306,15 @@ int armSystem_modeA(void){
     }
 
     /* アーム伸縮のリミットスイッチ */
-    if( idx == ROB0_ARMS && /* ロボット伸縮の制御か */
-         ( _IS_PRESSED_LIMITSW_ARM_BACK() && target_duty > 0 )){ /* 又は、アーム後端のリミットスイッチが押されているか */
-      g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
-      g_md_h[ROB0_ARMS].duty = 0;
+    if( idx == ROB0_ARMS ){/* ロボット伸縮の制御か */
+      if ( _IS_PRESSED_LIMITSW_ARM_BACK() && target_duty > 0 ){ /* 又は、アーム後端のリミットスイッチが押されているか */
+	g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
+	g_md_h[ROB0_ARMS].duty = 0;
+      }else{
+	control_trapezoid(&tc_slope_lim_armS, &g_md_h[idx], target_duty, is_reverse);
+      }
     }else{
-      /* 台形制御 */
-      control_trapezoid(&tc_slope_lim_dri, &g_md_h[idx], target_duty, is_reverse);
+      control_trapezoid(&tc_slope_lim_arm, &g_md_h[idx], target_duty, is_reverse);
     }
   }
 
@@ -340,12 +347,12 @@ int armSystem_modeB(void){
       g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
       g_md_h[ROB0_ARMS].duty = 0;
     }else{
-      control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
+      control_trapezoid(&tc_slope_lim_armS, &g_md_h[ROB0_ARMS], MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
     }
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
+    control_trapezoid(&tc_slope_lim_armS, &g_md_h[ROB0_ARMS], -MD_MAX_DUTY_ARMS, _IS_REVERSE_ARMS);
   }else{
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_ARMS], 0, _IS_REVERSE_ARMS);
+    control_trapezoid(&tc_slope_lim_armS, &g_md_h[ROB0_ARMS], 0, _IS_REVERSE_ARMS);
   }
 
   return EXIT_SUCCESS;
