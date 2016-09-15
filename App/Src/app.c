@@ -10,12 +10,14 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
+/* 駆動の台形制御の変化量 */
 const tc_slope_lim_t tc_slope_lim_dri = {
   .rising_val = 200,
   .falling_val = 200,
 };
 
-const tc_slope_lim_t tc_slope_lim_psh = {
+/* アームの台形制御の変化量 */
+const tc_slope_lim_t tc_slope_lim_arm = {
   .rising_val = 200,
   .falling_val = 200,
 };
@@ -149,19 +151,20 @@ int suspensionSystem(void){
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
+/*プライベート 足回りシステム*/
 int armSystem(void){
   if( __RC_ISPRESSED_UP(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_psh, &g_md_h[ROB1_ARM], MD_MAX_DUTY_ARM, _IS_REVERSE_ARM);
-  }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], MD_MAX_DUTY_ARM, _IS_REVERSE_ARM);
+  }else if( __RC_ISPRESSED_DOWN(g_rc_data)){ /* アームのリミットスイッチが押されているか */
     if(_IS_PRESSED_LIMITSW_ARM()){
       g_md_h[ROB1_ARM].mode = D_MMOD_BRAKE;
       g_md_h[ROB1_ARM].duty = 0;
     }else{
-      control_trapezoid(&tc_slope_lim_psh, &g_md_h[ROB1_ARM], -MD_MAX_DUTY_ARM, _IS_REVERSE_ARM);
+      control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], -MD_MAX_DUTY_ARM, _IS_REVERSE_ARM);
     }
   }else{
-    control_trapezoid(&tc_slope_lim_psh, &g_md_h[ROB1_ARM], 0, _IS_REVERSE_ARM);
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], 0, _IS_REVERSE_ARM);
   }
 
   return EXIT_SUCCESS;
-}
+} /* armSystem */

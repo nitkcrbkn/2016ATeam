@@ -19,11 +19,11 @@
 
 /*モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
-#define _IS_REVERSE_DRIL 0
-#define _IS_REVERSE_DRIR 1
-#define _IS_REVERSE_DRIBL 0
-#define _IS_REVERSE_DRIBR 0
-#define _IS_REVERSE_ARM 0
+#define _IS_REVERSE_DRIL 0 /* 駆動左 */
+#define _IS_REVERSE_DRIR 1 /* 駆動右 */
+#define _IS_REVERSE_DRIBL 0 /* 橋用駆動左 */
+#define _IS_REVERSE_DRIBR 0 /* 橋用駆動左 */
+#define _IS_REVERSE_ARM 0 /* アーム */
 
 /* 各モータのインデックス */
 #define ROB1_DRIL 0
@@ -48,7 +48,7 @@
 #define MD_GAIN_DRIBL ( MD_MAX_DUTY_DRIBL / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIBR ( MD_MAX_DUTY_DRIBR / DD_RC_ANALOG_MAX )
 
-/*アームの先端リミットスイッチは押されているか*/
+/*アームのリミットスイッチは押されているか*/
 #define _LIMITSW_ARM_GPIOxID GPIOCID
 #define _LIMITSW_ARM_GPIOPIN GPIO_PIN_0
 #define _IS_PRESSED_LIMITSW_ARM() (!(MW_GPIORead(_LIMITSW_ARM_GPIOxID, _LIMITSW_ARM_GPIOPIN)))
