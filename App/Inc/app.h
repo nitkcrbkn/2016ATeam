@@ -20,13 +20,13 @@
 /*モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
 #define _IS_REVERSE_MTRL 0
-#define _IS_REVERSE_DRIS 0
+#define _IS_REVERSE_DRIS 0 
 #define _IS_REVERSE_XPNS 1
 
 /* 各モータのインデックス */
-#define ROB1_MTRL 0
-#define ROB1_DRIS 1
-#define ROB1_XPNS 2
+#define ROB1_MTRL 0 /* 駆動(大) */
+#define ROB1_DRIS 1 /* 駆動(小) */
+#define ROB1_XPNS 2 /* 橋展開用 */
 
 /* コントローラのスティックの補正値 */
 #define CENTRAL_THRESHOLD 5

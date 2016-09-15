@@ -10,16 +10,19 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
+/* 駆動(小)の台形制御の変化量 */
 const tc_slope_lim_t tc_slope_lim_dri_small = {
   .rising_val = 50,
   .falling_val = 200,
 };
 
+/* 駆動(大)の台形制御の変化量 */
 const tc_slope_lim_t tc_slope_lim_dri_lerge = {
   .rising_val = 200,
   .falling_val = 200,
 };
 
+/* 橋展開の台形制御の変化量 */
 const tc_slope_lim_t tc_slope_lim_xpn = {
   .rising_val = 200,
   .falling_val = 200,
@@ -128,6 +131,7 @@ int suspensionSystem(void){
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
+/*プライベート 橋展開システム*/
 static
 int bridgeSystem(void){
   if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
@@ -139,4 +143,4 @@ int bridgeSystem(void){
   }
   
   return EXIT_SUCCESS;
-}
+} /* bridgeSystem */
