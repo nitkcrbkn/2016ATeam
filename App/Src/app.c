@@ -10,16 +10,19 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
+/* 駆動の台形制御の変化量 */
 const tc_slope_lim_t tc_slope_lim_dri = {
   .rising_val = 200,
   .falling_val = 200,
 };
 
+/* アーム回転と上下の台形制御の変化量 */
 const tc_slope_lim_t tc_slope_lim_arm = {
   .rising_val = 200,
   .falling_val = 400,
 };
 
+/* アームの伸縮の台形制御の変化量 */
 const tc_slope_lim_t tc_slope_lim_armS = {
   .rising_val = 200,
   .falling_val = 5000,
@@ -96,7 +99,7 @@ int appTask(void){
     return ret;
   }
 
-  /* モードA,Bで関数を分けるb */
+  /* モードA,Bで関数を分ける */
   switch( g_ope_mode ){
   case OPE_MODE_A:
     ret = suspensionSystem_modeA();
@@ -150,6 +153,7 @@ int swInit(void){
   return EXIT_SUCCESS;
 }
 
+/* 操作モードの変更 */
 static
 int changeOpeMode(void){
   if( __RC_ISPRESSED_L2(g_rc_data)){
@@ -161,7 +165,7 @@ int changeOpeMode(void){
   return EXIT_SUCCESS;
 }
 
-/*プライベート 足回りシステム*/
+/*プライベート 足回りシステム モードA*/
 static
 int suspensionSystem_modeA(void){
   /* ボタンを１つ押すと、４つのモータが動作する */
@@ -195,6 +199,7 @@ int suspensionSystem_modeA(void){
   return EXIT_SUCCESS;
 } /* suspensionSystem_modeA */
 
+/*プライベート 足回りシステム モードB*/
 static
 int suspensionSystem_modeB(void){
   const int num_of_motor = 4; /*モータの個数*/
@@ -257,6 +262,7 @@ int suspensionSystem_modeB(void){
   return EXIT_SUCCESS;
 } /* suspensionSystem_modeB */
 
+/*プライベート アームシステム モードA*/
 static
 int armSystem_modeA(void){
   const int num_of_motor = ROB0_ARMT + 3; /*モータの個数*/
@@ -321,6 +327,7 @@ int armSystem_modeA(void){
   return EXIT_SUCCESS;
 } /* armSystem_modeA */
 
+/*プライベート 足回りシステム モードB*/
 static
 int armSystem_modeB(void){
   /* アーム基部の回転動作の制御 */
@@ -343,7 +350,7 @@ int armSystem_modeB(void){
 
   /* アームの伸縮動作の制御 */
   if( __RC_ISPRESSED_LEFT(g_rc_data)){
-    if( _IS_PRESSED_LIMITSW_ARM_BACK()){
+    if( _IS_PRESSED_LIMITSW_ARM_BACK()){ /* アーム伸縮のリミットスイッチが押されているか */
       g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
       g_md_h[ROB0_ARMS].duty = 0;
     }else{
@@ -358,6 +365,7 @@ int armSystem_modeB(void){
   return EXIT_SUCCESS;
 } /* armSystem_modeB */
 
+/*プライベート 真空モータシステム*/
 static
 int vacSystem(void){
   static int has_pressed_tri;
@@ -368,9 +376,9 @@ int vacSystem(void){
       has_pressed_tri = 1;
       /* △がすでに押されているか */
       if(( g_ab_h[ROB0_VAC].dat & ( VAC0 | VAC1 | VAC2 | VAC3 )) != ( VAC0 | VAC1 | VAC2 | VAC3 )){
-        g_ab_h[ROB0_VAC].dat |= ( VAC0 | VAC1 | VAC2 | VAC3 );
+        g_ab_h[ROB0_VAC].dat |= ( VAC0 | VAC1 | VAC2 | VAC3 ); /* on */
       }else{
-        g_ab_h[ROB0_VAC].dat &= ~( VAC0 | VAC1 | VAC2 | VAC3 );
+        g_ab_h[ROB0_VAC].dat &= ~( VAC0 | VAC1 | VAC2 | VAC3 ); /* off */
       }
     }
   }else{
@@ -378,8 +386,9 @@ int vacSystem(void){
   }
 
   return EXIT_SUCCESS;
-}
+}/* vacSystem */
 
+/*プライベート LEDシステム*/
 static int LEDSystem(void){
   switch( g_ope_mode ){
   case OPE_MODE_A:
@@ -393,5 +402,5 @@ static int LEDSystem(void){
   }
 
   return EXIT_SUCCESS;
-}
+}/* LEDSystem */
 
