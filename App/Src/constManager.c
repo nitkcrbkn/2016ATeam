@@ -22,11 +22,25 @@ static const adjust_t defaultad={
     .display_name = "DRIL adjust",
     .display_unit = "%",
   },
-  .DRIRadjust = {
+  .DRIBLadjust = {
     .value = 100,
     .maxvalue = 100,
     .minvalue = 0,
-    .display_name = "DRIR adjust",
+    .display_name = "DRIBL adjust",
+    .display_unit = "%",
+  },
+  .DRIBRadjust = {
+    .value = 100,
+    .maxvalue = 100,
+    .minvalue = 0,
+    .display_name = "DRIBR adjust",
+    .display_unit = "%",
+  },
+  .ARMadjust = {
+    .value = 100,
+    .maxvalue = 100,
+    .minvalue = 0,
+    .display_name = "ARM adjust",
     .display_unit = "%",
   },
   
@@ -47,6 +61,9 @@ adjust_t g_adjust;
 const_element_t *editlist[_EDITLIST_NUM]={
   &(g_adjust.DRILadjust),
   &(g_adjust.DRIRadjust),
+  &(g_adjust.DRIBLadjust),
+  &(g_adjust.DRIBRadjust),
+  &(g_adjust.ARMadjust),
 };
 
 static
