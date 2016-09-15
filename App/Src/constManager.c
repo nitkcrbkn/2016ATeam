@@ -22,6 +22,13 @@ static const adjust_t defaultad={
     .display_name = "DRIL adjust",
     .display_unit = "%",
   },
+  .DRIRadjust = {
+    .value = 100,
+    .maxvalue = 100,
+    .minvalue = 0,
+    .display_name = "DRIR adjust",
+    .display_unit = "%",
+  },
   .DRIBLadjust = {
     .value = 100,
     .maxvalue = 100,
