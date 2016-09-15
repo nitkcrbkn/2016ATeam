@@ -16,8 +16,8 @@ const tc_slope_lim_t tc_slope_lim_dri = {
 };
 
 const tc_slope_lim_t tc_slope_lim_psh = {
-  .rising_val = 400,
-  .falling_val = 400,
+  .rising_val = 200,
+  .falling_val = 200,
 };
 
 /* スイッチを使うポートの初期化 */
