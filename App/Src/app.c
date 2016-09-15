@@ -132,6 +132,8 @@ static
 int bridgeSystem(void){
   if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
     control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], -MD_MAX_DUTY_XPNS, _IS_REVERSE_XPNS);
+  }else if(__RC_ISPRESSED_CROSS(g_rc_data)){
+    control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], MD_MAX_DUTY_XPNS, _IS_REVERSE_XPNS);
   }else{
     control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], 0, _IS_REVERSE_XPNS);
   }
