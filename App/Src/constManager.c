@@ -233,8 +233,8 @@ int ad_keyTask(void){
   
   /*reload value*/
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
-    message("msg","load default value");
     reloadDefault();
+    message("msg","load default value");
     adjustPrint(select);
   }
 
