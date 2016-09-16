@@ -112,7 +112,7 @@ int suspensionSystem(void){
       /* 前後の向きを反転 */
       is_reverse = _IS_REVERSE_MTRL;
       idx = ROB1_MTRL;
-      tc_slope_lim_ptr = &tc_slope_lim_dri_small;
+      tc_slope_lim_ptr = &tc_slope_lim_dri_lerge;
       break;
     case ROB1_DRIS:
       rc_analogdata = DD_RCGetRY(g_rc_data);
@@ -120,7 +120,7 @@ int suspensionSystem(void){
       /* 前後の向きを反転 */
       is_reverse = _IS_REVERSE_DRIS;
       idx = ROB1_DRIS;
-      tc_slope_lim_ptr = &tc_slope_lim_dri_lerge;
+      tc_slope_lim_ptr = &tc_slope_lim_dri_small;
       break;
     default: return EXIT_FAILURE;
     }
