@@ -146,7 +146,7 @@ int suspensionSystem(void){
 int armSystem(void){
   if( __RC_ISPRESSED_UP(g_rc_data)){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], MD_MAX_DUTY_ARM, _IS_REVERSE_ARM);
-  }else if( __RC_ISPRESSED_DOWN(g_rc_data)){ /* アームのリミットスイッチが押されているか */
+  }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], -MD_MAX_DUTY_ARM, _IS_REVERSE_ARM);
   }else{
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], 0, _IS_REVERSE_ARM);
