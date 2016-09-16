@@ -24,7 +24,7 @@ const tc_slope_lim_t tc_slope_lim_arm = {
 
 /* スイッチを使うポートの初期化 */
 static
-int swInit(void);
+void swInit(void);
 
 /*suspensionSystem*/
 static
@@ -81,7 +81,7 @@ int appTask(void){
 
 /* スイッチを使うポートの初期化 */
 static
-int swInit(void){
+void swInit(void){
   MW_SetGPIOPin(_LIMITSW_ARM_GPIOPIN);
   MW_SetGPIOMode(GPIO_MODE_INPUT);
   MW_SetGPIOPull(GPIO_PULLUP);
@@ -91,7 +91,7 @@ int swInit(void){
   return EXIT_SUCCESS;
 }
 
-/*プライベート 足回りシステム*/
+/* 足回りシステム*/
 static
 int suspensionSystem(void){
   const int num_of_motor = 4;       /*モータの個数*/
@@ -151,7 +151,7 @@ int suspensionSystem(void){
   return EXIT_SUCCESS;
 } /* suspensionSystem */
 
-/*プライベート 足回りシステム*/
+/*アームシステム*/
 int armSystem(void){
   if( __RC_ISPRESSED_UP(g_rc_data)){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], MD_MAX_DUTY_ARM, _IS_REVERSE_ARM);
