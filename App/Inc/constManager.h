@@ -4,7 +4,7 @@
 #define _RC_ADJUST_NUM 4
 
 /*exclude dumy*/
-#define _EDITLIST_NUM  10
+#define _EDITLIST_NUM  13
 
 #define WRITE_ADDR (const void*)(0x8000000+0x400*(128-1))/*128[KiB]*/
 

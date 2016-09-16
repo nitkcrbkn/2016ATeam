@@ -17,6 +17,12 @@ int control_trapezoid(const tc_slope_lim_t *tc_slope_lim, DD_MDHand_t *md_h, int
   switch( md_h->mode ){
   case D_MMOD_FREE:
   case D_MMOD_BRAKE:
+    if( 0 < target_val ){
+      ctrl_val = current_val + _MIN(tc_slope_lim->rising_val, target_val - current_val);
+    }else if( 0 > target_val ){
+      ctrl_val = current_val - _MIN(tc_slope_lim->rising_val, current_val - target_val);
+    }else{ ctrl_val = target_val; }
+    break;
   case D_MMOD_FORWARD:
     if( current_val < target_val ){
       ctrl_val = current_val + _MIN(tc_slope_lim->rising_val, target_val - current_val);

@@ -50,6 +50,13 @@ static const adjust_t defaultad={
     .display_name = "ARMT adjust",
     .display_unit = "%",
   },
+  .ARMEadjust = {
+    .value = 100,
+    .maxvalue = 100,
+    .minvalue = 0,
+    .display_name = "ARME adjust",
+    .display_unit = "%",
+  },
   .ARMSadjust = {
     .value = 100,
     .maxvalue = 100,
@@ -139,6 +146,8 @@ static
 int saveData(void);
 static
 int RC_adjust(void);
+static
+void wait(unsigned int ms);
 
 /* reload default value */
 static
@@ -306,8 +315,8 @@ int ad_keyTask(void){
   
   /*reload value*/
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
-    message("msg","load default value");
     reloadDefault();
+    message("msg","load default value");
     adjustPrint(select);
   }
 
