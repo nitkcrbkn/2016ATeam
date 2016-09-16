@@ -48,11 +48,6 @@
 #define MD_GAIN_DRIBL ( MD_MAX_DUTY_DRIBL / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIBR ( MD_MAX_DUTY_DRIBR / DD_RC_ANALOG_MAX )
 
-/*アームのリミットスイッチは押されているか*/
-#define _LIMITSW_ARM_GPIOxID GPIOCID
-#define _LIMITSW_ARM_GPIOPIN GPIO_PIN_0
-#define _IS_PRESSED_LIMITSW_ARM() (!(MW_GPIORead(_LIMITSW_ARM_GPIOxID, _LIMITSW_ARM_GPIOPIN)))
-
 int appTask(void);
 int appInit(void);
 

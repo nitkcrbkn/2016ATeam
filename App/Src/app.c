@@ -16,11 +16,6 @@ tc_slope_lim_t tc_slope_lim_dri;
 /* アームの台形制御の変化量 */
 tc_slope_lim_t tc_slope_lim_arm;
 
-/* スイッチを使うポートの初期化 */
-static
-void swInit(void);
-
-
 /* 台形制御の変化量の初期化 */
 static
 void setTCVal(void);
@@ -43,8 +38,6 @@ int armSystem(void);
 int appInit(void){
 
   ad_init();
-
-  swInit();
 
   setTCVal();
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
@@ -79,17 +72,6 @@ int appTask(void){
 
   return EXIT_SUCCESS;
 }
-
-/* スイッチを使うポートの初期化 */
-static
-void swInit(void){
-  MW_SetGPIOPin(_LIMITSW_ARM_GPIOPIN);
-  MW_SetGPIOMode(GPIO_MODE_INPUT);
-  MW_SetGPIOPull(GPIO_PULLUP);
-  MW_SetGPIOSpeed(GPIO_SPEED_FREQ_LOW);
-  MW_GPIOInit(_LIMITSW_ARM_GPIOxID);
-}
-
 
 /* 台形制御の変化量の初期化 */
 static
@@ -165,12 +147,7 @@ int armSystem(void){
   if( __RC_ISPRESSED_UP(g_rc_data)){
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], MD_MAX_DUTY_ARM, _IS_REVERSE_ARM);
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){ /* アームのリミットスイッチが押されているか */
-    if(_IS_PRESSED_LIMITSW_ARM()){
-      g_md_h[ROB1_ARM].mode = D_MMOD_BRAKE;
-      g_md_h[ROB1_ARM].duty = 0;
-    }else{
-      control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], -MD_MAX_DUTY_ARM, _IS_REVERSE_ARM);
-    }
+    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], -MD_MAX_DUTY_ARM, _IS_REVERSE_ARM);
   }else{
     control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB1_ARM], 0, _IS_REVERSE_ARM);
   }
