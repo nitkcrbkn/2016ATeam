@@ -4,7 +4,7 @@
 #define _RC_ADJUST_NUM 4
 
 /*exclude dumy*/
-#define _EDITLIST_NUM  3
+#define _EDITLIST_NUM  9
 
 #define WRITE_ADDR (const void*)(0x8000000+0x400*(128-1))/*128[KiB]*/
 
@@ -27,6 +27,12 @@ typedef struct {
   const_element_t MTRLadjust;
   const_element_t DRISadjust;
   const_element_t XPNSadjust;
+  const_element_t tc_dril_rise;
+  const_element_t tc_dril_fall;
+  const_element_t tc_dris_rise;
+  const_element_t tc_dris_fall;
+  const_element_t tc_xpn_rise;
+  const_element_t tc_xpn_fall;
 } adjust_t;
 
 extern adjust_t g_adjust;

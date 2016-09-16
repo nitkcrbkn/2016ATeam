@@ -33,7 +33,7 @@
 
 #define MD_MAX_DUTY 9999
 
-#define MD_MAX_DUTY_MTRL (int) (MD_MAX_DUTY * 0.6 *g_adjust.MTRLadjust.value / 100)
+#define MD_MAX_DUTY_MTRL (int) (MD_MAX_DUTY * g_adjust.MTRLadjust.value / 100)
 #define MD_MAX_DUTY_DRIS (int) (MD_MAX_DUTY * g_adjust.DRISadjust.value / 100)
 #define MD_MAX_DUTY_XPNS (int) (MD_MAX_DUTY * g_adjust.XPNSadjust.value / 100)
 

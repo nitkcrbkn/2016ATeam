@@ -10,23 +10,19 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
-/* 駆動(小)の台形制御の変化量 */
-const tc_slope_lim_t tc_slope_lim_dri_small = {
-  .rising_val = 50,
-  .falling_val = 200,
-};
 
 /* 駆動(大)の台形制御の変化量 */
-const tc_slope_lim_t tc_slope_lim_dri_lerge = {
-  .rising_val = 200,
-  .falling_val = 200,
-};
+tc_slope_lim_t tc_slope_lim_dri_lerge ;
+
+/* 駆動(小)の台形制御の変化量 */
+tc_slope_lim_t tc_slope_lim_dri_small;
 
 /* 橋展開の台形制御の変化量 */
-const tc_slope_lim_t tc_slope_lim_xpn = {
-  .rising_val = 200,
-  .falling_val = 200,
-};
+tc_slope_lim_t tc_slope_lim_xpn;
+
+/* 台形制御の変化量の初期化 */
+static
+void setTCVal(void);
 
 /*suspensionSystem*/
 static
@@ -47,6 +43,7 @@ int appInit(void){
 
   ad_init();
 
+  setTCVal();
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
@@ -62,6 +59,7 @@ int appTask(void){
         SY_wait(10);
 
     ad_main();
+    setTCVal();
   }
 
   /*それぞれの機構ごとに処理をする*/
@@ -77,6 +75,17 @@ int appTask(void){
   }
 
   return EXIT_SUCCESS;
+}
+
+/* 台形制御の変化量の初期化 */
+static
+void setTCVal(void){
+  tc_slope_lim_dri_lerge.rising_val = g_adjust.tc_dril_rise.value;
+  tc_slope_lim_dri_lerge.falling_val = g_adjust.tc_dril_fall.value;
+  tc_slope_lim_dri_small.rising_val = g_adjust.tc_dris_rise.value;
+  tc_slope_lim_dri_small.falling_val = g_adjust.tc_dris_fall.value;
+  tc_slope_lim_xpn.rising_val = g_adjust.tc_xpn_rise.value;
+  tc_slope_lim_xpn.falling_val = g_adjust.tc_xpn_fall.value;
 }
 
 /*プライベート 足回りシステム*/

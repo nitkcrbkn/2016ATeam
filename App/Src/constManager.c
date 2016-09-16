@@ -16,7 +16,7 @@ typedef enum{
 /*second, write const description.*/
 static const adjust_t defaultad={
 .MTRLadjust = {
-    .value = 100,
+    .value = 60,
     .maxvalue = 100,
     .minvalue = 0,
     .display_name = "MTRL adjust",
@@ -35,6 +35,48 @@ static const adjust_t defaultad={
     .minvalue = 0,
     .display_name = "XPNS adjust",
     .display_unit = "%",
+  },
+  .tc_dril_rise = {
+    .value = 50,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_dril_rise",
+    .display_unit = "",
+  },
+  .tc_dril_fall = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_dril_fall",
+    .display_unit = "",
+  },
+  .tc_dris_rise = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_dris_rise",
+    .display_unit = "",
+  },
+  .tc_dris_fall = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_dris_fall",
+    .display_unit = "",
+  },
+  .tc_xpn_rise = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_xpn_rise",
+    .display_unit = "",
+  },
+  .tc_xpn_fall = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_xpn_fall",
+    .display_unit = "",
   },
   
   /*template
@@ -55,6 +97,12 @@ const_element_t *editlist[_EDITLIST_NUM]={
   &(g_adjust.MTRLadjust),
   &(g_adjust.DRISadjust),
   &(g_adjust.XPNSadjust),
+  &(g_adjust.tc_dril_rise),
+  &(g_adjust.tc_dril_fall),
+  &(g_adjust.tc_dris_rise),
+  &(g_adjust.tc_dris_fall),
+  &(g_adjust.tc_xpn_rise),
+  &(g_adjust.tc_xpn_fall),
 };
 
 static
