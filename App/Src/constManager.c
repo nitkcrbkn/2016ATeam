@@ -44,13 +44,41 @@ static const adjust_t defaultad={
     .display_unit = "%",
   },
   .ARMadjust = {
-    .value = 100,
+    .value = 50,
     .maxvalue = 100,
     .minvalue = 0,
     .display_name = "ARM adjust",
     .display_unit = "%",
   },
-  
+  .tc_dri_rise = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_dri_rise",
+    .display_unit = "",
+  },
+  .tc_dri_fall = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_dri_fall",
+    .display_unit = "",
+  },
+  .tc_arm_rise = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_arm_rise",
+    .display_unit = "",
+  },
+  .tc_arm_fall = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_arm_fall",
+    .display_unit = "",
+  },
+ 
   /*template
   . = {
     .value = ,
@@ -71,6 +99,10 @@ const_element_t *editlist[_EDITLIST_NUM]={
   &(g_adjust.DRIBLadjust),
   &(g_adjust.DRIBRadjust),
   &(g_adjust.ARMadjust),
+  &(g_adjust.tc_dri_rise),
+  &(g_adjust.tc_dri_fall),
+  &(g_adjust.tc_arm_rise),
+  &(g_adjust.tc_arm_fall),
 };
 
 static

@@ -41,7 +41,7 @@
 #define MD_MAX_DUTY_DRIR (int) (MD_MAX_DUTY * g_adjust.DRIRadjust.value / 100)
 #define MD_MAX_DUTY_DRIBL (int) (MD_MAX_DUTY * g_adjust.DRIBLadjust.value / 100)
 #define MD_MAX_DUTY_DRIBR (int) (MD_MAX_DUTY * g_adjust.DRIBRadjust.value / 100)
-#define MD_MAX_DUTY_ARM (int) (MD_MAX_DUTY * 0.5 * g_adjust.ARMadjust.value / 100)
+#define MD_MAX_DUTY_ARM (int) (MD_MAX_DUTY * g_adjust.ARMadjust.value / 100)
 
 #define MD_GAIN_DRIL ( MD_MAX_DUTY_DRIL / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIR ( MD_MAX_DUTY_DRIR / DD_RC_ANALOG_MAX )

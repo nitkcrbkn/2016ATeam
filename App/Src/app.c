@@ -11,20 +11,19 @@
 #include "constManager.h"
 
 /* 駆動の台形制御の変化量 */
-const tc_slope_lim_t tc_slope_lim_dri = {
-  .rising_val = 200,
-  .falling_val = 200,
-};
+tc_slope_lim_t tc_slope_lim_dri;
 
 /* アームの台形制御の変化量 */
-const tc_slope_lim_t tc_slope_lim_arm = {
-  .rising_val = 200,
-  .falling_val = 200,
-};
+tc_slope_lim_t tc_slope_lim_arm;
 
 /* スイッチを使うポートの初期化 */
 static
 void swInit(void);
+
+
+/* 台形制御の変化量の初期化 */
+static
+void setTCVal(void);
 
 /*suspensionSystem*/
 static
@@ -47,6 +46,7 @@ int appInit(void){
 
   swInit();
 
+  setTCVal();
   /*GPIO の設定などでMW,GPIOではHALを叩く*/
   return EXIT_SUCCESS;
 }
@@ -62,6 +62,7 @@ int appTask(void){
       SY_wait(10);
 
     ad_main();
+    setTCVal();
   }
 
   /*それぞれの機構ごとに処理をする*/
@@ -87,8 +88,16 @@ void swInit(void){
   MW_SetGPIOPull(GPIO_PULLUP);
   MW_SetGPIOSpeed(GPIO_SPEED_FREQ_LOW);
   MW_GPIOInit(_LIMITSW_ARM_GPIOxID);
+}
 
-  return EXIT_SUCCESS;
+
+/* 台形制御の変化量の初期化 */
+static
+void setTCVal(void){
+  tc_slope_lim_dri.rising_val = g_adjust.tc_dri_rise.value;
+  tc_slope_lim_dri.falling_val = g_adjust.tc_dri_fall.value;
+  tc_slope_lim_arm.rising_val = g_adjust.tc_arm_rise.value;
+  tc_slope_lim_arm.falling_val = g_adjust.tc_arm_fall.value;
 }
 
 /* 足回りシステム*/
