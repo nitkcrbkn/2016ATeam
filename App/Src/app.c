@@ -165,7 +165,7 @@ int changeOpeMode(void){
   return EXIT_SUCCESS;
 }
 
-/*プライベート 足回りシステム モードA*/
+/*足回りシステム モードA*/
 static
 int suspensionSystem_modeA(void){
   /* ボタンを１つ押すと、４つのモータが動作する */
@@ -199,7 +199,7 @@ int suspensionSystem_modeA(void){
   return EXIT_SUCCESS;
 } /* suspensionSystem_modeA */
 
-/*プライベート 足回りシステム モードB*/
+/*足回りシステム モードB*/
 static
 int suspensionSystem_modeB(void){
   const int num_of_motor = 4; /*モータの個数*/
@@ -262,7 +262,7 @@ int suspensionSystem_modeB(void){
   return EXIT_SUCCESS;
 } /* suspensionSystem_modeB */
 
-/*プライベート アームシステム モードA*/
+/*アームシステム モードA*/
 static
 int armSystem_modeA(void){
   const int num_of_motor = ROB0_ARMT + 3; /*モータの個数*/
@@ -327,7 +327,7 @@ int armSystem_modeA(void){
   return EXIT_SUCCESS;
 } /* armSystem_modeA */
 
-/*プライベート 足回りシステム モードB*/
+/*足回りシステム モードB*/
 static
 int armSystem_modeB(void){
   /* アーム基部の回転動作の制御 */
@@ -365,7 +365,7 @@ int armSystem_modeB(void){
   return EXIT_SUCCESS;
 } /* armSystem_modeB */
 
-/*プライベート 真空モータシステム*/
+/*真空モータシステム*/
 static
 int vacSystem(void){
   static int has_pressed_tri;
@@ -388,7 +388,7 @@ int vacSystem(void){
   return EXIT_SUCCESS;
 }/* vacSystem */
 
-/*プライベート LEDシステム*/
+/*LEDシステム*/
 static int LEDSystem(void){
   switch( g_ope_mode ){
   case OPE_MODE_A:
