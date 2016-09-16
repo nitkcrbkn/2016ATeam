@@ -4,7 +4,7 @@
 #define _RC_ADJUST_NUM 4
 
 /*exclude dumy*/
-#define _EDITLIST_NUM  7
+#define _EDITLIST_NUM  10
 
 #define WRITE_ADDR (const void*)(0x8000000+0x400*(128-1))/*128[KiB]*/
 
@@ -31,6 +31,12 @@ typedef struct {
   const_element_t ARMTadjust;
   const_element_t ARMEadjust;
   const_element_t ARMSadjust;
+  const_element_t tc_dri_rise;
+  const_element_t tc_dri_fall;
+  const_element_t tc_arm_rise;
+  const_element_t tc_arm_fall;
+  const_element_t tc_armS_rise;
+  const_element_t tc_armS_fall;
 } adjust_t;
 
 extern adjust_t g_adjust;

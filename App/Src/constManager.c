@@ -57,13 +57,49 @@ static const adjust_t defaultad={
     .display_name = "ARMS adjust",
     .display_unit = "%",
   },
-  .ARMEadjust = {
-    .value = 100,
-    .maxvalue = 100,
+  .tc_dri_rise = {
+    .value = 200,
+    .maxvalue = 999,
     .minvalue = 0,
-    .display_name = "ARME adjust",
-    .display_unit = "%",
+    .display_name = "tc_dri_rise",
+    .display_unit = "",
   },
+  .tc_dri_fall = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_dri_fall",
+    .display_unit = "",
+  },
+  .tc_arm_rise = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_arm_rise",
+    .display_unit = "",
+  },
+  .tc_arm_fall = {
+    .value = 400,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_arm_fall",
+    .display_unit = "",
+  },
+  .tc_armS_rise = {
+    .value = 200,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_armS_rise",
+    .display_unit = "",
+  },
+  .tc_armS_fall = {
+    .value = 999,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_armS_fall",
+    .display_unit = "",
+  },
+
   /*template
   . = {
     .value = ,
@@ -86,6 +122,12 @@ const_element_t *editlist[_EDITLIST_NUM]={
   &(g_adjust.ARMTadjust),
   &(g_adjust.ARMEadjust),
   &(g_adjust.ARMSadjust),
+  &(g_adjust.tc_dri_rise),
+  &(g_adjust.tc_dri_fall),
+  &(g_adjust.tc_arm_rise),
+  &(g_adjust.tc_arm_fall),
+  &(g_adjust.tc_armS_rise),
+  &(g_adjust.tc_armS_fall),
 };
 
 static

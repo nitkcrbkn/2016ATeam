@@ -11,29 +11,24 @@
 #include "constManager.h"
 
 /* 駆動の台形制御の変化量 */
-const tc_slope_lim_t tc_slope_lim_dri = {
-  .rising_val = 200,
-  .falling_val = 200,
-};
+tc_slope_lim_t tc_slope_lim_dri;
 
 /* アーム回転と上下の台形制御の変化量 */
-const tc_slope_lim_t tc_slope_lim_arm = {
-  .rising_val = 200,
-  .falling_val = 400,
-};
+tc_slope_lim_t tc_slope_lim_arm;
 
 /* アームの伸縮の台形制御の変化量 */
-const tc_slope_lim_t tc_slope_lim_armS = {
-  .rising_val = 200,
-  .falling_val = 5000,
-};
+tc_slope_lim_t tc_slope_lim_armS;
 
 /* 操作モード */
 static ope_mode_t g_ope_mode = OPE_MODE_A;
 
 /* スイッチを使うポートの初期化 */
 static
-int swInit(void);
+void swInit(void);
+
+/* 台形制御の変化量の初期化 */
+static
+void tcInit(void);
 
 /* 操作モード変更 */
 static
@@ -143,14 +138,24 @@ int appTask(void){
 
 /* スイッチを使うポートの初期化 */
 static
-int swInit(void){
+void swInit(void){
   MW_SetGPIOPin(_LIMITSW_ARM_BACK_GPIOPIN);
   MW_SetGPIOMode(GPIO_MODE_INPUT);
   MW_SetGPIOPull(GPIO_PULLUP);
   MW_SetGPIOSpeed(GPIO_SPEED_FREQ_LOW);
   MW_GPIOInit(_LIMITSW_ARM_BACK_GPIOxID);
+}
 
-  return EXIT_SUCCESS;
+
+/* 台形制御の変化量の初期化 */
+static
+void tcInit(void){
+  tc_slope_lim_dri.rising_val = g_adjust.tc_dri_rise.value;
+  tc_slope_lim_dri.falling_val = g_adjust.tc_dri_fall.value;
+  tc_slope_lim_arm.rising_val = g_adjust.tc_arm_rise.value;
+  tc_slope_lim_arm.falling_val = g_adjust.tc_arm_fall.value;
+  tc_slope_lim_armS.rising_val = g_adjust.tc_armS_rise.value;
+  tc_slope_lim_armS.falling_val = g_adjust.tc_armS_fall.value;
 }
 
 /* 操作モードの変更 */
