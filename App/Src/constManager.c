@@ -16,14 +16,14 @@ typedef enum{
 /*second, write const description.*/
 static const adjust_t defaultad={
   .DRILadjust = {
-    .value = 100,
+    .value = 60,
     .maxvalue = 100,
     .minvalue = 0,
     .display_name = "DRIL adjust",
     .display_unit = "%",
   },
   .DRIRadjust = {
-    .value = 100,
+    .value = 60,
     .maxvalue = 100,
     .minvalue = 0,
     .display_name = "DRIR adjust",
