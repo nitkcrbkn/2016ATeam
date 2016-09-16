@@ -173,33 +173,44 @@ int changeOpeMode(void){
 /*足回りシステム モードA*/
 static
 int suspensionSystem_modeA(void){
+  /* 目標値 */
+  int DRIL_target_duty; 
+  int DRIR_target_duty; 
+  int DRIBF_target_duty; 
+  int DRIBB_target_duty; 
+
   /* ボタンを１つ押すと、４つのモータが動作する */
   if( __RC_ISPRESSED_UP(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], -MD_MAX_DUTY_DRIBF, _IS_REVERSE_DRIB);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], -MD_MAX_DUTY_DRIBB, _IS_REVERSE_DRIB);
+    DRIL_target_duty = -MD_MAX_DUTY_DRIL; 
+    DRIR_target_duty = -MD_MAX_DUTY_DRIR; 
+    DRIBF_target_duty = -MD_MAX_DUTY_DRIBF; 
+    DRIBB_target_duty = -MD_MAX_DUTY_DRIBB; 
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], MD_MAX_DUTY_DRIBF, _IS_REVERSE_DRIB);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], MD_MAX_DUTY_DRIBB, _IS_REVERSE_DRIB);
+    DRIL_target_duty = MD_MAX_DUTY_DRIL; 
+    DRIR_target_duty = MD_MAX_DUTY_DRIR; 
+    DRIBF_target_duty = MD_MAX_DUTY_DRIBF; 
+    DRIBB_target_duty = MD_MAX_DUTY_DRIBB; 
   }else if( __RC_ISPRESSED_LEFT(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], -MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], 0, _IS_REVERSE_DRIB);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], 0, _IS_REVERSE_DRIB);
+    DRIL_target_duty = MD_MAX_DUTY_DRIL; 
+    DRIR_target_duty = -MD_MAX_DUTY_DRIR; 
+    DRIBF_target_duty = 0; 
+    DRIBB_target_duty = 0; 
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], -MD_MAX_DUTY_DRIL, _IS_REVERSE_DRIL);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], MD_MAX_DUTY_DRIR, _IS_REVERSE_DRIR);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], 0, _IS_REVERSE_DRIB);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], 0, _IS_REVERSE_DRIB);
+    DRIL_target_duty = -MD_MAX_DUTY_DRIL; 
+    DRIR_target_duty = MD_MAX_DUTY_DRIR; 
+    DRIBF_target_duty = 0; 
+    DRIBB_target_duty = 0; 
   }else{
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIL], 0, _IS_REVERSE_DRIL);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIR], 0, _IS_REVERSE_DRIR);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBF], 0, _IS_REVERSE_DRIB);
-    control_trapezoid(&tc_slope_lim_arm, &g_md_h[ROB0_DRIBB], 0, _IS_REVERSE_DRIB);
+    DRIL_target_duty = 0; 
+    DRIR_target_duty = 0; 
+    DRIBF_target_duty = 0; 
+    DRIBB_target_duty = 0; 
   }
+
+  control_trapezoid(&tc_slope_lim_dri, &g_md_h[ROB0_DRIL], DRIL_target_duty, _IS_REVERSE_DRIL);
+  control_trapezoid(&tc_slope_lim_dri, &g_md_h[ROB0_DRIR], DRIR_target_duty, _IS_REVERSE_DRIR);
+  control_trapezoid(&tc_slope_lim_dri, &g_md_h[ROB0_DRIBF], DRIBF_target_duty, _IS_REVERSE_DRIB);
+  control_trapezoid(&tc_slope_lim_dri, &g_md_h[ROB0_DRIBB], DRIBB_target_duty, _IS_REVERSE_DRIB);
 
   return EXIT_SUCCESS;
 } /* suspensionSystem_modeA */
