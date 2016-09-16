@@ -12,7 +12,7 @@
 
 
 /* 駆動(大)の台形制御の変化量 */
-tc_slope_lim_t tc_slope_lim_dri_lerge ;
+tc_slope_lim_t tc_slope_lim_dri_lerge;
 
 /* 駆動(小)の台形制御の変化量 */
 tc_slope_lim_t tc_slope_lim_dri_small;
@@ -40,7 +40,6 @@ int bridgeSystem(void);
  */
 
 int appInit(void){
-
   ad_init();
 
   setTCVal();
@@ -52,11 +51,12 @@ int appInit(void){
 int appTask(void){
   int ret = 0;
 
-  if(__RC_ISPRESSED_R1(g_rc_data)&&__RC_ISPRESSED_R2(g_rc_data)&&
-     __RC_ISPRESSED_L1(g_rc_data)&&__RC_ISPRESSED_L2(g_rc_data)){
-    while(__RC_ISPRESSED_R1(g_rc_data)||__RC_ISPRESSED_R2(g_rc_data)||
-	  __RC_ISPRESSED_L1(g_rc_data)||__RC_ISPRESSED_L2(g_rc_data))
-        SY_wait(10);
+  if( __RC_ISPRESSED_R1(g_rc_data) && __RC_ISPRESSED_R2(g_rc_data) &&
+      __RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_L2(g_rc_data)){
+    while( __RC_ISPRESSED_R1(g_rc_data) || __RC_ISPRESSED_R2(g_rc_data) ||
+           __RC_ISPRESSED_L1(g_rc_data) || __RC_ISPRESSED_L2(g_rc_data)){
+      SY_wait(10);
+    }
 
     ad_main();
     setTCVal();
@@ -131,10 +131,9 @@ int suspensionSystem(void){
     }else{
       target_val = rc_analogdata * md_gain;
     }
-   
+
     /*台数制御*/
     control_trapezoid(tc_slope_lim_ptr, &g_md_h[idx], target_val, is_reverse);
-    
   }
 
   return EXIT_SUCCESS;
@@ -143,13 +142,14 @@ int suspensionSystem(void){
 /*プライベート 橋展開システム*/
 static
 int bridgeSystem(void){
-  if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
+  if( __RC_ISPRESSED_CIRCLE(g_rc_data)){
     control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], -MD_MAX_DUTY_XPNS, _IS_REVERSE_XPNS);
-  }else if(__RC_ISPRESSED_CROSS(g_rc_data)){
+  }else if( __RC_ISPRESSED_CROSS(g_rc_data)){
     control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], MD_MAX_DUTY_XPNS, _IS_REVERSE_XPNS);
   }else{
     control_trapezoid(&tc_slope_lim_xpn, &g_md_h[ROB1_XPNS], 0, _IS_REVERSE_XPNS);
   }
-  
+
   return EXIT_SUCCESS;
 } /* bridgeSystem */
+

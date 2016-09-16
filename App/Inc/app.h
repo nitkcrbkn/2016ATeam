@@ -20,7 +20,7 @@
 /*モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
 #define _IS_REVERSE_MTRL 0
-#define _IS_REVERSE_DRIS 0 
+#define _IS_REVERSE_DRIS 0
 #define _IS_REVERSE_XPNS 1
 
 /* 各モータのインデックス */
@@ -33,9 +33,9 @@
 
 #define MD_MAX_DUTY 9999
 
-#define MD_MAX_DUTY_MTRL (int) (MD_MAX_DUTY * g_adjust.MTRLadjust.value / 100)
-#define MD_MAX_DUTY_DRIS (int) (MD_MAX_DUTY * g_adjust.DRISadjust.value / 100)
-#define MD_MAX_DUTY_XPNS (int) (MD_MAX_DUTY * g_adjust.XPNSadjust.value / 100)
+#define MD_MAX_DUTY_MTRL (int)( MD_MAX_DUTY * g_adjust.MTRLadjust.value / 100 )
+#define MD_MAX_DUTY_DRIS (int)( MD_MAX_DUTY * g_adjust.DRISadjust.value / 100 )
+#define MD_MAX_DUTY_XPNS (int)( MD_MAX_DUTY * g_adjust.XPNSadjust.value / 100 )
 
 #define MD_GAIN_MTRL ( MD_MAX_DUTY_MTRL / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIS ( MD_MAX_DUTY_DRIS / DD_RC_ANALOG_MAX )
@@ -44,6 +44,5 @@ int appTask(void);
 int appInit(void);
 
 #endif
-
 
 
