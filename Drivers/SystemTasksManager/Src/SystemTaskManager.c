@@ -141,7 +141,7 @@ int SY_init(void){
 
   /*Initialize printf null transit*/
   flush();
-#if _NO_DEVICE
+#if !_NO_DEVICE
   ret = DD_initialize();
   if(ret){
     return ret;
