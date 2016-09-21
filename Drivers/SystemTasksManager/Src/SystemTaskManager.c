@@ -71,11 +71,11 @@ int main(void){
 
     SY_doAppTasks();
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
+      MW_printf("\033[1;1H");
       DD_RCPrint((uint8_t*)g_rc_data);
       DD_print();
       MW_printf("$%d",(int)g_led_mode);
       flush(); /* out message. */
-      MW_printf("\033[1;1H");
     }
     while( g_SY_system_counter % _INTERVAL_MS != _INTERVAL_MS / 2 - 1 ){
     }
@@ -141,11 +141,12 @@ int SY_init(void){
 
   /*Initialize printf null transit*/
   flush();
-  
+#if !_NO_DEVICE
   ret = DD_initialize();
   if(ret){
     return ret;
   }
+#endif
 
   /*Initialize GPIO*/
   SY_GPIOInit();
