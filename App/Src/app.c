@@ -393,10 +393,12 @@ int vacSystem(void){
     if( !has_pressed_tri ){
       has_pressed_tri = 1;
       /* △がすでに押されているか */
-      if(( g_ab_h[ROB0_VAC].dat & ( VAC0 | VAC1 | VAC2 | VAC3 )) != ( VAC0 | VAC1 | VAC2 | VAC3 )){
-        g_ab_h[ROB0_VAC].dat |= ( VAC0 | VAC1 | VAC2 | VAC3 ); /* on */
+      if(( g_ab_h[ROB0_VAC].dat & ( VAC0 | VAC1 | VAC2 | VAC3 )) == ( VAC0 | VAC1 | VAC2 | VAC3 )){
+        g_ab_h[ROB0_VAC].dat &= ~( VAC0 | VAC1 ); /* 前２つのみoff */
+      }else if(( g_ab_h[ROB0_VAC].dat & ( VAC0 | VAC1 | VAC2 | VAC3 )) == ( VAC2 | VAC3 )){
+        g_ab_h[ROB0_VAC].dat &= ~( VAC2 | VAC3 ); /* 後２つもoff */
       }else{
-        g_ab_h[ROB0_VAC].dat &= ~( VAC0 | VAC1 | VAC2 | VAC3 ); /* off */
+	g_ab_h[ROB0_VAC].dat |= ( VAC0 | VAC1 | VAC2 | VAC3 ); /* on */
       }
     }
   }else{
