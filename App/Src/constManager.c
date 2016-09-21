@@ -44,7 +44,7 @@ static const adjust_t defaultad={
     .display_unit = "%",
   },
   .ARMadjust = {
-    .value = 50,
+    .value = 75,
     .maxvalue = 100,
     .minvalue = 0,
     .display_name = "ARM adjust",
