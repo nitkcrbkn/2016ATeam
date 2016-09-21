@@ -386,20 +386,46 @@ int armSystem_modeB(void){
 /*真空モータシステム*/
 static
 int vacSystem(void){
+  static int has_pressed_cir;
+  static int has_pressed_crs;
+  static int has_pressed_sqr;
   static int has_pressed_tri;
+
+  if( __RC_ISPRESSED_CIRCLE(g_rc_data)){
+    /* ○が押され続けている間は処理を行わない */
+    if( !has_pressed_cir ){
+      has_pressed_cir = 1;
+      g_ab_h[ROB0_VAC].dat ^= VAC0; /* トグル */
+    }
+  }else{
+    has_pressed_cir = 0;
+  }
+
+  if( __RC_ISPRESSED_CROSS(g_rc_data)){
+    /* ×が押され続けている間は処理を行わない */
+    if( !has_pressed_crs ){
+      has_pressed_crs = 1;
+      g_ab_h[ROB0_VAC].dat ^= VAC1; /* トグル */
+    }
+  }else{
+    has_pressed_crs = 0;
+  }
+
+  if( __RC_ISPRESSED_SQARE(g_rc_data)){
+    /* □が押され続けている間は処理を行わない */
+    if( !has_pressed_sqr ){
+      has_pressed_sqr = 1;
+      g_ab_h[ROB0_VAC].dat ^= VAC2; /* トグル */
+    }
+  }else{
+    has_pressed_sqr = 0;
+  }
 
   if( __RC_ISPRESSED_TRIANGLE(g_rc_data)){
     /* △が押され続けている間は処理を行わない */
     if( !has_pressed_tri ){
       has_pressed_tri = 1;
-      /* △がすでに押されているか */
-      if(( g_ab_h[ROB0_VAC].dat & ( VAC0 | VAC1 | VAC2 | VAC3 )) == ( VAC0 | VAC1 | VAC2 | VAC3 )){
-        g_ab_h[ROB0_VAC].dat &= ~( VAC0 | VAC1 ); /* 前２つのみoff */
-      }else if(( g_ab_h[ROB0_VAC].dat & ( VAC0 | VAC1 | VAC2 | VAC3 )) == ( VAC2 | VAC3 )){
-        g_ab_h[ROB0_VAC].dat &= ~( VAC2 | VAC3 ); /* 後２つもoff */
-      }else{
-	g_ab_h[ROB0_VAC].dat |= ( VAC0 | VAC1 | VAC2 | VAC3 ); /* on */
-      }
+      g_ab_h[ROB0_VAC].dat ^= VAC3; /* トグル */
     }
   }else{
     has_pressed_tri = 0;
