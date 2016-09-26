@@ -40,7 +40,7 @@ DD_MDHand_t g_md_h[DD_NUM_OF_MD] = {
 /*AB Definition*/
 DD_ABHand_t g_ab_h[DD_NUM_OF_AB] = {
   { .add = 0x25, /* address */
-    .dat = 0x00, /* data */
+    .dat = 0x0F, /* data */
   },
 };
 #endif
