@@ -15,70 +15,70 @@ typedef enum{
 
 /*second, write const description.*/
 static const adjust_t defaultad={
-  .leftadjust = {
-    .value = 0,
-    .maxvalue = 20,
-    .minvalue = -20,
-    .display_name = "left adjust",
+  .DRILadjust = {
+    .value = 60,
+    .maxvalue = 100,
+    .minvalue = 0,
+    .display_name = "DRIL adjust",
     .display_unit = "%",
   },
-  .rightadjust = {
-    .value = 0,
-    .maxvalue = 20,
-    .minvalue = -20,
-    .display_name = "right adjust",
-    .display_unit = "%"
-  },
-  .steeringtime = {
-    .value = 50,
-    .maxvalue = 200,
+  .DRIRadjust = {
+    .value = 60,
+    .maxvalue = 100,
     .minvalue = 0,
-    .display_name = "steering time",
-    .display_unit = "*10ms",
+    .display_name = "DRIR adjust",
+    .display_unit = "%",
   },
-  .rctimeout = {
-    .value = 10,
+  .DRIBLadjust = {
+    .value = 100,
+    .maxvalue = 100,
+    .minvalue = 0,
+    .display_name = "DRIBL adjust",
+    .display_unit = "%",
+  },
+  .DRIBRadjust = {
+    .value = 100,
+    .maxvalue = 100,
+    .minvalue = 0,
+    .display_name = "DRIBR adjust",
+    .display_unit = "%",
+  },
+  .ARMadjust = {
+    .value = 75,
+    .maxvalue = 100,
+    .minvalue = 0,
+    .display_name = "ARM adjust",
+    .display_unit = "%",
+  },
+  .tc_dri_rise = {
+    .value = 100,
     .maxvalue = 999,
-    .minvalue = 1,
-    .display_name = "rc timeout",
-    .display_unit = "s",
+    .minvalue = 0,
+    .display_name = "tc_dri_rise",
+    .display_unit = "",
   },
-  .rc_centre_thereshold = {
-    .value = 4,
-    .maxvalue = 6,
-    .minvalue = 2,
-    .display_name = "rc cntr theres",
-    .display_unit = "/16",
+  .tc_dri_fall = {
+    .value = 100,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_dri_fall",
+    .display_unit = "",
   },
-  .rc_centre_thereshold2 = {
-    .value = 4,
-    .maxvalue = 6,
-    .minvalue = 2,
-    .display_name = "rc cntr theres",
-    .display_unit = "/16",
+  .tc_arm_rise = {
+    .value = 100,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_arm_rise",
+    .display_unit = "",
   },
-  .rc_centre_thereshold3 = {
-    .value = 4,
-    .maxvalue = 6,
-    .minvalue = 2,
-    .display_name = "rc cntr theres",
-    .display_unit = "/16",
+  .tc_arm_fall = {
+    .value = 100,
+    .maxvalue = 999,
+    .minvalue = 0,
+    .display_name = "tc_arm_fall",
+    .display_unit = "",
   },
-  .rc_centre_thereshold4 = {
-    .value = 4,
-    .maxvalue = 6,
-    .minvalue = 2,
-    .display_name = "rc cntr theres",
-    .display_unit = "/16",
-  },
-  .rc_centre_thereshold5 = {
-    .value = 4,
-    .maxvalue = 6,
-    .minvalue = 2,
-    .display_name = "rc cntr theres",
-    .display_unit = "/16",
-  },
-  
+ 
   /*template
   . = {
     .value = ,
@@ -94,15 +94,15 @@ adjust_t g_adjust;
 
 /*finary, add edit list.*/
 const_element_t *editlist[_EDITLIST_NUM]={
-  &(g_adjust.rightadjust),
-  &(g_adjust.leftadjust),
-  &(g_adjust.steeringtime),
-  &(g_adjust.rctimeout),
-  &(g_adjust.rc_centre_thereshold),
-  &(g_adjust.rc_centre_thereshold2),
-  &(g_adjust.rc_centre_thereshold3),
-  &(g_adjust.rc_centre_thereshold4),
-  &(g_adjust.rc_centre_thereshold5),
+  &(g_adjust.DRILadjust),
+  &(g_adjust.DRIRadjust),
+  &(g_adjust.DRIBLadjust),
+  &(g_adjust.DRIBRadjust),
+  &(g_adjust.ARMadjust),
+  &(g_adjust.tc_dri_rise),
+  &(g_adjust.tc_dri_fall),
+  &(g_adjust.tc_arm_rise),
+  &(g_adjust.tc_arm_fall),
 };
 
 static
@@ -208,14 +208,12 @@ void adjustPrint(int point){
 
 static
 void interval_10ms(void){
-    while(g_SY_system_counter%10==0);
-    while(g_SY_system_counter%10!=0);
+  SY_wait(10);
 }
 
 static
 void wait(unsigned int ms){
-  unsigned int old = g_SY_system_counter;
-  while(old + ms > g_SY_system_counter);
+  SY_wait(ms);
 }
 
 
@@ -283,8 +281,8 @@ int ad_keyTask(void){
   
   /*reload value*/
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
-    message("msg","load default value");
     reloadDefault();
+    message("msg","load default value");
     adjustPrint(select);
   }
 

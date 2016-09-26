@@ -24,15 +24,15 @@ typedef struct {
 
 /*first, add menber to this list.*/
 typedef struct {
-  const_element_t leftadjust;
-  const_element_t rightadjust;
-  const_element_t steeringtime;
-  const_element_t rctimeout;
-  const_element_t rc_centre_thereshold;
-  const_element_t rc_centre_thereshold2;
-  const_element_t rc_centre_thereshold3;
-  const_element_t rc_centre_thereshold4;
-  const_element_t rc_centre_thereshold5;
+  const_element_t DRILadjust;
+  const_element_t DRIRadjust;
+  const_element_t DRIBLadjust;
+  const_element_t DRIBRadjust;
+  const_element_t ARMadjust;
+  const_element_t tc_dri_rise;
+  const_element_t tc_dri_fall;
+  const_element_t tc_arm_rise;
+  const_element_t tc_arm_fall;
 } adjust_t;
 
 extern adjust_t g_adjust;

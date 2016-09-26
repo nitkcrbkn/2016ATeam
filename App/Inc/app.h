@@ -3,8 +3,8 @@
 
 
 /* モータ、電磁弁の個数 */
-#define DD_NUM_OF_MD 4
-#define DD_NUM_OF_AB 1
+#define DD_NUM_OF_MD 5
+#define DD_NUM_OF_AB 0
 
 #define DD_USE_ENCODER1 0
 #define DD_USE_ENCODER2 0
@@ -19,47 +19,38 @@
 
 /*モータを反転させるか(１で反転) */
 /* 駆動のモータの回転の向きを揃えるために使用 */
-#define _IS_REVERSE_DRIL 0
-#define _IS_REVERSE_DRIR 1
-#define _IS_REVERSE_DRIB 0
-#define _IS_REVERSE_PSH 0
+#define _IS_REVERSE_DRIL 0 /* 駆動左 */
+#define _IS_REVERSE_DRIR 1 /* 駆動右 */
+#define _IS_REVERSE_DRIBL 0 /* 橋用駆動左 */
+#define _IS_REVERSE_DRIBR 0 /* 橋用駆動左 */
+#define _IS_REVERSE_ARM 0 /* アーム */
 
 /* 各モータのインデックス */
 #define ROB1_DRIL 0
 #define ROB1_DRIR 1
-#define ROB1_DRIB 2
-#define ROB1_PSH 3
-
-/* 電磁弁のインデックス */
-#define ROB1_AB 0
-
-/* 電磁弁のチャンネル */
-#define LIFTL (1<<0)
-#define LIFTR (1<<1)
-#define PNCHL (1<<2)
-#define PNCHR (1<<3)
+#define ROB1_DRIBL 2
+#define ROB1_DRIBR 3
+#define ROB1_ARM 4
 
 /* コントローラのスティックの補正値 */
 #define CENTRAL_THRESHOLD 5
 
 #define MD_MAX_DUTY 9999
 
-#define MD_MAX_DUTY_DRIL MD_MAX_DUTY
-#define MD_MAX_DUTY_DRIR MD_MAX_DUTY
-#define MD_MAX_DUTY_DRIB MD_MAX_DUTY
-#define MD_MAX_DUTY_PSH MD_MAX_DUTY
+#define MD_MAX_DUTY_DRIL (int)( MD_MAX_DUTY * g_adjust.DRILadjust.value / 100 )
+#define MD_MAX_DUTY_DRIR (int)( MD_MAX_DUTY * g_adjust.DRIRadjust.value / 100 )
+#define MD_MAX_DUTY_DRIBL (int)( MD_MAX_DUTY * g_adjust.DRIBLadjust.value / 100 )
+#define MD_MAX_DUTY_DRIBR (int)( MD_MAX_DUTY * g_adjust.DRIBRadjust.value / 100 )
+#define MD_MAX_DUTY_ARM (int)( MD_MAX_DUTY * g_adjust.ARMadjust.value / 100 )
 
 #define MD_GAIN_DRIL ( MD_MAX_DUTY_DRIL / DD_RC_ANALOG_MAX )
 #define MD_GAIN_DRIR ( MD_MAX_DUTY_DRIR / DD_RC_ANALOG_MAX )
-#define MD_GAIN_DRIB ( MD_MAX_DUTY_DRIB / DD_RC_ANALOG_MAX )
+#define MD_GAIN_DRIBL ( MD_MAX_DUTY_DRIBL / DD_RC_ANALOG_MAX )
+#define MD_GAIN_DRIBR ( MD_MAX_DUTY_DRIBR / DD_RC_ANALOG_MAX )
 
 int appTask(void);
 int appInit(void);
 
 #endif
-
-
-
-
 
 
