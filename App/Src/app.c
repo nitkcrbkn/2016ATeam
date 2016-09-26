@@ -36,7 +36,6 @@ int armSystem(void);
  */
 
 int appInit(void){
-
   ad_init();
 
   setTCVal();
@@ -48,11 +47,12 @@ int appInit(void){
 int appTask(void){
   int ret = 0;
 
-  if(__RC_ISPRESSED_R1(g_rc_data)&&__RC_ISPRESSED_R2(g_rc_data)&&
-     __RC_ISPRESSED_L1(g_rc_data)&&__RC_ISPRESSED_L2(g_rc_data)){
-    while(__RC_ISPRESSED_R1(g_rc_data)||__RC_ISPRESSED_R2(g_rc_data)||
-	  __RC_ISPRESSED_L1(g_rc_data)||__RC_ISPRESSED_L2(g_rc_data))
+  if( __RC_ISPRESSED_R1(g_rc_data) && __RC_ISPRESSED_R2(g_rc_data) &&
+      __RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_L2(g_rc_data)){
+    while( __RC_ISPRESSED_R1(g_rc_data) || __RC_ISPRESSED_R2(g_rc_data) ||
+           __RC_ISPRESSED_L1(g_rc_data) || __RC_ISPRESSED_L2(g_rc_data)){
       SY_wait(10);
+    }
 
     ad_main();
     setTCVal();
@@ -128,7 +128,7 @@ int suspensionSystem(void){
       idx = ROB1_DRIBR;
       break;
     default: return EXIT_FAILURE;
-    }
+    } /* switch */
 
     /* 目標値計算 */
     /*これは中央か?±3程度余裕を持つ必要がある。*/
@@ -154,3 +154,4 @@ int armSystem(void){
 
   return EXIT_SUCCESS;
 } /* armSystem */
+
