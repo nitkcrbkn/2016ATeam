@@ -148,7 +148,6 @@ void swInit(void){
   MW_GPIOInit(_LIMITSW_ARM_BACK_GPIOxID);
 }
 
-
 /* 台形制御の変化量の初期化 */
 static
 void setTCVal(void){
@@ -176,37 +175,37 @@ int changeOpeMode(void){
 static
 int suspensionSystem_modeA(void){
   /* 目標値 */
-  int DRIL_target_duty; 
-  int DRIR_target_duty; 
-  int DRIBF_target_duty; 
-  int DRIBB_target_duty; 
+  int DRIL_target_duty;
+  int DRIR_target_duty;
+  int DRIBF_target_duty;
+  int DRIBB_target_duty;
 
   /* ボタンを１つ押すと、４つのモータが動作する */
   if( __RC_ISPRESSED_UP(g_rc_data)){
-    DRIL_target_duty = -MD_MAX_DUTY_DRIL; 
-    DRIR_target_duty = -MD_MAX_DUTY_DRIR; 
-    DRIBF_target_duty = -MD_MAX_DUTY_DRIBF; 
-    DRIBB_target_duty = -MD_MAX_DUTY_DRIBB; 
+    DRIL_target_duty = -MD_MAX_DUTY_DRIL;
+    DRIR_target_duty = -MD_MAX_DUTY_DRIR;
+    DRIBF_target_duty = -MD_MAX_DUTY_DRIBF;
+    DRIBB_target_duty = -MD_MAX_DUTY_DRIBB;
   }else if( __RC_ISPRESSED_DOWN(g_rc_data)){
-    DRIL_target_duty = MD_MAX_DUTY_DRIL; 
-    DRIR_target_duty = MD_MAX_DUTY_DRIR; 
-    DRIBF_target_duty = MD_MAX_DUTY_DRIBF; 
-    DRIBB_target_duty = MD_MAX_DUTY_DRIBB; 
+    DRIL_target_duty = MD_MAX_DUTY_DRIL;
+    DRIR_target_duty = MD_MAX_DUTY_DRIR;
+    DRIBF_target_duty = MD_MAX_DUTY_DRIBF;
+    DRIBB_target_duty = MD_MAX_DUTY_DRIBB;
   }else if( __RC_ISPRESSED_LEFT(g_rc_data)){
-    DRIL_target_duty = MD_MAX_DUTY_DRIL; 
-    DRIR_target_duty = -MD_MAX_DUTY_DRIR; 
-    DRIBF_target_duty = 0; 
-    DRIBB_target_duty = 0; 
+    DRIL_target_duty = MD_MAX_DUTY_DRIL;
+    DRIR_target_duty = -MD_MAX_DUTY_DRIR;
+    DRIBF_target_duty = 0;
+    DRIBB_target_duty = 0;
   }else if( __RC_ISPRESSED_RIGHT(g_rc_data)){
-    DRIL_target_duty = -MD_MAX_DUTY_DRIL; 
-    DRIR_target_duty = MD_MAX_DUTY_DRIR; 
-    DRIBF_target_duty = 0; 
-    DRIBB_target_duty = 0; 
+    DRIL_target_duty = -MD_MAX_DUTY_DRIL;
+    DRIR_target_duty = MD_MAX_DUTY_DRIR;
+    DRIBF_target_duty = 0;
+    DRIBB_target_duty = 0;
   }else{
-    DRIL_target_duty = 0; 
-    DRIR_target_duty = 0; 
-    DRIBF_target_duty = 0; 
-    DRIBB_target_duty = 0; 
+    DRIL_target_duty = 0;
+    DRIR_target_duty = 0;
+    DRIBF_target_duty = 0;
+    DRIBB_target_duty = 0;
   }
 
   control_trapezoid(&tc_slope_lim_dri, &g_md_h[ROB0_DRIL], DRIL_target_duty, _IS_REVERSE_DRIL);
@@ -330,12 +329,14 @@ int armSystem_modeA(void){
     }
 
     /* アーム伸縮のリミットスイッチ */
-    if( idx == ROB0_ARMS ){/* ロボット伸縮の制御か */
-      if ( _IS_PRESSED_LIMITSW_ARM_BACK() && target_duty > 0 ){ /* 又は、アーム後端のリミットスイッチが押されているか */
-	g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
-	g_md_h[ROB0_ARMS].duty = 0;
+    if( idx == ROB0_ARMS ){ /* ロボット伸縮の制御か */
+      if( _IS_PRESSED_LIMITSW_ARM_BACK() && target_duty > 0 ){  /*
+                                                                 *又は、アーム後端のリミットスイッチが押されているか
+                                                                 **/
+        g_md_h[ROB0_ARMS].mode = D_MMOD_BRAKE;
+        g_md_h[ROB0_ARMS].duty = 0;
       }else{
-	control_trapezoid(&tc_slope_lim_armS, &g_md_h[idx], target_duty, is_reverse);
+        control_trapezoid(&tc_slope_lim_armS, &g_md_h[idx], target_duty, is_reverse);
       }
     }else{
       control_trapezoid(&tc_slope_lim_arm, &g_md_h[idx], target_duty, is_reverse);
@@ -432,7 +433,7 @@ int vacSystem(void){
   }
 
   return EXIT_SUCCESS;
-}/* vacSystem */
+} /* vacSystem */
 
 /*LEDシステム*/
 static int LEDSystem(void){
@@ -448,5 +449,5 @@ static int LEDSystem(void){
   }
 
   return EXIT_SUCCESS;
-}/* LEDSystem */
+} /* LEDSystem */
 
