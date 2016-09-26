@@ -73,6 +73,7 @@ int MW_waitForMessageTransitionComplete(uint32_t timeout){
   uint32_t time;
   time = g_SY_system_counter;
   while( !had_completed && time + timeout > g_SY_system_counter ){
+    SY_wait(1);
   }
   if( time + timeout <= g_SY_system_counter ){
     return EXIT_FAILURE;
