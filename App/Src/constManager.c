@@ -8,6 +8,11 @@
 #include "MW_flash.h"
 #include "constManager.h"
 
+/*exclude dumy*/
+#define _EDITLIST_NUM  (sizeof(editlist)/sizeof(editlist[0]))
+
+#define _RC_ADJUST_NUM 4
+
 typedef enum{
   DM_HELP,
   DM_RC_VAL
@@ -15,70 +20,42 @@ typedef enum{
 
 /*second, write const description.*/
 static const adjust_t defaultad={
-.MTRLadjust = {
-    .value = 60,
-    .maxvalue = 100,
-    .minvalue = 0,
-    .display_name = "MTRL adjust",
+  .leftadjust = {
+    .value = 0,
+    .maxvalue = 20,
+    .minvalue = -20,
+    .display_name = "left adjust",
     .display_unit = "%",
   },
-.DRISadjust = {
-    .value = 100,
-    .maxvalue = 100,
-    .minvalue = 0,
-    .display_name = "DRIS adjust",
-    .display_unit = "%",
+  .rightadjust = {
+    .value = 0,
+    .maxvalue = 20,
+    .minvalue = -20,
+    .display_name = "right adjust",
+    .display_unit = "%"
   },
-.XPNSadjust = {
-    .value = 100,
-    .maxvalue = 100,
+  .steeringtime = {
+    .value = 50,
+    .maxvalue = 200,
     .minvalue = 0,
-    .display_name = "XPNS adjust",
-    .display_unit = "%",
+    .display_name = "steering time",
+    .display_unit = "*10ms",
   },
-  .tc_dril_rise = {
-    .value = 25,
+  .rctimeout = {
+    .value = 10,
     .maxvalue = 999,
-    .minvalue = 0,
-    .display_name = "tc_dril_rise",
-    .display_unit = "",
+    .minvalue = 1,
+    .display_name = "rc timeout",
+    .display_unit = "s",
   },
-  .tc_dril_fall = {
-    .value = 100,
-    .maxvalue = 999,
-    .minvalue = 0,
-    .display_name = "tc_dril_fall",
-    .display_unit = "",
+  .rc_centre_thereshold = {
+    .value = 4,
+    .maxvalue = 6,
+    .minvalue = 2,
+    .display_name = "rc cntr theres",
+    .display_unit = "/16",
   },
-  .tc_dris_rise = {
-    .value = 100,
-    .maxvalue = 999,
-    .minvalue = 0,
-    .display_name = "tc_dris_rise",
-    .display_unit = "",
-  },
-  .tc_dris_fall = {
-    .value = 100,
-    .maxvalue = 999,
-    .minvalue = 0,
-    .display_name = "tc_dris_fall",
-    .display_unit = "",
-  },
-  .tc_xpn_rise = {
-    .value = 100,
-    .maxvalue = 999,
-    .minvalue = 0,
-    .display_name = "tc_xpn_rise",
-    .display_unit = "",
-  },
-  .tc_xpn_fall = {
-    .value = 100,
-    .maxvalue = 999,
-    .minvalue = 0,
-    .display_name = "tc_xpn_fall",
-    .display_unit = "",
-  },
-  
+
   /*template
   . = {
     .value = ,
@@ -93,27 +70,20 @@ static const adjust_t defaultad={
 adjust_t g_adjust;
 
 /*finary, add edit list.*/
-const_element_t *editlist[_EDITLIST_NUM]={
-  &(g_adjust.MTRLadjust),
-  &(g_adjust.DRISadjust),
-  &(g_adjust.XPNSadjust),
-  &(g_adjust.tc_dril_rise),
-  &(g_adjust.tc_dril_fall),
-  &(g_adjust.tc_dris_rise),
-  &(g_adjust.tc_dris_fall),
-  &(g_adjust.tc_xpn_rise),
-  &(g_adjust.tc_xpn_fall),
+static const_element_t *editlist[]={
+  &(g_adjust.rightadjust),
+  &(g_adjust.leftadjust),
+  &(g_adjust.steeringtime),
+  &(g_adjust.rctimeout),
+  &(g_adjust.rc_centre_thereshold),
 };
 
 static
 ad_disp_mode_t mode = DM_HELP;
-
-int g_c_data[_RC_ADJUST_NUM+_EDITLIST_NUM+4+1];
+int data[_RC_ADJUST_NUM+_EDITLIST_NUM+1];
 
 static
 int saveData(void);
-static
-int RC_adjust(void);
 
 /* reload default value */
 static
@@ -124,11 +94,8 @@ void reloadDefault(void){
 static
 void load(void){
   int i;
-  for(i=0;i<(int)_EDITLIST_NUM+4;i++){
-    g_c_data[i] = ((int*)WRITE_ADDR)[i];
-  }
   for(i=0;i<(int)_EDITLIST_NUM;i++){
-    editlist[i]->value = g_c_data[i];
+    editlist[i]->value = ((int*)WRITE_ADDR)[i];
   }
 }
 
@@ -136,7 +103,7 @@ static
 int save(void){
   int i;
   for(i=0;i<(int)_EDITLIST_NUM;i++){
-    g_c_data[i] = editlist[i]->value;
+    data[i] = editlist[i]->value;
   }
 
   return saveData();  
@@ -158,7 +125,7 @@ void ad_const_elementPrint(int i,const_element_t *list){
 static
 int saveData(void){
   /*the boundary of size cause write failure, so this is arrenged the size.*/
-  if(MW_flashWrite(g_c_data, WRITE_ADDR, sizeof(g_c_data)&0xFFFFFFFE)==MW_FLASH_OK){
+  if(MW_flashWrite(data, WRITE_ADDR, sizeof(data)&0xFFFFFFFE)==MW_FLASH_OK){
     return EXIT_SUCCESS;
   }
   else{
@@ -208,12 +175,14 @@ void adjustPrint(int point){
 
 static
 void interval_10ms(void){
-  SY_wait(10);
+    while(g_SY_system_counter%10==0);
+    while(g_SY_system_counter%10!=0);
 }
 
 static
 void wait(unsigned int ms){
-  SY_wait(ms);
+  unsigned int old = g_SY_system_counter;
+  while(old + ms > g_SY_system_counter);
 }
 
 
@@ -281,8 +250,8 @@ int ad_keyTask(void){
   
   /*reload value*/
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
-    reloadDefault();
     message("msg","load default value");
+    reloadDefault();
     adjustPrint(select);
   }
 
@@ -302,19 +271,10 @@ int ad_keyTask(void){
     }
   }
 
-  else if(__RC_ISPRESSED_LEFT(g_rc_data)){
-    message("msg","RC_ADJUST");
-    wait(1000);      
-    RC_adjust();
-    adjustPrint(select);
-    return 1;
-  }
-  
   /*screen update*/
   flush();
 
   if(__RC_ISPRESSED_CROSS(g_rc_data)){
-    select = 0;
     message("msg","canceled");
     wait(1000);
     _SCR_CLEAR();
@@ -327,13 +287,11 @@ int ad_keyTask(void){
 static
 int RC_adjust_Zero(void){
   _SCR_CLEAR();
-  _SCR_CURSOR_SET(0, 10);
+  _SCR_CURSOR_SET(0, 5);
   MW_printf("adjust zero\n");
   MW_printf("○ ... adjust\n× ... cancel\n");
   flush();
 
-  int p1x,p1y;
-  int p2x,p2y;
   while(1){
     _SCR_CURSOR_SET(0, 0);
     MW_printf("(%d,%d),(%d,%d)\n",
@@ -342,67 +300,14 @@ int RC_adjust_Zero(void){
 	      __RC_GET_RX_VAL(g_rc_data),
 	      __RC_GET_RY_VAL(g_rc_data)
 	      );
-    
-    p1x = __RC_GET_LX_VAL(g_rc_data);
-    p1y = __RC_GET_LY_VAL(g_rc_data);
-    p2x = __RC_GET_RX_VAL(g_rc_data);
-    p2y = __RC_GET_RY_VAL(g_rc_data);
-
-    _SCR_CURSOR_SET(0,1);
-    MW_printf("+---------------+  "" +---------------+  \n");
-    MW_printf("|       |       |  "" |       |       |  \n");
-    MW_printf("|       |       |  "" |       |       |  \n");
-    MW_printf("|       |       |  "" |       |       |  \n");
-    MW_printf("|-------+-------|  "" |-------+-------|  \n");
-    MW_printf("|       |       |  "" |       |       |  \n");
-    MW_printf("|       |       |  "" |       |       |  \n");
-    MW_printf("|       |       |  "" |       |       |  \n");
-    MW_printf("+---------------+  "" +---------------+  \n");
-    
-    _SCR_CURSOR_SET(((g_c_data[_EDITLIST_NUM + 0] - 16 + 3)*2)+2,g_c_data[_EDITLIST_NUM + 1] - 16+3+2);
-    MW_printf("\033[41m  \033[49m");
-    _SCR_CURSOR_SET(((g_c_data[_EDITLIST_NUM + 2] - 16 + 3)*2)+2+20,g_c_data[_EDITLIST_NUM + 3] - 16+3+2);
-    MW_printf("\033[41m  \033[49m");
-    {
-      if(
-	 p1x <= 16 + 3&&
-	 p1x >= 16 - 3&&
-	 p1y <= 16 + 3&&
-	 p1y >= 16 - 3
-	 ){
-
-	_SCR_CURSOR_SET(((p1x - 16 + 3)*2)+2,p1y - 16+3+2);
-	MW_printf("\033[42m  \033[49m");
-      }
-      if(
-	 p2x <= 16 + 3&&
-	 p2x >= 16 - 3&&
-	 p2y <= 16 + 3&&
-	 p2y >= 16 - 3
-	 ){
-
-	_SCR_CURSOR_SET(((p2x - 16 + 3)*2)+2+20,p2y - 16+3+2);
-	MW_printf("\033[42m  \033[49m");
-	flush();
-	interval_10ms();
-	interval_10ms();
-	interval_10ms();
-	interval_10ms();
-	interval_10ms();
-	interval_10ms();
-	interval_10ms();
-	interval_10ms();
-	interval_10ms();
-	interval_10ms();
-      }
-    }
+    flush();
     interval_10ms();
 
     if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
-      g_c_data[_EDITLIST_NUM+0] = __RC_GET_LX_VAL(g_rc_data);
-      g_c_data[_EDITLIST_NUM+1] = __RC_GET_LY_VAL(g_rc_data);
-      g_c_data[_EDITLIST_NUM+2] = __RC_GET_RX_VAL(g_rc_data);
-      g_c_data[_EDITLIST_NUM+3] = __RC_GET_RY_VAL(g_rc_data);
+      data[_EDITLIST_NUM+0] = __RC_GET_LX_VAL(g_rc_data);
+      data[_EDITLIST_NUM+1] = __RC_GET_LY_VAL(g_rc_data);
+      data[_EDITLIST_NUM+2] = __RC_GET_RX_VAL(g_rc_data);
+      data[_EDITLIST_NUM+3] = __RC_GET_RY_VAL(g_rc_data);
       message("msg","adjusted");
       wait(1000);
       return EXIT_SUCCESS;
@@ -410,11 +315,10 @@ int RC_adjust_Zero(void){
     else if(__RC_ISPRESSED_CROSS(g_rc_data)){
       message("msg","canceled");
       wait(1000);
-      _SCR_CLEAR();
       return EXIT_SUCCESS;
     }
   }
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -445,9 +349,8 @@ int adjust(void){
       __RC_ISPRESSED_R2(g_rc_data)||
       __RC_ISPRESSED_TRIANGLE(g_rc_data)||
       __RC_ISPRESSED_SQARE(g_rc_data)||
-      __RC_ISPRESSED_LEFT(g_rc_data)||
       __RC_ISPRESSED_CROSS(g_rc_data);
-
+    
     if(had_key_pressed){
       if(count == 0||(count > 30&&count % 5==0)){
 	ret = ad_keyTask();

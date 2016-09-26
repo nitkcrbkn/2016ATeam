@@ -1,4 +1,4 @@
-/* ===Kisarazu RBKN Library===
+ /* ===Kisarazu RBKN Library===
  *
  * autor          : Oishi
  * version        : v0.10
@@ -18,14 +18,11 @@
 #include "DD_Gene.h"
 #include "message.h"
 #include "app.h"
-#include "DD_RC.h" 
-#include "MW_IWDG.h"
+#include "DD_RC.h"
 
 volatile uint32_t g_SY_system_counter;
 volatile uint8_t g_rc_data[RC_DATA_NUM]={0x0,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,};
 static uint8_t rc_rcv[RC_DATA_NUM];
-volatile led_mode_t g_led_mode = lmode_1;
-static volatile unsigned int count_for_rc = 0;
 
 static
 int SY_init(void);
@@ -58,24 +55,19 @@ int main(void){
     message("err", "I2CConnectionTest Faild%d", ret);
     MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
-    }
-  
+  }
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
   MW_printf("\033[2J\033[1;1H");
   
   while( 1 ){
-   
-    MW_IWDGClr();//reset counter of watch dog  
-
     SY_doAppTasks();
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
-      MW_printf("\033[1;1H");
       DD_RCPrint((uint8_t*)g_rc_data);
       DD_print();
-      MW_printf("$%d",(int)g_led_mode);
       flush(); /* out message. */
+      MW_printf("\033[1;1H");
     }
     while( g_SY_system_counter % _INTERVAL_MS != _INTERVAL_MS / 2 - 1 ){
     }
@@ -87,21 +79,8 @@ int main(void){
     }
     while( g_SY_system_counter % _INTERVAL_MS != 0 ){
     }
-    count_for_rc++;
-    if(count_for_rc >= 20){
-      message("err","RC disconnected!");
-      while(1);
-    }
   }
 } /* main */
-
-void SY_wait(int ms){
-  volatile uint32_t time;
-  time = g_SY_system_counter;
-  while(time + ms > g_SY_system_counter)
-    MW_IWDGClr();//reset counter of watch dog
-  MW_IWDGClr();//reset counter of watch dog
-}
 
 static
 int SY_doAppTasks(void){
@@ -125,7 +104,7 @@ static
 int SY_init(void){
   int ret;
   /* Reset of all peripherals, Initializes the Flash interface and the Systick.
-  **/
+   **/
   if( HAL_Init()){
     return EXIT_FAILURE;
   }
@@ -141,36 +120,22 @@ int SY_init(void){
 
   /*Initialize printf null transit*/
   flush();
-#if !_NO_DEVICE
+  
   ret = DD_initialize();
   if(ret){
     return ret;
   }
-#endif
 
   /*Initialize GPIO*/
   SY_GPIOInit();
 
-  appInit();
-  
   message("msg", "wait for RC connection...");
-  if( DD_RCInit((uint8_t*)g_rc_data, 100000) ){
+  if( DD_RCInit((uint8_t*)g_rc_data, 10000) ){
     message("err", "RC initialize faild!\n");
     return EXIT_FAILURE;
   }
-  
   message("msg", "RC connected sucess");
-  
-  /*initialize IWDG*/
-  message("msg", "IWDG initialize");
-  MW_SetIWDGPrescaler(IWDG_PRESCALER_16);//clock 40kHz --> 1/16 -->2500Hz
-  MW_SetIWDGReload(250);//Reload volue is 250. reset time(100ms)
-  ret = MW_IWDGInit(); 
-  if(ret){
-    message("err", "IWDG initialize failed!\n");
-    return ret;
-  }
-  
+
   appInit();
 
   return EXIT_SUCCESS;
@@ -195,7 +160,7 @@ int SY_clockInit(void){
   }
 
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-    | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+                                | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
@@ -254,7 +219,6 @@ void SY_GPIOInit(void){
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle){
   UNUSED(UartHandle);
   DD_RCTask(rc_rcv, (uint8_t*)g_rc_data);
-  count_for_rc = 0;
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle){
