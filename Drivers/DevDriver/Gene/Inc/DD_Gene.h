@@ -17,7 +17,7 @@
 #include "DD_SV.h"
 #include "DD_ENCODER.h"
 
-#define _I2C_SPEED_BPS 200000
+#define _I2C_SPEED_BPS 100000
 
 #if DD_NUM_OF_MD
 extern DD_MDHand_t g_md_h[DD_NUM_OF_MD];
