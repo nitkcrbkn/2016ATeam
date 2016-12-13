@@ -3,7 +3,7 @@
 
 #include "DD_RC.h"
 #define _INTERVAL_MS 10
-#define _MESSAGE_INTERVAL_MS 30
+#define _MESSAGE_INTERVAL_MS 50
 
 typedef enum{
   lmode_wait_for_rc = 0,
@@ -21,5 +21,7 @@ extern volatile led_mode_t g_led_mode;
 
 #define _MAX(x,y) ((x)>(y)?(x):(y))
 #define _MIN(x,y) ((x)<(y)?(x):(y))
+
+void SY_wait(int ms);
 
 #endif

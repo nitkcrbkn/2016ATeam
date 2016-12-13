@@ -30,21 +30,25 @@ DD_MDHand_t g_md_h[DD_NUM_OF_MD] = {
     .duty = 0, /* default duty */
     .mode = D_MMOD_FREE, /* mode */
   },
+  { .add = 0x16, /* address */
+    .duty = 0, /* default duty */
+    .mode = D_MMOD_FREE, /* mode */
+  },
 };
 #endif
 #if DD_NUM_OF_AB
 /*AB Definition*/
 DD_ABHand_t g_ab_h[DD_NUM_OF_AB] = {
   { .add = 0x25, /* address */
-    .dat = 0x00, /* data */
+    .dat = 0x0F, /* data */
   },
 };
 #endif
 #if DD_NUM_OF_SV
 DD_SV_t g_sv_h = {
-  .i2cadd = 0x40,/*address*/
+  .i2cadd = 0x40, /*address*/
   .val = {
-    0,0,0,0
+    0, 0, 0, 0
   }
 };
 #endif

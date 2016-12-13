@@ -42,19 +42,9 @@ void DD_RCTask(uint8_t rc_data[RC_DATA_NUM], uint8_t out_data[RC_DATA_NUM]){
   
   if( is_not_avaiable > 0){
     is_not_avaiable--;
-    for( i = 0; i < RC_DATA_NUM; i++ ){
-      correct[rc_data[i] >> 5] += rc_data[i] & ( 0xFF >> 3 );
-    }
-    if( !is_not_avaiable ){
-      for( i = 0; i < RC_DATA_NUM; i++ ){
-        /*calc average*/
-        correct[i] >>= 3;
-      }
-    }
-  }else  {
-    for( i = 0; i < RC_DATA_NUM; i++ ){
-      out_data[rc_data[i] >> 5] = rc_data[i] & ( 0xFF >> 3 );
-    }
+  }
+  for( i = 0; i < RC_DATA_NUM; i++ ){
+    out_data[rc_data[i] >> 5] = rc_data[i] & ( 0xFF >> 3 );
   }
   MW_USART3ReceiveMult(8, rc_data);
 }
